@@ -11,6 +11,7 @@ export interface Role {
   description: string;
   icon: "blueprint" | "shield" | "code" | "chart";
   accent: string;
+  href?: string;
 }
 
 export const ROLES: Role[] = [
@@ -40,6 +41,7 @@ export const ROLES: Role[] = [
       "Lleva el reto a código: construye la interfaz y el backend de principio a fin.",
     icon: "code",
     accent: "#45609B",
+    href: "/retos/backend",
   },
   {
     slug: "analista",

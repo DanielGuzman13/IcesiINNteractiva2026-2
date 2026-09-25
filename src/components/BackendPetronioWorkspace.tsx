@@ -8,13 +8,11 @@ import {
   defineBackendBlocks,
   buildBackendPlan,
   runBackendPedido,
-  statusLabel,
   INITIAL_INVENTORY,
   type BackendLog,
   type BackendPlan,
-  type BackendRunResult,
-  type Ingredient,
-  type Inventory
+  type Inventory,
+  type Ingredient
 } from '@/lib/blocks/backend-petronio-blocks';
 
 type CasetaScene = 'idle' | 'cooking' | 'served' | 'rejected' | 'smoke';
@@ -45,11 +43,11 @@ const LOG_TONE_CLASS: Record<BackendLog['tone'], string> = {
 };
 
 const TX_LABEL: Record<TransactionState, string> = {
-  idle: 'En espera',
-  ok: 'Transacción completada',
-  conflict: 'Rechazada (409)',
-  rollback: 'Rollback aplicado',
-  'no-updates': 'Sin descuento'
+  idle: 'En espera de un pedido',
+  ok: 'Pedido entregado',
+  conflict: 'Pedido rechazado',
+  rollback: 'Se revirtió el pedido',
+  'no-updates': 'Faltó descontar ingredientes'
 };
 
 function nowTime(): string {
@@ -75,10 +73,9 @@ function BackendPetronioWorkspace({
   const [inventory, setInventory] = useState<Inventory>(INITIAL_INVENTORY);
   const inventoryRef = useRef<Inventory>(INITIAL_INVENTORY);
   const [logs, setLogs] = useState<LogEntry[]>([
-    { id: 0, tone: 'info', text: 'Esperando despliegue de endpoint...', time: nowTime() }
+    { id: 0, tone: 'info', text: 'La caseta está cerrada: arma el flujo y ábrela para recibir pedidos.', time: '--:--:--' }
   ]);
   const [plan, setPlan] = useState<BackendPlan | null>(null);
-  const [lastStatus, setLastStatus] = useState<number | null>(null);
   const [txState, setTxState] = useState<TransactionState>('idle');
   const [targetIngredient, setTargetIngredient] = useState<string | null>(null);
   const [tip, setTip] = useState<string | null>(null);
@@ -108,24 +105,18 @@ function BackendPetronioWorkspace({
       case 'cooking':
         return { text: 'Preparando pedido en la olla...', tone: 'info' };
       case 'served':
-        return {
-          text: lastStatus ? `${statusLabel(lastStatus)} · Plato servido` : 'Plato servido',
-          tone: 'success'
-        };
+        return { text: '¡Plato servido al comensal!', tone: 'success' };
       case 'rejected':
-        return {
-          text: lastStatus ? `${statusLabel(lastStatus)} · Sin ingredientes` : 'Pedido rechazado',
-          tone: 'error'
-        };
+        return { text: 'Pedido rechazado: no hay ingredientes', tone: 'error' };
       case 'smoke':
-        return { text: 'DATABASE ERROR · Venta fantasma detectada', tone: 'warn' };
+        return { text: 'Error: vendiste sin insumos', tone: 'warn' };
       case 'idle':
       default:
         return serverState === 'inactive'
-          ? { text: 'Servidor Inactivo', tone: 'info' }
-          : { text: `Servidor listo · ${methodOf(plan)}`, tone: 'info' };
+          ? { text: 'La caseta aún no está lista', tone: 'info' }
+          : { text: 'La caseta está lista para recibir pedidos', tone: 'info' };
     }
-  }, [scene, serverState, lastStatus, plan]);
+  }, [scene, serverState]);
 
   useEffect(() => {
     const container = blocklyDivRef.current;
@@ -191,12 +182,11 @@ function BackendPetronioWorkspace({
     if (serverState === 'inactive') {
       setServerState('deployed');
       appendLogs([
-        { tone: 'info', text: `[SERVER] Endpoint ${currentPlan.method} ${currentPlan.path} desplegado: escuchando peticiones.` }
+        { tone: 'info', text: 'La caseta abrió sus puertas: ya puede recibir pedidos.' }
       ]);
     }
 
-    const result: BackendRunResult = runBackendPedido(ws, inventoryRef.current);
-    setLastStatus(result.status);
+    const result = runBackendPedido(ws, inventoryRef.current);
     setTargetIngredient(result.targetIngredient);
 
     if (result.committed) {
@@ -236,11 +226,6 @@ function BackendPetronioWorkspace({
         setTxState('no-updates');
         setScene('idle');
         break;
-      case 'error-status':
-        setTxState('conflict');
-        setScene('rejected');
-        timersRef.current.push(window.setTimeout(() => setScene('idle'), 4500));
-        break;
       default:
         break;
     }
@@ -253,11 +238,10 @@ function BackendPetronioWorkspace({
     clearTimers();
     applyInventory({ ...INITIAL_INVENTORY });
     setLogs([
-      { id: logIdRef.current++, tone: 'info', text: 'Esperando despliegue de endpoint...', time: nowTime() }
+      { id: logIdRef.current++, tone: 'info', text: 'La caseta está cerrada: arma el flujo y ábrela para recibir pedidos.', time: nowTime() }
     ]);
     setScene('idle');
     setServerState('inactive');
-    setLastStatus(null);
     setTxState('idle');
     setTip(null);
     setTargetIngredient(null);
@@ -286,7 +270,7 @@ function BackendPetronioWorkspace({
             Backend Engineer · Caseta Gastronómica
           </h2>
           <p className="text-sm font-medium text-white/85">
-            Construye la lógica de tu endpoint con bloques y observa la cocina en tiempo real.
+            Construye la lógica de la caseta con bloques y observa la cocina en tiempo real.
           </p>
         </div>
         <div className="flex flex-col items-end gap-2">
@@ -297,7 +281,7 @@ function BackendPetronioWorkspace({
                 : 'bg-emerald-400/90 text-emerald-950'
             }`}
           >
-            {serverState === 'inactive' ? 'Servidor Inactivo' : 'Servidor Activo'}
+            {serverState === 'inactive' ? 'Caseta cerrada' : 'Caseta abierta'}
           </span>
           {completed && (
             <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
@@ -316,7 +300,7 @@ function BackendPetronioWorkspace({
               disabled={readOnly}
               className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-mid disabled:cursor-not-allowed disabled:opacity-50"
             >
-              {serverState === 'inactive' ? 'Desplegar API' : 'Ejecutar Pedido'}
+              {serverState === 'inactive' ? 'Abrir la caseta' : 'Recibir un pedido'}
             </button>
             <button
               type="button"
@@ -379,7 +363,7 @@ function BackendPetronioWorkspace({
           <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
             <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
               <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Inventario en memoria
+                La despensa
               </h3>
               <div className="space-y-2">
                 {(['Jaiba', 'Coco', 'Camarón'] as Ingredient[]).map((ingredient) => {
@@ -413,7 +397,7 @@ function BackendPetronioWorkspace({
               </div>
               <div className="mt-3 flex items-center justify-between rounded-lg bg-slate-50 px-2 py-1.5 text-xs">
                 <span className="font-semibold uppercase tracking-wide text-slate-500">
-                  Transacción
+                  Último pedido
                 </span>
                 <span
                   className={`font-bold ${
@@ -433,10 +417,10 @@ function BackendPetronioWorkspace({
 
             <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
               <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Código generado
+                Así se lee tu flujo
               </h3>
               <pre className="h-[168px] overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-emerald-300">
-                {plan?.pseudo ?? '// Tu API aparecerá aquí'}
+                {plan?.pseudo ?? '// Tu flujo aparecerá aquí'}
               </pre>
               {plan && plan.issues.length > 0 && (
                 <ul className="mt-2 space-y-1">
@@ -452,7 +436,7 @@ function BackendPetronioWorkspace({
 
             <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
               <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Status Board · Terminal
+                Bitácora de la caseta
               </h3>
               <div
                 ref={terminalRef}
@@ -481,10 +465,10 @@ function BackendPetronioWorkspace({
           >
             <div>
               <div className="text-sm font-bold text-brand-support">
-                {completed ? '¡Reto Completado!' : 'Completa la transacción con stock disponible'}
+                {completed ? '¡Reto Completado!' : 'Completa la caseta con lo que hay en la despensa'}
               </div>
               <p className="text-xs text-brand-support/70">
-                Despliega el endpoint, valida el inventario de Camarón y responde 201 para superar el reto.
+                Abre la caseta, valida cuántos Camarones quedan y responde &quot;¡Todo listo, plato servido!&quot; para completar el reto.
               </p>
             </div>
             {completed ? (
@@ -508,10 +492,6 @@ function BackendPetronioWorkspace({
       </div>
     </section>
   );
-}
-
-function methodOf(plan: BackendPlan | null): string {
-  return plan?.hasEndpoint ? `${plan.method} ${plan.path}` : 'POST /api/pedidos';
 }
 
 function formatInventory(inventory: Inventory): string {
