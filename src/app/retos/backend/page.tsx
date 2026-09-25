@@ -47,7 +47,7 @@ export default function BackendRetoPage() {
         }
         aria-hidden={showIntro}
       >
-        <BackendPetronioWorkspace />
+        <BackendPetronioWorkspace nextHref="/retos/frontend" />
       </div>
 
       {showIntro && (
