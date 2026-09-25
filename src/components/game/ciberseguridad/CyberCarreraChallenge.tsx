@@ -9,41 +9,50 @@ const EXPRESIONES: string[] = [
   "LULADAFRIA",
   "MANGOVICHE",
   "CHONTADURO",
-  "PARAMASASOAR",
-  "PAMARARICA",
-  "PANADAFIRIA",
-  "PATABANCAYO",
-  "ROBACELADO",
-  "UBACADULCE",
-  "AVALALEYO",
-  "MABADARCE",
-  "MALECIOSA",
-  "BUYAFRIO",
-  "CARCERIO",
-  "UCAACIDO",
-  "MASARICA",
-  "CADAPASA",
-  "LULADEFRIA",
-  "MANGODULCE",
-  "PANAUAPYO",
-  "BUYARICA",
-  "MARODURO",
-  "TACAFRIA",
-  "PAMECIOSA",
-  "TACADULCE",
+  "PANADADECALI",
+  "MYACADJELO",
+  "CHORIPAN",
+  "MYACADGAO",
+  "ZILOLISDA",
+  "BRISASDECALI",
+  "POLLOCONPAPA",
+  "CHOLADOFRIO",
+  "FRITOCALENO",
+  "BULEVARDELRIO",
+  "ISLITADELRIO",
+  "GAOCONPAPA",
   "LULADARICA",
-  "AONAACIDO",
-  "YABEELADO",
-  "NAUAFRIO",
-  "PAMARICA",
-  "PAMADULCE",
-  "BUYAPASA",
-  "PANELADO",
-  "MASAFRIA",
+  "MANGOENLIMON",
+  "CHOLADODULCE",
+  "MALBONITO",
+  "PAPAFRITA",
+  "LULADAGORDA",
+  "MYACACONPAPA",
+  "POLLOCALENO",
+  "CALENOFRIO",
+  "CHORICALENO",
+  "LULADAFRESCA",
+  "MANGOVITO",
+  "BUFFOCALENO",
+  "POLLAGOTO",
+  "MYACACONFRIO",
+  "PAPAFRITA",
+  "FRITORICO",
+  "POLLORICO",
+  "CALENOAMOR",
 ];
 
-function invertir(texto: string) {
-  return texto.split("").reverse().join("");
+function cifrarCesar(texto: string, posiciones: number) {
+  const abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+  return texto
+    .split("")
+    .map((letra) => {
+      const indice = abecedario.indexOf(letra);
+      return indice === -1
+        ? letra
+        : abecedario[(indice + posiciones + 26) % 26];
+    })
+    .join("");
 }
 
 const GANADORES = [
@@ -76,7 +85,7 @@ export default function CyberCarreraChallenge() {
   );
 
   const expresion = EXPRESIONES[expresionIndex];
-  const encriptado = invertir(expresion);
+  const encriptado = cifrarCesar(expresion, 3);
 
   function handleRestaurar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -86,7 +95,7 @@ export default function CyberCarreraChallenge() {
       return;
     }
     setError(
-      "⚠️ Clave de acceso no válida. Recuerda invertir el orden de las letras de derecha a izquierda en tu hoja.",
+      "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo (21K ÷ 7 = 3) y retroceder 3 posiciones en el abecedario para cada letra.",
     );
     setIntentoFallido((current) => current + 1);
   }
@@ -110,8 +119,8 @@ export default function CyberCarreraChallenge() {
               </p>
               <p className="mt-2 text-sm text-red-500/90">
                 Un atacante bloqueó la puerta de enlace del servidor de
-                resultados del Bulevar del Río con una clave dinámica de
-                autenticación.
+                resultados del Bulevar del Río con un algoritmo de Cifrado
+                César dinámico.
               </p>
             </div>
 
@@ -125,10 +134,21 @@ export default function CyberCarreraChallenge() {
               >
                 {encriptado}
               </p>
+              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
+                <p className="text-xs font-bold uppercase tracking-wide text-amber-700">
+                  Pista: clave de desplazamiento
+                </p>
+                <p className="mt-1 text-xs leading-relaxed text-amber-800/90">
+                  &ldquo;La clave de desplazamiento es igual al número de kilómetros
+                  oficiales de la Media Maratón de Cali (21K) dividida entre 7&rdquo;
+                  (21 ÷ 7 = 3, Desplazamiento = 3 posiciones hacia atrás en el
+                  abecedario).
+                </p>
+              </div>
               <p className="mt-3 text-xs leading-relaxed text-brand-support/80">
-                Paso 1: Copia tu código encriptado en la hoja de papel y
-                descífralo invirtiendo el orden de las letras de derecha a
-                izquierda.
+                Paso 1: Resuelve el acertijo numérico en tu hoja para hallar el
+                desplazamiento y descifra el código usando la tabla de Cifrado
+                César.
               </p>
             </div>
           </div>
@@ -213,8 +233,8 @@ export default function CyberCarreraChallenge() {
                 gateway del Bulevar del Río...
               </p>
               <p className="mt-1">
-                <span className="text-emerald-300">&gt;</span> [SUCCESS] Token
-                caleño verificado. Desbloqueando tabla de tiempos...
+                <span className="text-emerald-300">&gt;</span> [SUCCESS] Clave
+                Cifrado César verificada. Desbloqueando tabla de tiempos...
               </p>
               <p className="mt-1">
                 <span className="text-emerald-300">&gt;</span>{" "}
