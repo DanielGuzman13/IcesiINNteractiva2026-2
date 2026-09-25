@@ -4,7 +4,47 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 
-const CLAVE_CORRECTA = "pacifico2026";
+const EXPRESIONES: string[] = [
+  "CHOLADOHELADO",
+  "LULADAFRIA",
+  "MANGOVICHE",
+  "CHONTADURO",
+  "PARAMASASOAR",
+  "PAMARARICA",
+  "PANADAFIRIA",
+  "PATABANCAYO",
+  "ROBACELADO",
+  "UBACADULCE",
+  "AVALALEYO",
+  "MABADARCE",
+  "MALECIOSA",
+  "BUYAFRIO",
+  "CARCERIO",
+  "UCAACIDO",
+  "MASARICA",
+  "CADAPASA",
+  "LULADEFRIA",
+  "MANGODULCE",
+  "PANAUAPYO",
+  "BUYARICA",
+  "MARODURO",
+  "TACAFRIA",
+  "PAMECIOSA",
+  "TACADULCE",
+  "LULADARICA",
+  "AONAACIDO",
+  "YABEELADO",
+  "NAUAFRIO",
+  "PAMARICA",
+  "PAMADULCE",
+  "BUYAPASA",
+  "PANELADO",
+  "MASAFRIA",
+];
+
+function invertir(texto: string) {
+  return texto.split("").reverse().join("");
+}
 
 const GANADORES = [
   { posicion: 1, corredor: "Juliana Rodríguez", categoria: "Elite Femenina", tiempo: "1:12:48" },
@@ -29,16 +69,24 @@ export default function CyberCarreraChallenge() {
   const [clave, setClave] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [intentoFallido, setIntentoFallido] = useState(0);
+  const [expresionIndex] = useState(() =>
+    typeof window === "undefined"
+      ? 0
+      : Math.floor(Math.random() * EXPRESIONES.length),
+  );
+
+  const expresion = EXPRESIONES[expresionIndex];
+  const encriptado = invertir(expresion);
 
   function handleRestaurar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (clave.trim().toLowerCase() === CLAVE_CORRECTA) {
+    if (clave.trim().toLowerCase() === expresion.toLowerCase()) {
       setError(null);
       setEstado("restaurado");
       return;
     }
     setError(
-      "⚠️ Clave de acceso no válida. Revisa la pista de los 21K y la tabla de desplazamiento en tu hoja.",
+      "⚠️ Clave de acceso no válida. Recuerda invertir el orden de las letras de derecha a izquierda en tu hoja.",
     );
     setIntentoFallido((current) => current + 1);
   }
@@ -61,23 +109,26 @@ export default function CyberCarreraChallenge() {
                 ⚠️ SERVIDOR BLOQUEADO / ATAQUE DETECTADO
               </p>
               <p className="mt-2 text-sm text-red-500/90">
-                Un atacante cifró la puerta de enlace del servidor de resultados
-                en el Bulevar del Río.
+                Un atacante bloqueó la puerta de enlace del servidor de
+                resultados del Bulevar del Río con una clave dinámica de
+                autenticación.
               </p>
             </div>
 
             <div className="rounded-3xl border border-brand-soft bg-brand-light/30 p-6">
               <h3 className="text-sm font-bold uppercase tracking-wide text-brand-support">
-                Nota de rescate encriptada
+                Código Encriptado
               </h3>
-              <p className="mt-2 rounded-xl bg-white/70 p-4 font-mono text-xl tracking-widest text-brand-primary">
-                SDFLILFR2026
+              <p
+                suppressHydrationWarning
+                className="mt-2 rounded-xl bg-white/70 p-4 font-mono text-xl tracking-widest text-brand-primary"
+              >
+                {encriptado}
               </p>
               <p className="mt-3 text-xs leading-relaxed text-brand-support/80">
-                Pista de la hoja: &quot;La clave de desplazamiento es igual al
-                número de kilómetros oficiales de la Media Maratón de Cali (21K)
-                dividida entre 7&quot;. Usa la tabla de sustitución del Cifrado
-                César para retroceder el desplazamiento.
+                Paso 1: Copia tu código encriptado en la hoja de papel y
+                descífralo invirtiendo el orden de las letras de derecha a
+                izquierda.
               </p>
             </div>
           </div>
@@ -101,7 +152,7 @@ export default function CyberCarreraChallenge() {
             <form onSubmit={handleRestaurar} noValidate className="text-left">
               <label className="block" htmlFor="cyber-clave">
                 <span className="mb-2 block text-sm font-bold uppercase tracking-wide text-brand-support">
-                  Clave de Desbloqueo de Emergencia
+                  Clave Descifrada
                 </span>
                 <input
                   id="cyber-clave"
@@ -162,8 +213,8 @@ export default function CyberCarreraChallenge() {
                 gateway del Bulevar del Río...
               </p>
               <p className="mt-1">
-                <span className="text-emerald-300">&gt;</span> [SUCCESS] Clave
-                válida. Desbloqueando tabla de tiempos...
+                <span className="text-emerald-300">&gt;</span> [SUCCESS] Token
+                caleño verificado. Desbloqueando tabla de tiempos...
               </p>
               <p className="mt-1">
                 <span className="text-emerald-300">&gt;</span>{" "}

@@ -68,14 +68,14 @@ export default function QACarreraForm() {
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    // BUG-7: El formulario se envía exitosamente aunque el checkbox de
+    // BUG-6: El formulario se envía exitosamente aunque el checkbox de
     // "Términos y Condiciones" esté desmarcado (no se valida).
     setRegistrado({ nombre: nombre.trim(), categoria, distancia });
   }
 
   function handleValidarReporte() {
-    // BUG-1 a BUG-7 están presentes en este formulario; el total esperado es 7.
-    if (respuestaAuditoria.trim() === "7") {
+    // BUG-1 a BUG-6 están presentes en este formulario; el total esperado es 6.
+    if (respuestaAuditoria.trim() === "6") {
       setEstadoAuditoria("correcto");
     } else {
       setEstadoAuditoria("incorrecto");
@@ -171,10 +171,8 @@ export default function QACarreraForm() {
             autoComplete="tel"
             className="w-full rounded-2xl border-2 border-brand-soft bg-white/80 px-5 py-3.5 text-base text-brand-support shadow-sm outline-none transition placeholder:text-brand-support/50 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20"
           />
-          {/* BUG-6: El mensaje de ayuda está escrito en inglés en lugar de
-              español. */}
           <span className="mt-2 block text-xs text-brand-support/70">
-            Enter a valid phone number
+            Ingresa un número de teléfono válido.
           </span>
         </label>
 
@@ -338,9 +336,9 @@ export default function QACarreraForm() {
                 formulario de la Carrera del Pacífico.
               </p>
               <p className="mt-1 text-xs text-emerald-700/80">
-                Has identificado los 7 bugs: validación (edad, documento,
-                nombre), lógica (categoría), UX (botón) y localización
-                (teléfono).
+                Has identificado los 6 bugs: validación (edad, documento,
+                nombre), lógica (categoría), flujo (términos y condiciones) y
+                UX (botón).
               </p>
             </div>
           )}
