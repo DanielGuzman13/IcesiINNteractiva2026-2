@@ -471,7 +471,7 @@ export default function FrontendPetronioAudit({
             App oficial &quot;Sonoridades del Pacífico&quot;
           </div>
           <h2 className="text-xl font-black text-brand-support">
-            Auditoría de interfaz y usabilidad
+            Mejora la interfaz y la usabilidad
           </h2>
         </div>
 
@@ -534,7 +534,7 @@ export default function FrontendPetronioAudit({
                 disabled={selected === null}
                 className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-mid disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
               >
-                {isLast ? "Finalizar Auditoría" : "Siguiente Pregunta"}
+                {isLast ? "Finalizar" : "Siguiente Pregunta"}
               </button>
             </div>
           </>
@@ -544,7 +544,7 @@ export default function FrontendPetronioAudit({
           <div className="space-y-6">
             <div className="text-center">
               <span className="inline-flex items-center rounded-full bg-amber-200/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
-                Auditoría finalizada
+                Actividad completada
               </span>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-brand-support">
                 {score}/6 aciertos
@@ -616,7 +616,7 @@ export default function FrontendPetronioAudit({
                 }}
                 className="rounded-xl border border-brand-soft bg-white px-6 py-3 text-sm font-bold text-brand-support transition-colors hover:bg-brand-soft/20"
               >
-                Reintentar auditoría
+                Reintentar actividad
               </button>
               <Link
                 href="/retos"

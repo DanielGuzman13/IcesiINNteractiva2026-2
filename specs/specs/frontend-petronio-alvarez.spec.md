@@ -6,7 +6,7 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 ## Escenario
 - **Evento:** Festival de Música del Pacífico Petronio Álvarez (Cali, Colombia).
 - **Rol:** Frontend / UX Engineer.
-- **Narrativa / Misión (Ventana Emergente):** La organización del festival acaba de lanzar la app oficial "Sonoridades del Pacífico" para que el público consulte en vivo qué agrupación de marimba o chirimía está tocando en tarima y escuche adelantos de sus canciones. Sin embargo, la interfaz actual está causando frustración entre los asistentes: los botones no responden visualmente, los contrastes son ilegibles bajo el sol de Cali y la navegación es confusa. El equipo necesita a un especialista de Frontend para auditar la app y elegir las mejores decisiones de interfaz y heurísticas de usabilidad.
+- **Narrativa / Misión (Ventana Emergente):** La organización del festival acaba de lanzar la app oficial "Sonoridades del Pacífico" para que el público consulte en vivo qué agrupación de marimba o chirimía está tocando en tarima y escuche adelantos de sus canciones. Sin embargo, la interfaz actual está causando frustración entre los asistentes: los botones no responden visualmente, los contrastes son ilegibles bajo el sol de Cali y la navegación es confusa. El equipo necesita a un especialista de Frontend para revisar la app y elegir las mejores decisiones de interfaz y heurísticas de usabilidad.
 
 ---
 
@@ -15,14 +15,14 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 1. **Modal de Contexto Inicial (Storytelling Modal):**
    - Se abre automáticamente al cargar la pantalla.
    - Presenta el símil con la música del Petronio Álvarez y explica la misión de UX/Frontend.
-   - Botón: "Comenzar Auditoría Frontend".
+   - Botón: "Comenzar a Mejorar la App".
 
 2. **Panel de Evaluación Interactiva (Quiz Visual de 6 Preguntas):**
    - Barra de progreso superior (ej. "Pregunta 3 de 6").
    - Enunciado del problema de interfaz.
    - Tarjetas de opción visual (Simulación o Screenshots de componentes UI: botones, modales, paletas, reproductores).
    - Modo de selección: Selección única excluyente por pregunta.
-   - Botón de navegación: "Siguiente Pregunta" (inactivo hasta seleccionar una opción) y "Finalizar Auditoría" en la última pregunta.
+   - Botón de navegación: "Siguiente Pregunta" (inactivo hasta seleccionar una opción) y "Finalizar" en la última pregunta.
 
 3. **Panel de Retroalimentación y Resultados (Feedback Screen):**
    - Se despliega únicamente cuando las 6 preguntas han sido respondidas.
@@ -95,7 +95,7 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
   When la página termina de cargar
   Then debe mostrarse una ventana emergente (Modal) con la narrativa de la app de música del Petronio Álvarez
   And el fondo debe mostrarse atenuado (overlay oscuro)
-  And al hacer clic en "Comenzar Auditoría Frontend", el modal debe cerrarse y mostrar la primera pregunta.
+  And al hacer clic en "Comenzar a Mejorar la App", el modal debe cerrarse y mostrar la primera pregunta.
 
 ---
 
@@ -112,7 +112,7 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 
 ### Scenario: Visualización del panel de justificaciones al completar el quiz
   Given que el estudiante ha respondido la pregunta 6
-  When hace clic en "Finalizar Auditoría"
+  When hace clic en "Finalizar"
   Then el sistema debe calcular el número total de aciertos sobre 6
   And renderizar la pantalla de retroalimentación detallada
   And por cada pregunta, mostrar si la respuesta fue correcta o incorrecta junto con la justificación técnica de la heurística/principio aplicado

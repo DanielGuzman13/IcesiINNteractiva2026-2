@@ -53,7 +53,7 @@ export default function FrontendRetoPage() {
               </div>
               <h1 className="text-3xl font-extrabold">Frontend / UX</h1>
               <div className="text-sm font-medium text-white/80">
-                Auditoría de la app &quot;Sonoridades del Pacífico&quot;
+                Mejora la app &quot;Sonoridades del Pacífico&quot;
               </div>
             </div>
           </div>
@@ -110,7 +110,7 @@ export default function FrontendRetoPage() {
                 navegación es confusa.
               </p>
               <p className="text-sm leading-relaxed text-brand-support">
-                Tu misión: auditar la app, elegir la mejor decisión de interfaz en cada
+                Tu misión: revisar la app, elegir la mejor decisión de interfaz en cada
                 caso y completar las <strong>6 preguntas</strong> de heurísticas de
                 usabilidad, color y componentes UI.
               </p>
@@ -122,7 +122,7 @@ export default function FrontendRetoPage() {
                 onClick={() => setShowIntro(false)}
                 className="rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-mid"
               >
-                Comenzar Auditoría Frontend
+                Comenzar a Mejorar la App
               </button>
             </div>
           </div>
