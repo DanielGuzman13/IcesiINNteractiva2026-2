@@ -12,8 +12,6 @@ export const INITIAL_INVENTORY: Inventory = {
   Camarón: 5
 };
 
-export const API_PATH = '/api/pedidos';
-
 export const BACKEND_BLOCK_TYPES = [
   'api_endpoint',
   'db_get_stock',
@@ -23,11 +21,6 @@ export const BACKEND_BLOCK_TYPES = [
 ] as const;
 
 const INGREDIENT_OPTIONS: [string, string][] = INGREDIENTS.map((name) => [name, name]);
-
-const METHOD_OPTIONS: [string, string][] = [
-  ['por internet (POST)', 'POST'],
-  ['por teléfono (GET)', 'GET']
-];
 
 const OPERATOR_OPTIONS: [string, string][] = [
   ['por lo menos', '>='],
@@ -57,23 +50,10 @@ const OPERATOR_WORD: Record<string, string> = {
   '==': 'exactamente'
 };
 
-const STATUS_LABELS: Record<number, string> = {
-  200: '200 OK',
-  201: '201 Created',
-  409: '409 Conflict'
-};
-
-export function statusLabel(status: number): string {
-  return STATUS_LABELS[status] ?? `${status}`;
-}
-
 export function defineBackendBlocks() {
   Blocks['api_endpoint'] = {
     init: function () {
-      this.appendDummyInput()
-        .appendField('Cuando llega un pedido')
-        .appendField(new FieldDropdown(METHOD_OPTIONS), 'METHOD')
-        .appendField('a la caseta, atiende el pedido así:');
+      this.appendDummyInput().appendField('Cuando llega un pedido a la caseta');
       this.appendStatementInput('DO').appendField('entonces');
       this.setColour(210);
       this.setTooltip(
@@ -86,23 +66,23 @@ export function defineBackendBlocks() {
   Blocks['db_get_stock'] = {
     init: function () {
       this.appendDummyInput()
-        .appendField('¿cuánto hay de')
+        .appendField('Consultar cuántos')
         .appendField(new FieldDropdown(INGREDIENT_OPTIONS), 'INGREDIENT')
-        .appendField('?');
-      this.setOutput(true, 'Number');
+        .appendField('quedan en la despensa');
+      this.setPreviousStatement(true, null);
+      this.setNextStatement(true, null);
       this.setColour(30);
-      this.setTooltip('Pregunta cuántas unidades quedan de un ingrediente en la despensa.');
+      this.setTooltip('Consulta cuántas unidades quedan del ingrediente en la despensa.');
       this.setHelpUrl('');
     }
   };
 
   Blocks['controls_if_stock'] = {
     init: function () {
-      this.appendValueInput('STOCK')
-        .setCheck('Number')
-        .appendField('Si con');
       this.appendDummyInput()
-        .appendField('alcanza para')
+        .appendField('Si todavía hay')
+        .appendField(new FieldDropdown(INGREDIENT_OPTIONS), 'INGREDIENT')
+        .appendField('para')
         .appendField(new FieldDropdown(OPERATOR_OPTIONS), 'OP')
         .appendField(new FieldNumber(1, 0, 99, 1), 'AMOUNT')
         .appendField('plato(s)');
@@ -112,7 +92,7 @@ export function defineBackendBlocks() {
       this.setNextStatement(true, null);
       this.setColour(120);
       this.setTooltip(
-        'Decide qué hacer según lo que quede en la despensa. Conecta aquí un bloque "¿cuánto hay de...?"'
+        'Decide qué hacer según lo que quede del ingrediente en la despensa.'
       );
       this.setHelpUrl('');
     }
@@ -121,9 +101,8 @@ export function defineBackendBlocks() {
   Blocks['db_update_stock'] = {
     init: function () {
       this.appendDummyInput()
-        .appendField('Descontar del almacén')
+        .appendField('Quitar de la despensa')
         .appendField(new FieldNumber(1, 1, 20, 1), 'AMOUNT')
-        .appendField('de')
         .appendField(new FieldDropdown(INGREDIENT_OPTIONS), 'INGREDIENT');
       this.setPreviousStatement(true, null);
       this.setNextStatement(true, null);
@@ -153,8 +132,6 @@ export interface BackendLog {
 
 export interface BackendPlan {
   hasEndpoint: boolean;
-  method: string;
-  path: string;
   pseudo: string;
   issues: string[];
   hasValidation: boolean;
@@ -168,14 +145,10 @@ export type RunKind =
   | 'conflict'
   | 'db-error'
   | 'no-response'
-  | 'no-updates'
-  | 'error-status';
+  | 'no-updates';
 
 export interface BackendRunResult {
   kind: RunKind;
-  method: string;
-  path: string;
-  status: number | null;
   inventory: Inventory;
   committed: boolean;
   targetIngredient: string | null;
@@ -184,7 +157,7 @@ export interface BackendRunResult {
 }
 
 const ARCHITECTURE_TIP =
-  'Tip de Arquitectura: Recuerda siempre consultar y validar el inventario antes de descontar o responder al cliente';
+  'Consejo: consulta cuánto hay en la despensa antes de descontar o de responderle al comensal.';
 
 function chainToPseudo(start: Block | null, indent: string, lines: string[]) {
   let block: Block | null = start;
@@ -197,21 +170,17 @@ function chainToPseudo(start: Block | null, indent: string, lines: string[]) {
 function blockToPseudo(block: Block, indent: string, lines: string[]) {
   switch (block.type) {
     case 'api_endpoint': {
-      const method = String(block.getFieldValue('METHOD') || 'POST');
-      lines.push(`${indent}Cuando llega un pedido ${method} a la caseta {`);
+      lines.push(`${indent}Cuando llega un pedido a la caseta: {`);
       chainToPseudo(block.getInputTargetBlock('DO'), `${indent}  `, lines);
       lines.push(`${indent}}`);
       break;
     }
     case 'controls_if_stock': {
-      const stockBlock = block.getInputTargetBlock('STOCK');
-      const ingredient = stockBlock
-        ? String(stockBlock.getFieldValue('INGREDIENT'))
-        : '...';
+      const ingredient = String(block.getFieldValue('INGREDIENT'));
       const op = String(block.getFieldValue('OP'));
       const word = OPERATOR_WORD[op] ?? op;
       const amount = block.getFieldValue('AMOUNT');
-      lines.push(`${indent}Si con ${ingredient} alcanza para ${word} ${amount} plato(s) {`);
+      lines.push(`${indent}Si todavía hay ${ingredient} para ${word} ${amount} plato(s) {`);
       chainToPseudo(block.getInputTargetBlock('DO'), `${indent}  `, lines);
       const elseBlock = block.getInputTargetBlock('ELSE');
       if (elseBlock) {
@@ -224,12 +193,12 @@ function blockToPseudo(block: Block, indent: string, lines: string[]) {
     case 'db_update_stock': {
       const ingredient = String(block.getFieldValue('INGREDIENT'));
       const amount = block.getFieldValue('AMOUNT');
-      lines.push(`${indent}Descontar ${amount} de ${ingredient}`);
+      lines.push(`${indent}Quitar ${amount} ${ingredient} de la despensa`);
       break;
     }
     case 'db_get_stock': {
       const ingredient = String(block.getFieldValue('INGREDIENT'));
-      lines.push(`${indent}Consultar cuánto hay de ${ingredient}`);
+      lines.push(`${indent}Consultar cuántos ${ingredient} quedan en la despensa`);
       break;
     }
     case 'http_response': {
@@ -255,8 +224,6 @@ export function buildBackendPlan(workspace: Workspace): BackendPlan {
     const loose = looseBlocks.length;
     return {
       hasEndpoint: false,
-      method: 'POST',
-      path: API_PATH,
       pseudo: '// Arrastra el bloque "Cuando llega un pedido" para empezar tu flujo',
       issues: [
         'Falta el punto de inicio: arrastra el bloque "Cuando llega un pedido".',
@@ -271,8 +238,6 @@ export function buildBackendPlan(workspace: Workspace): BackendPlan {
   }
 
   const endpoint = endpoints[0];
-  const method = String(endpoint.getFieldValue('METHOD') || 'POST');
-  const path = API_PATH;
 
   const lines: string[] = [];
   blockToPseudo(endpoint, '', lines);
@@ -285,20 +250,14 @@ export function buildBackendPlan(workspace: Workspace): BackendPlan {
   const updateCount = descendants.filter((block) => block.type === 'db_update_stock').length;
   const responseCount = descendants.filter((block) => block.type === 'http_response').length;
   const bodyEmpty = !endpoint.getInputTargetBlock('DO');
-  const missingPlug = descendants.some(
-    (block) => block.type === 'controls_if_stock' && !block.getInputTargetBlock('STOCK')
-  );
 
   const issues: string[] = [];
   if (bodyEmpty) {
     issues.push('El flujo está vacío: agrega una condición, un descuento y una respuesta.');
   }
-  if (missingPlug) {
-    issues.push('Hay una condición sin terminar: conecta un bloque "¿cuánto hay de...?" al hueco.');
-  }
   if (updateCount > 0 && !hasValidation) {
     issues.push(
-      'Descuentas ingredientes sin preguntar primero cuánto hay: podrías vender sin insumos.'
+      'Descuentas ingredientes sin consultar primero cuánto hay: podrías vender sin insumos.'
     );
   }
   if (responseCount === 0 && !bodyEmpty) {
@@ -310,8 +269,6 @@ export function buildBackendPlan(workspace: Workspace): BackendPlan {
 
   return {
     hasEndpoint: true,
-    method,
-    path,
     pseudo: lines.join('\n'),
     issues,
     hasValidation,
@@ -326,16 +283,13 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   if (endpoints.length === 0) {
     return {
       kind: 'no-endpoint',
-      method: 'POST',
-      path: API_PATH,
-      status: null,
       inventory,
       committed: false,
       targetIngredient: null,
       logs: [
         {
           tone: 'error',
-          text: '[ERROR 404] Aún no hay un "Cuando llega un pedido": arma y despliega tu flujo primero.'
+          text: 'Aún no hay un punto de inicio: arrastra el bloque "Cuando llega un pedido" y vuelve a probar.'
         }
       ],
       tip: ARCHITECTURE_TIP
@@ -343,11 +297,9 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   }
 
   const endpoint = endpoints[0];
-  const method = String(endpoint.getFieldValue('METHOD') || 'POST');
-  const path = API_PATH;
 
   const logs: BackendLog[] = [
-    { tone: 'info', text: `→ ${method} ${path} · recibiendo petición del comensal...` }
+    { tone: 'info', text: 'Un comensal hizo un pedido en la caseta: empieza tu flujo.' }
   ];
 
   const working: Inventory = { ...inventory };
@@ -357,22 +309,13 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   let targetIngredient: string | null = null;
 
   const evaluateCondition = (block: Block): boolean => {
-    const stockBlock = block.getInputTargetBlock('STOCK');
-    if (!stockBlock || stockBlock.type !== 'db_get_stock') {
-      logs.push({
-        tone: 'warn',
-        text: 'Falta saber cuánto hay: conecta el bloque "¿cuánto hay de...?" a la condición.'
-      });
-      return false;
-    }
-
-    const ingredient = String(stockBlock.getFieldValue('INGREDIENT')) as Ingredient;
+    const ingredient = String(block.getFieldValue('INGREDIENT')) as Ingredient;
     const op = String(block.getFieldValue('OP'));
     const amount = Number(block.getFieldValue('AMOUNT'));
     const value = inventory[ingredient] ?? 0;
     targetIngredient = targetIngredient ?? ingredient;
 
-    let result = false;
+    let result: boolean;
     switch (op) {
       case '>=':
         result = value >= amount;
@@ -395,7 +338,7 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
 
     logs.push({
       tone: 'info',
-      text: `Pregunta: ¿cuánto hay de ${ingredient}? → ${value} ${result ? '· sí alcanza' : '· no alcanza'}`
+      text: `Validando ${ingredient}: hay ${value} · ${result ? 'sí alcanza' : 'no alcanza'}`
     });
     return result;
   };
@@ -405,6 +348,15 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
       case 'controls_if_stock': {
         const passes = evaluateCondition(block);
         execChain(passes ? block.getInputTargetBlock('DO') : block.getInputTargetBlock('ELSE'));
+        break;
+      }
+      case 'db_get_stock': {
+        const ingredient = String(block.getFieldValue('INGREDIENT')) as Ingredient;
+        const value = inventory[ingredient] ?? 0;
+        logs.push({
+          tone: 'info',
+          text: `En la despensa hay ${value} de ${ingredient}`
+        });
         break;
       }
       case 'db_update_stock': {
@@ -421,7 +373,7 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
         updates.push({ ingredient, delta: -amount, before, after });
         logs.push({
           tone: 'info',
-          text: `Descontar ${amount} de ${ingredient}: quedan ${after}`
+          text: `Quitar ${amount} de ${ingredient}: quedan ${after}`
         });
         break;
       }
@@ -447,9 +399,6 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   if (fatalError) {
     return {
       kind: 'db-error',
-      method,
-      path,
-      status: null,
       inventory,
       committed: false,
       targetIngredient,
@@ -457,11 +406,11 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
         ...logs,
         {
           tone: 'error',
-          text: '[DATABASE ERROR] Integridad violada: Stock negativo no permitido'
+          text: 'Error en la despensa: intentaste quitar más ingredientes de los que hay. Eso no se puede.'
         },
         {
           tone: 'warn',
-          text: 'ROLLBACK: la transacción se revirtió, el inventario no cambió.'
+          text: 'Se revirtió todo: el inventario no cambió.'
         }
       ],
       tip: ARCHITECTURE_TIP
@@ -471,9 +420,6 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   if (!responded) {
     return {
       kind: 'no-response',
-      method,
-      path,
-      status: null,
       inventory,
       committed: false,
       targetIngredient,
@@ -481,7 +427,7 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
         ...logs,
         {
           tone: 'warn',
-          text: '[ERROR 504] Nadie respondió al comensal: falta el bloque "Decirle al comensal".'
+          text: 'Le faltaste el respeto al comensal: no encontré el bloque "Decirle al comensal" en tu flujo.'
         }
       ],
       tip: 'Agrega el bloque "Decirle al comensal" al final de tu flujo para responderle al cliente.'
@@ -489,14 +435,10 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   }
 
   const { status } = responded;
-  const label = statusLabel(status);
 
   if (status === 409) {
     return {
       kind: 'conflict',
-      method,
-      path,
-      status,
       inventory,
       committed: false,
       targetIngredient,
@@ -504,9 +446,9 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
         ...logs,
         {
           tone: 'error',
-          text: `[${method} 409 Conflict] - Pedido rechazado: Stock insuficiente`
+          text: 'Pedido rechazado: no quedan suficientes ingredientes para preparar el plato.'
         },
-        { tone: 'info', text: 'Inventario intacto: no se aplicó ningún descuento.' }
+        { tone: 'info', text: 'Inventario intacto: no se descontó nada.' }
       ],
       tip: null
     };
@@ -516,15 +458,12 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
     if (updates.length === 0) {
       return {
         kind: 'no-updates',
-        method,
-        path,
-        status,
         inventory,
         committed: false,
         targetIngredient,
         logs: [
           ...logs,
-          { tone: 'warn', text: `[${method} ${label}] - Respuesta enviada sin descontar inventario.` }
+          { tone: 'warn', text: 'Se respondió al comensal, pero nadie descontó los ingredientes del plato.' }
         ],
         tip: ARCHITECTURE_TIP
       };
@@ -532,21 +471,14 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
 
     return {
       kind: 'created',
-      method,
-      path,
-      status,
       inventory: working,
       committed: true,
       targetIngredient,
       logs: [
         ...logs,
-        ...updates.map((update) => ({
-          tone: 'success' as const,
-          text: `DESCUENTO aplicado: ${update.ingredient} ${update.before} → ${update.after}`
-        })),
         {
           tone: 'success' as const,
-          text: `[${method} ${label}] - Transacción completada con éxito`
+          text: 'Pedido completado con éxito: la cocina preparó el plato y se lo entregó al comensal.'
         }
       ],
       tip: null
@@ -554,16 +486,13 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
   }
 
   return {
-    kind: 'error-status',
-    method,
-    path,
-    status,
+    kind: 'no-updates',
     inventory,
     committed: false,
     targetIngredient,
     logs: [
       ...logs,
-      { tone: 'error', text: `[${method} ${label}] - El servidor rechazó la petición.` }
+      { tone: 'error', text: 'La caseta respondió con un mensaje de error.' }
     ],
     tip: null
   };

@@ -3,7 +3,7 @@ export const backendToolbox = {
   contents: [
     {
       kind: 'category',
-      name: 'Tráfico HTTP',
+      name: 'Pedidos y respuestas',
       colour: '210',
       contents: [
         { kind: 'block', type: 'api_endpoint' },
@@ -12,7 +12,7 @@ export const backendToolbox = {
     },
     {
       kind: 'category',
-      name: 'Base de Datos',
+      name: 'Despensa',
       colour: '30',
       contents: [
         { kind: 'block', type: 'db_get_stock' },
@@ -21,7 +21,7 @@ export const backendToolbox = {
     },
     {
       kind: 'category',
-      name: 'Lógica y Control',
+      name: 'Decisiones',
       colour: '120',
       contents: [{ kind: 'block', type: 'controls_if_stock' }]
     }

@@ -9,7 +9,7 @@ interface RoleCardProps {
 export default function RoleCard({ role }: RoleCardProps) {
   return (
     <Link
-      href={`/retos/${role.slug}`}
+      href={role.href ?? `/retos/${role.slug}`}
       className="group relative flex flex-col overflow-hidden rounded-3xl border border-white/70 bg-white/80 p-6 shadow-lg shadow-brand-primary/10 backdrop-blur transition-all duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-brand-primary/25 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-mid sm:p-8"
     >
       <span
