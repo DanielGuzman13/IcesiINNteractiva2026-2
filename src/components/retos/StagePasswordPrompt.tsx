@@ -6,11 +6,12 @@ import { AnimatePresence, motion } from "framer-motion";
 import type { RutaStage } from "@/lib/ruta-progress";
 import { unlockStage, verifyStagePassword } from "@/lib/stage-access";
 import { PERSONAJES, PERSONAJE_POR_PARADA } from "@/lib/personajes";
+import TextoCaleno from "@/components/personajes/TextoCaleno";
 
 const MENSAJES_ERROR = [
-  "Mmm… esa no es la contraseña. Pídela a tu guía cuando sea el momento de empezar.",
-  "Todavía no es esa. Revisa bien con tu guía, ¡ya casi arrancamos!",
-  "Esa tampoco es. Recuerda: la contraseña la tiene tu guía.",
+  "¡*Pailas*! Esa no es la contraseña. Pedísela a tu guía cuando sea el momento de empezar.",
+  "Uy, no… todavía no es esa. Revisá bien con tu guía, ¡ya casi arrancamos!",
+  "Esa tampoco es, *ve*. Acordate: la contraseña la tiene tu guía.",
 ];
 
 /**
@@ -40,10 +41,10 @@ export default function StagePasswordPrompt({
   }, []);
 
   const mensaje = correcta
-    ? `¡Correcta! Bienvenido a ${stage.title}. ¡Vamos!`
+    ? `¡*Eso, ve*! Contraseña correcta. ¡*Vamos pues* a ${stage.title}!`
     : intentos > 0
       ? MENSAJES_ERROR[(intentos - 1) % MENSAJES_ERROR.length]
-      : `¡Hola! Soy ${personaje.presentacion}. Para abrir ${stage.title} necesito la contraseña que te dará tu guía.`;
+      : `¡*Quiubo*! Soy ${personaje.presentacion}. Para abrir ${stage.title} necesito la contraseña que te dará tu guía.`;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -63,7 +64,7 @@ export default function StagePasswordPrompt({
 
   return (
     <div
-      className="flex w-full max-w-3xl flex-col items-center gap-2 md:flex-row md:items-end md:gap-0"
+      className="flex w-full max-w-5xl flex-col items-center gap-2 md:flex-row md:items-end md:gap-0"
       role="dialog"
       aria-modal="true"
       aria-label={`${stage.title}: contraseña de la actividad`}
@@ -72,14 +73,14 @@ export default function StagePasswordPrompt({
         initial={{ x: -30, opacity: 0 }}
         animate={correcta ? { x: 0, opacity: 1, y: [0, -14, 0] } : { x: 0, opacity: 1 }}
         transition={{ duration: correcta ? 0.5 : 0.4, ease: "easeOut" }}
-        className="relative h-44 w-44 shrink-0 sm:h-56 sm:w-56 md:h-80 md:w-72"
+        className="relative h-60 w-60 shrink-0 sm:h-80 sm:w-80 md:h-[min(34rem,72vh)] md:w-[min(30rem,64vh)]"
       >
         <Image
           src={personaje.imagen}
           alt={personaje.titulo}
           fill
           priority
-          sizes="(max-width: 768px) 224px, 288px"
+          sizes="(max-width: 768px) 320px, 480px"
           className="object-contain object-bottom drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]"
         />
       </motion.div>
@@ -88,7 +89,7 @@ export default function StagePasswordPrompt({
         key={intentos}
         animate={error ? { x: [0, -12, 12, -12, 12, -8, 8, 0] } : { scale: [0.97, 1] }}
         transition={{ duration: error ? 0.5 : 0.2 }}
-        className="relative w-full md:mb-6 md:flex-1"
+        className="relative w-full md:mb-16 md:flex-1"
       >
         <span
           aria-hidden="true"
@@ -122,7 +123,7 @@ export default function StagePasswordPrompt({
                 error ? "text-red-600" : correcta ? "text-emerald-700" : "text-brand-support"
               }`}
             >
-              {mensaje}
+              <TextoCaleno texto={mensaje} />
             </motion.p>
           </AnimatePresence>
 

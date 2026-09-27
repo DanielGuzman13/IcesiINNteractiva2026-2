@@ -5,6 +5,7 @@ import Image from "next/image";
 import { AnimatePresence, motion } from "framer-motion";
 import { loadPlayer } from "@/lib/player";
 import { PERSONAJES, textoConNombre, type RolActividad } from "@/lib/personajes";
+import TextoCaleno from "./TextoCaleno";
 
 /**
  * Escena a pantalla completa: el personaje a un lado y su globo de diálogo
@@ -28,7 +29,7 @@ export default function EscenaPersonaje({
   const textoBoton = esUltimo
     ? tipo === "intro"
       ? personaje.botonIntro
-      : "Continuar"
+      : personaje.botonCierre
     : "Siguiente";
 
   function avanzar() {
@@ -47,25 +48,25 @@ export default function EscenaPersonaje({
         initial={{ opacity: 0, y: 24 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: "easeOut" }}
-        className="my-auto flex w-full max-w-5xl flex-col items-center gap-2 md:flex-row md:items-end md:gap-0"
+        className="my-auto flex w-full max-w-6xl flex-col items-center gap-2 md:flex-row md:items-end md:gap-0"
       >
         <motion.div
           initial={{ x: -40, opacity: 0 }}
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
-          className="relative h-56 w-56 shrink-0 sm:h-72 sm:w-72 md:h-[26rem] md:w-[24rem]"
+          className="relative h-72 w-72 shrink-0 sm:h-96 sm:w-96 md:h-[min(40rem,78vh)] md:w-[min(36rem,70vh)]"
         >
           <Image
             src={personaje.imagen}
             alt={personaje.titulo}
             fill
             priority
-            sizes="(max-width: 768px) 288px, 384px"
+            sizes="(max-width: 768px) 384px, 576px"
             className="object-contain object-bottom drop-shadow-[0_18px_30px_rgba(0,0,0,0.35)]"
           />
         </motion.div>
 
-        <div className="relative w-full md:mb-16 md:flex-1">
+        <div className="relative w-full md:mb-24 md:flex-1">
           {/* Colita del globo apuntando al personaje */}
           <span
             aria-hidden="true"
@@ -86,7 +87,7 @@ export default function EscenaPersonaje({
                   transition={{ duration: 0.25 }}
                   className="text-lg leading-relaxed text-brand-support sm:text-xl"
                 >
-                  {textoConNombre(mensajes[paso], nombre)}
+                  <TextoCaleno texto={textoConNombre(mensajes[paso], nombre)} />
                 </motion.p>
               </AnimatePresence>
             </div>

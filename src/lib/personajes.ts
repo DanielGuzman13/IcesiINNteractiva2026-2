@@ -6,7 +6,9 @@
  *  2. presenta su rol y el reto al empezar (intro),
  *  3. felicita y explica por qué su rol es importante al terminar (cierre).
  *
- * En los textos, {nombre} se reemplaza por el nombre del estudiante.
+ * En los textos, {nombre} se reemplaza por el nombre del estudiante, y las
+ * expresiones caleñas van entre asteriscos (*ve*, *pailas*…) para que se
+ * resalten con su significado del diccionario caleñol (src/lib/calenol.ts).
  */
 
 export type RolActividad =
@@ -27,6 +29,10 @@ export interface Personaje {
   cierre: string[];
   /** Texto del botón con el que termina la intro. */
   botonIntro: string;
+  /** A dónde lleva el personaje al terminar la actividad. */
+  destinoCierre: string;
+  /** Texto del botón con el que termina el cierre. */
+  botonCierre: string;
 }
 
 export const PERSONAJES: Record<RolActividad, Personaje> = {
@@ -35,96 +41,108 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     presentacion: "la Analista de Requerimientos",
     imagen: "/personajes/analista.webp",
     intro: [
-      "¡Hola, {nombre}! Soy la Analista de Requerimientos. En los equipos también me llaman Product Owner.",
-      "Mi trabajo es entender la lógica del negocio: escucho a las personas, descubro qué necesitan de verdad y lo escribo tan claro que todo el equipo sabe qué construir.",
-      "Estamos en el Mundial de Salsa de Cali. El público quiere votar en vivo, comprar boletas y ver los puntajes del jurado desde el celular. Tu reto: armar un requerimiento sin confusiones, separando lo importante de lo que sobra.",
+      "¡*Ve*, {nombre}! ¿Todo bien? Soy la Analista de Requerimientos. En los equipos también me dicen Product Owner.",
+      "Mi trabajo es entender la lógica del negocio: escucho a la gente, averiguo qué necesita de verdad y lo escribo tan clarito que todo el equipo sabe qué construir.",
+      "*Mirá*: estamos en el Mundial de Salsa de Cali. El público quiere votar en vivo, comprar boletas y ver los puntajes del jurado desde el celular. Tu reto es armar un requerimiento sin enredos, separando lo importante de lo que sobra. ¿Le hacemos? ¡*De una*!",
     ],
     cierre: [
-      "¡Muy bien, {nombre}! Encontraste la condición, la acción y el resultado, y dejaste por fuera lo que no tenía nada que ver.",
-      "Eso evita que el equipo construya algo que nadie pidió. Un requerimiento claro ahorra semanas de trabajo y muchos dolores de cabeza.",
-      "Soy la primera pieza del ciclo de vida del software: si no entendemos bien el problema, no hay buena solución. ¡Me encanta hacer preguntas y conectar a las personas con la tecnología!",
+      "¡*Uy, qué nota*, {nombre}! Encontraste la condición, la acción y el resultado, y dejaste por fuera lo que no tenía nada que ver.",
+      "Eso evita que el equipo construya algo que nadie pidió. Un requerimiento clarito ahorra semanas de trabajo y muchos dolores de cabeza, ¿*oís*?",
+      "Yo soy la primera pieza del ciclo de vida del software: si no entendemos bien el problema, *pailas* con la solución. ¡Me *encarreta* hacer preguntas y conectar a la gente con la tecnología! Volvamos al mapa, *pues*.",
     ],
     botonIntro: "¡A analizar!",
+    destinoCierre: "/retos",
+    botonCierre: "Volver al mapa",
   },
   arquitecto: {
     titulo: "Arquitecto de Software",
     presentacion: "el Arquitecto de Software",
     imagen: "/personajes/arquitecto.webp",
     intro: [
-      "¡Hola, {nombre}! Soy el Arquitecto de Software.",
-      "Así como un arquitecto dibuja el plano antes de levantar un edificio, yo diseño la estructura de un programa antes de que alguien escriba una sola línea de código.",
-      "La Alcaldía quiere la app oficial de la Feria de Cali: boletas, desfiles, orquestas y escuelas de salsa. Vamos a diseñar juntos el plano de esa app.",
+      "¡*Quiubo*, {nombre}! Soy el Arquitecto de Software.",
+      "*Mirá*: así como un arquitecto dibuja el plano antes de levantar un edificio, yo diseño la estructura de un programa antes de que alguien escriba una sola línea de código.",
+      "La Alcaldía quiere la app oficial de la Feria de Cali: boletas, desfiles, orquestas y escuelas de salsa. *Vení* y diseñamos juntos el plano de esa app, ¡que quede *bien bacano*!",
     ],
     cierre: [
-      "¡Excelente, {nombre}! Separaste los moldes de los ejemplos, les diste características y los conectaste entre sí.",
-      "Con ese plano, el equipo de desarrollo sabe qué construir y cómo encajan las piezas. Un buen diseño evita que el sistema se vuelva un enredo difícil de arreglar.",
-      "Soy importante en el ciclo de vida del software porque pienso en el sistema completo antes de construirlo. ¡Me gusta ordenar ideas, encontrar patrones y tomar decisiones que duran años!",
+      "¡*Eso, ve*, {nombre}! Separaste los moldes de los ejemplos, les diste características y los conectaste entre sí.",
+      "Con ese plano, el equipo sabe qué construir y cómo encajan las piezas. Un buen diseño evita que el sistema termine hecho un *sancocho* difícil de arreglar.",
+      "Soy importante en el ciclo de vida del software porque pienso en el sistema completo antes de construirlo. ¡Me *encarreta* ordenar ideas, encontrar patrones y tomar decisiones que duran años!",
     ],
     botonIntro: "¡A diseñar!",
+    destinoCierre: "/retos",
+    botonCierre: "Volver al mapa",
   },
   backend: {
     titulo: "Desarrolladora Backend",
     presentacion: "la Desarrolladora Backend",
     imagen: "/personajes/backend.webp",
     intro: [
-      "¡Hola, {nombre}! Soy la Desarrolladora Backend.",
-      "Trabajo detrás de escena: programo la lógica, las reglas y los datos que hacen funcionar una app, aunque nadie los vea. Si algo falla por dentro, ¡me toca a mí!",
-      "En el Festival Petronio Álvarez, una caseta de comida del Pacífico necesita saber si puede preparar cada pedido con lo que queda en la despensa. Vamos a programar esa lógica con bloques.",
+      "¡*Ve*, {nombre}, qué bueno verte! Soy la Desarrolladora Backend.",
+      "Yo trabajo detrás de escena: programo la lógica, las reglas y los datos que hacen funcionar una app, aunque nadie los vea. Si algo se *totea* por dentro, ¡me toca a mí!",
+      "En el Petronio Álvarez, una caseta de comida del Pacífico necesita saber si puede preparar cada pedido con lo que queda en la despensa. *Pilas*, que vamos a programar esa lógica con bloques.",
     ],
     cierre: [
-      "¡Pedido servido, {nombre}! Tu lógica revisó los ingredientes, descontó lo usado y le respondió al visitante.",
-      "Eso es el backend: reglas claras que cuidan los datos y evitan, por ejemplo, vender un plato cuando ya no hay ingredientes.",
-      "Soy clave en el ciclo de vida del software porque convierto el diseño en código que funciona de verdad. ¡Me encanta resolver problemas paso a paso! Ahora mi compañera de Frontend te espera.",
+      "¡Pedido servido, {nombre}! Tu lógica revisó los ingredientes, descontó lo usado y le respondió al visitante. ¡Quedó *sabroso*!",
+      "Eso es el backend: reglas claras que cuidan los datos. Imaginate prometer una cazuela de mariscos y no tener mariscos: ¡*qué oso*!",
+      "Soy clave en el ciclo de vida del software porque convierto el diseño en código que funciona de verdad. ¡Me *encarreta* resolver problemas paso a paso! *Vamos pues* donde mi compañera de Frontend, que te está esperando.",
     ],
     botonIntro: "¡A programar!",
+    destinoCierre: "/retos/frontend",
+    botonCierre: "Ir a Frontend",
   },
   frontend: {
     titulo: "Desarrolladora Frontend",
     presentacion: "la Desarrolladora Frontend",
     imagen: "/personajes/frontend.webp",
     intro: [
-      "¡Hola, {nombre}! Soy la Desarrolladora Frontend.",
-      "Yo construyo lo que ves y tocas en una app: pantallas, botones, colores y textos. Mi misión es que usarla sea fácil y agradable para cualquier persona.",
-      "La app “Sonoridades del Pacífico” del Festival Petronio Álvarez tiene problemas: botones confusos y textos que no se leen bajo el sol de Cali. Ayúdame a tomar las mejores decisiones de diseño.",
+      "¡*Quiubo*, {nombre}! Soy la Desarrolladora Frontend.",
+      "Yo construyo lo que ves y tocás en una app: pantallas, botones, colores y textos. Mi misión es que usarla sea facilito y *bacano* para cualquier persona.",
+      "La app “Sonoridades del Pacífico” del Petronio Álvarez tiene problemas: botones confusos y letras que no se leen con este *solazo* de Cali. ¿Me ayudás a tomar las mejores decisiones de diseño?",
     ],
     cierre: [
-      "¡Muy bien, {nombre}! Tus decisiones hicieron la app más clara, legible y fácil de usar.",
-      "Una app puede funcionar perfecto por dentro, pero si la gente no entiende cómo usarla, no sirve. Por eso el diseño de la interfaz es tan importante como el código.",
-      "Soy el puente entre el código y las personas dentro del ciclo de vida del software. ¡Me encanta mezclar la creatividad del arte con la lógica de la programación!",
+      "¡Quedó una *mera app*, {nombre}! Tus decisiones la hicieron más clara, legible y fácil de usar.",
+      "Una app puede funcionar perfecto por dentro, pero si la gente no entiende cómo usarla, *pailas*. Por eso el diseño de la interfaz importa tanto como el código.",
+      "Soy el puente entre el código y las personas dentro del ciclo de vida del software. ¡Me *encarreta* mezclar la creatividad del arte con la lógica de la programación! Volvamos al mapa, *pues*.",
     ],
     botonIntro: "¡A diseñar la interfaz!",
+    destinoCierre: "/retos",
+    botonCierre: "Volver al mapa",
   },
   qa: {
     titulo: "QA y Ciberseguridad",
     presentacion: "el especialista en QA y Ciberseguridad",
     imagen: "/personajes/qa.webp",
     intro: [
-      "Hola, {nombre}. Soy el especialista en QA y Ciberseguridad.",
-      "QA significa aseguramiento de la calidad: busco los errores antes de que los encuentren los usuarios. Y también protejo los sistemas de quienes quieren atacarlos.",
-      "La Carrera del Pacífico abrió inscripciones, pero el formulario tiene errores escondidos. Tu reto: ponerlo a prueba y encontrarlos todos.",
+      "Hola, {nombre}. Soy el especialista en QA y Ciberseguridad. ¿Te asustó la máscara? Tranqui, es parte del oficio.",
+      "QA significa aseguramiento de la calidad: busco los errores antes de que los encuentren los usuarios. Y también protejo los sistemas de los que quieren atacarlos. *Ojo pues*.",
+      "La Carrera del Pacífico abrió inscripciones, pero el formulario tiene errores escondidos. *Pilas*: ponelo a prueba y encontralos todos.",
     ],
     cierre: [
-      "¡Buen trabajo de detective, {nombre}! Encontraste los errores escondidos del formulario.",
-      "Cada error que se detecta antes de lanzar una app le evita problemas a miles de corredores que se van a inscribir.",
-      "Pero esto no termina aquí: alguien atacó el servidor de resultados de la carrera. ¡Sígueme, que ahora nos toca defenderlo!",
+      "¡Qué buen ojo, {nombre}! Encontraste los errores escondidos del formulario.",
+      "Cada error que se detecta antes de lanzar una app le ahorra problemas a miles de corredores que se van a inscribir.",
+      "Pero *ve*, esto no termina aquí: alguien atacó el servidor de resultados de la carrera. ¡*Vení*, seguime, que ahora nos toca defenderlo!",
     ],
     botonIntro: "¡A buscar errores!",
+    destinoCierre: "/retos/ciberseguridad",
+    botonCierre: "Ir a Ciberseguridad",
   },
   ciberseguridad: {
     titulo: "QA y Ciberseguridad",
     presentacion: "el especialista en QA y Ciberseguridad",
     imagen: "/personajes/qa.webp",
     intro: [
-      "¡Alerta, {nombre}! Un atacante bloqueó el servidor de resultados de la Carrera del Pacífico con un código cifrado.",
-      "En ciberseguridad pensamos como los atacantes para defender mejor los sistemas. Un código cifrado es un mensaje escondido: si entiendes la regla, puedes leerlo.",
-      "Descifra la clave y restaura el servidor para que los corredores puedan ver sus tiempos oficiales.",
+      "¡*Uy, pailas*, {nombre}! Un atacante bloqueó el servidor de resultados de la Carrera del Pacífico con un código cifrado.",
+      "En ciberseguridad pensamos como los atacantes para defender mejor los sistemas. Un código cifrado es un mensaje escondido: si entendés la regla, lo podés leer.",
+      "Descifrá la clave y restaurá el servidor para que los corredores vean sus tiempos oficiales. ¡*Dale, que vos podés*!",
     ],
     cierre: [
-      "¡Servidor restaurado, {nombre}! Descifraste la clave y recuperaste los resultados oficiales.",
-      "La seguridad protege los datos y la confianza de las personas que usan la tecnología. Sin ella, cualquiera podría cambiar los resultados de una carrera.",
-      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Me gusta resolver acertijos y ver lo que otros no ven! Con esto completaste toda la ruta de la ingeniería de software.",
+      "¡Servidor restaurado, {nombre}! Descifraste la clave y recuperaste los resultados oficiales. ¡*Eso, ve*!",
+      "La seguridad protege los datos y la confianza de la gente que usa la tecnología. Sin ella, cualquiera podría cambiar los resultados de una carrera.",
+      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Me *encarretan* los acertijos y ver lo que otros no ven! Con esto completaste toda la ruta. ¡Cali nos une!",
     ],
     botonIntro: "¡A defender el servidor!",
+    destinoCierre: "/retos",
+    botonCierre: "Volver al mapa",
   },
 };
 

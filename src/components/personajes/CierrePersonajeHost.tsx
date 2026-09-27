@@ -1,8 +1,10 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   EVENTO_CIERRE,
+  PERSONAJES,
   escenaVista,
   marcarEscenaVista,
   type RolActividad,
@@ -10,10 +12,13 @@ import {
 import EscenaPersonaje from "./EscenaPersonaje";
 
 /**
- * Escucha el aviso de "actividad terminada" (anunciarCierrePersonaje) y
- * muestra el mensaje final del personaje encima de la actividad.
+ * Escucha el aviso de "actividad terminada" (anunciarCierrePersonaje),
+ * muestra el mensaje final del personaje encima de la actividad y al
+ * terminar lleva al estudiante al mapa (o a la siguiente actividad de la
+ * misma parada: Backend → Frontend, QA → Ciberseguridad).
  */
 export default function CierrePersonajeHost() {
+  const router = useRouter();
   const [rol, setRol] = useState<RolActividad | null>(null);
 
   useEffect(() => {
@@ -34,7 +39,7 @@ export default function CierrePersonajeHost() {
       tipo="cierre"
       onTerminar={() => {
         marcarEscenaVista(rol, "cierre");
-        setRol(null);
+        router.push(PERSONAJES[rol].destinoCierre);
       }}
     />
   );
