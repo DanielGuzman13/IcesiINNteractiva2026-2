@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, type DragEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
+import { anunciarCierrePersonaje } from "@/lib/personajes";
 
 type TipoBloque = "given" | "when" | "then" | "distractor";
 
@@ -290,6 +291,7 @@ export default function AnalistaSalsaChallenge() {
       setEstado("correcto");
       setZonasInvalidas([]);
       completeStage(1);
+      anunciarCierrePersonaje("analista", 1800);
       return;
     }
     setEstado("incorrecto");

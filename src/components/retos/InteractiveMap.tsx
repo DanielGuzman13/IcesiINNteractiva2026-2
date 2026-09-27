@@ -636,7 +636,7 @@ export default function InteractiveMap() {
           className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm"
           onClick={() => setStagePendiente(null)}
         >
-          <div className="w-full max-w-md" onClick={(event) => event.stopPropagation()}>
+          <div className="flex w-full max-w-5xl justify-center" onClick={(event) => event.stopPropagation()}>
             <StagePasswordPrompt
               stage={stagePendiente}
               onUnlocked={() => {

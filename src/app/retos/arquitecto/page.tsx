@@ -9,6 +9,7 @@ import PlanoFinal, { PUNTAJE_MAXIMO_TOTAL } from "@/components/game/arquitecto/P
 import { PENALIDAD_FALLO, PENALIDAD_PISTA } from "@/components/game/arquitecto/ArquitectoUI";
 import { saveActivityScore } from "@/lib/game-storage";
 import { completeStage } from "@/lib/ruta-progress";
+import { anunciarCierrePersonaje } from "@/lib/personajes";
 
 type Paso = "intro" | "nivel1" | "nivel2" | "nivel3" | "resultado";
 
@@ -97,6 +98,7 @@ export default function ArquitectoRetoPage() {
     if (siguientePaso === "resultado") {
       saveActivityScore("arquitecto", "score", siguientes[0] + siguientes[1] + siguientes[2]);
       completeStage(2);
+      anunciarCierrePersonaje("arquitecto", 1500);
     }
     setPaso(siguientePaso);
     window.scrollTo({ top: 0, behavior: "smooth" });

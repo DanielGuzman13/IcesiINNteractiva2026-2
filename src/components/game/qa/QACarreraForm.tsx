@@ -2,6 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
+import { anunciarCierrePersonaje } from "@/lib/personajes";
 import { motion } from "framer-motion";
 
 type Categoria = "infantil" | "juvenil" | "adulto";
@@ -77,6 +78,7 @@ export default function QACarreraForm() {
     // BUG-1 a BUG-6 están presentes en este formulario; el total esperado es 6.
     if (respuestaAuditoria.trim() === "6") {
       setEstadoAuditoria("correcto");
+      anunciarCierrePersonaje("qa", 1500);
     } else {
       setEstadoAuditoria("incorrecto");
     }
