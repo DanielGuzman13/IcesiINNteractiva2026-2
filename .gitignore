@@ -39,6 +39,3 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-
-# contraseñas de las actividades (solo guías, no subir)
-CONTRASENAS-GUIAS.md
