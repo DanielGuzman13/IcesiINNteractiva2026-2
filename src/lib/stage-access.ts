@@ -1,4 +1,5 @@
 import { getMaxCompletedStage, resetRutaProgress } from "./ruta-progress";
+import { resetPersonajesVistos } from "./personajes";
 
 /**
  * Control de acceso a las paradas del mapa.
@@ -71,6 +72,7 @@ export function iniciarNuevaSesion(): void {
   if (typeof window === "undefined") return;
   resetRutaProgress();
   resetStageUnlocks();
+  resetPersonajesVistos();
   try {
     window.sessionStorage.removeItem("icesi-last-stage-animated");
   } catch {

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import AppSimulator, { renderScene } from "@/components/AppSimulator";
 import { completeStage } from "@/lib/ruta-progress";
+import { anunciarCierrePersonaje } from "@/lib/personajes";
 
 type Phase = "quiz" | "results";
 
@@ -152,6 +153,7 @@ export default function FrontendPetronioAudit({
     if (isLast) {
       setPhase("results");
       completeStage(3);
+      anunciarCierrePersonaje("frontend", 1500);
       return;
     }
     const nextIndex = currentIndex + 1;

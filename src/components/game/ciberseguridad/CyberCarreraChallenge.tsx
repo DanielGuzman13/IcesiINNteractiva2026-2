@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
+import { anunciarCierrePersonaje } from "@/lib/personajes";
 
 const EXPRESIONES: string[] = [
   "CHOLADOHELADO",
@@ -94,6 +95,7 @@ export default function CyberCarreraChallenge() {
       setError(null);
       setEstado("restaurado");
       completeStage(4);
+      anunciarCierrePersonaje("ciberseguridad", 1800);
       return;
     }
     setError(
