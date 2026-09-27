@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { savePlayer } from "@/lib/player";
+import { nombreYaUsado, registrarNombreUsado, savePlayer } from "@/lib/player";
+import { iniciarNuevaSesion } from "@/lib/stage-access";
 import { AVATARS, type AvatarId } from "@/lib/avatars";
 import AvatarPicker from "./AvatarPicker";
 
@@ -23,6 +24,9 @@ export default function RegistrationForm() {
 
     if (!name.trim()) {
       nextErrors.name = "Escribe tu nombre para continuar.";
+    } else if (nombreYaUsado(name)) {
+      nextErrors.name =
+        "Ese nombre ya se usó en este computador. Agrega tu apellido o una inicial (ej. Juan P.).";
     }
     if (!avatar) {
       nextErrors.avatar = "Elige un avatar para tu perfil.";
@@ -32,6 +36,10 @@ export default function RegistrationForm() {
     if (Object.keys(nextErrors).length > 0) return;
     if (!avatar) return;
 
+    // Cada registro es una persona nueva: se borra el avance y los desbloqueos
+    // de este computador para que el mapa vuelva a pedir las contraseñas.
+    iniciarNuevaSesion();
+    registrarNombreUsado(name);
     savePlayer({ name: name.trim(), avatar });
     router.push("/retos");
   }
