@@ -256,7 +256,7 @@ export default function PlanoFinal({
           href="/retos"
           className="flex items-center justify-center rounded-full bg-brand-primary px-8 py-3 font-bold text-white shadow-md transition-all hover:bg-brand-mid"
         >
-          Volver a los retos
+          Continuar
         </Link>
       </div>
     </div>

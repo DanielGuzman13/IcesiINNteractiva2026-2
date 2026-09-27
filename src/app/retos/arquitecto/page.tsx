@@ -8,6 +8,7 @@ import Nivel3Conexiones from "@/components/game/arquitecto/Nivel3Conexiones";
 import PlanoFinal, { PUNTAJE_MAXIMO_TOTAL } from "@/components/game/arquitecto/PlanoFinal";
 import { PENALIDAD_FALLO, PENALIDAD_PISTA } from "@/components/game/arquitecto/ArquitectoUI";
 import { saveActivityScore } from "@/lib/game-storage";
+import { completeStage } from "@/lib/ruta-progress";
 
 type Paso = "intro" | "nivel1" | "nivel2" | "nivel3" | "resultado";
 
@@ -95,6 +96,7 @@ export default function ArquitectoRetoPage() {
     const siguientePaso: Paso = nivel === 0 ? "nivel2" : nivel === 1 ? "nivel3" : "resultado";
     if (siguientePaso === "resultado") {
       saveActivityScore("arquitecto", "score", siguientes[0] + siguientes[1] + siguientes[2]);
+      completeStage(2);
     }
     setPaso(siguientePaso);
     window.scrollTo({ top: 0, behavior: "smooth" });

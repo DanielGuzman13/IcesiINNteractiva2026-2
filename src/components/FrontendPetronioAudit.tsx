@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import AppSimulator, { renderScene } from "@/components/AppSimulator";
+import { completeStage } from "@/lib/ruta-progress";
 
 type Phase = "quiz" | "results";
 
@@ -150,6 +151,7 @@ export default function FrontendPetronioAudit({
 
     if (isLast) {
       setPhase("results");
+      completeStage(3);
       return;
     }
     const nextIndex = currentIndex + 1;
@@ -336,7 +338,7 @@ export default function FrontendPetronioAudit({
                 href="/retos"
                 className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-mid"
               >
-                Volver a los retos →
+                Continuar
               </Link>
             </div>
           </div>

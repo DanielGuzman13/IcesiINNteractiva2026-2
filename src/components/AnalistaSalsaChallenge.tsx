@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type DragEvent } from "react";
 import { motion } from "framer-motion";
+import { completeStage } from "@/lib/ruta-progress";
 
 type TipoBloque = "given" | "when" | "then" | "distractor";
 
@@ -288,6 +289,7 @@ export default function AnalistaSalsaChallenge() {
     if (invalidas.length === 0) {
       setEstado("correcto");
       setZonasInvalidas([]);
+      completeStage(1);
       return;
     }
     setEstado("incorrecto");
@@ -452,7 +454,7 @@ export default function AnalistaSalsaChallenge() {
                 href="/retos"
                 className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
               >
-                Avanzar a la Siguiente Actividad
+                Continuar
                 <svg
                   viewBox="0 0 24 24"
                   className="h-5 w-5"

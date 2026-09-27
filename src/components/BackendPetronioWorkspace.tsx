@@ -437,7 +437,7 @@ function BackendPetronioWorkspace({
                 href={nextHref}
                 className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
               >
-                Siguiente actividad →
+                Continuar
               </Link>
             ) : (
               <button
@@ -445,7 +445,7 @@ function BackendPetronioWorkspace({
                 disabled
                 className="cursor-not-allowed rounded-xl bg-slate-200 px-5 py-2.5 text-sm font-bold text-slate-400"
               >
-                Siguiente actividad →
+                Continuar
               </button>
             )}
           </div>
