@@ -32,6 +32,7 @@ export const ROLES: Role[] = [
       "Asegura la calidad y la seguridad: valida escenarios, prueba y protege cada detalle.",
     icon: "shield",
     accent: "#6E7FA2",
+    href: "/retos/qa",
   },
   {
     slug: "fullstack",

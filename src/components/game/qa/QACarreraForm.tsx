@@ -353,7 +353,7 @@ export default function QACarreraForm() {
           {estadoAuditoria === "correcto" && (
             <button
               type="button"
-              onClick={() => router.push("/retos")}
+              onClick={() => router.push("/retos/ciberseguridad")}
               className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
             >
               Continuar al siguiente rol

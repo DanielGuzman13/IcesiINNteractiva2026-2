@@ -2,18 +2,6 @@ interface IconProps {
   className?: string;
 }
 
-export function SoccerBall({ className = "h-4 w-4" }: IconProps) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} aria-hidden="true">
-      <circle cx="12" cy="12" r="10.5" fill="#ffffff" />
-      <g fill="none" stroke="#1f2937" strokeWidth="0.9">
-        <polygon points="12,9.2 14.8,12.3 13.3,15.7 10.7,15.7 9.2,12.3" />
-        <path d="M12 3.2v6M12 15.7v5.1M6.8 7.1l2.4 5.2M17.2 7.1l-2.4 5.2M5.2 16.3l5.5-.6M18.8 16.3l-5.5-.6" />
-      </g>
-    </svg>
-  );
-}
-
 export function StarIcon({ className = "h-6 w-6" }: IconProps) {
   return (
     <svg viewBox="0 0 24 24" className={className} fill="currentColor" aria-hidden="true">
