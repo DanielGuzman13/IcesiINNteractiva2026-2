@@ -6,6 +6,7 @@ import Actividad1DiagramaClases from "@/components/game/arquitecto/Actividad1Dia
 import Actividad2AsignarAtributos from "@/components/game/arquitecto/Actividad2AsignarAtributos";
 import { MedalIcon, TrophyIcon } from "@/components/game/icons";
 import { saveActivityScore } from "@/lib/game-storage";
+import { completeStage } from "@/lib/ruta-progress";
 
 type Paso = "intro" | "actividad1" | "actividad2" | "resultado";
 
@@ -38,6 +39,7 @@ export default function ArquitectoRetoPage() {
 
     const total = scoreA1 + score;
     saveActivityScore("arquitecto", "score", total);
+    completeStage(2);
 
     const mensajes = [
       "¡Increíble! Has completado el diseño arquitectónico del sistema.",
@@ -276,7 +278,7 @@ export default function ArquitectoRetoPage() {
                     href="/retos"
                     className="flex flex-col items-center rounded-full bg-brand-primary px-8 py-3 font-bold text-white shadow-md transition-all hover:bg-brand-mid"
                   >
-                    <span>Volver a los retos</span>
+                    <span>Continuar</span>
                   </Link>
                 </div>
               </div>

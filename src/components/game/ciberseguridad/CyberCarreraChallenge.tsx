@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
+import { completeStage } from "@/lib/ruta-progress";
 
 const EXPRESIONES: string[] = [
   "CHOLADOHELADO",
@@ -92,6 +93,7 @@ export default function CyberCarreraChallenge() {
     if (clave.trim().toLowerCase() === expresion.toLowerCase()) {
       setError(null);
       setEstado("restaurado");
+      completeStage(4);
       return;
     }
     setError(
@@ -292,7 +294,7 @@ export default function CyberCarreraChallenge() {
               href="/retos"
               className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
             >
-              Siguiente actividad del taller
+              Continuar
               <svg
                 viewBox="0 0 24 24"
                 className="h-5 w-5"
