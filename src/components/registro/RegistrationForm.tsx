@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { savePlayer } from "@/lib/player";
+import { loadPlayer, savePlayer } from "@/lib/player";
+import { iniciarNuevaSesion } from "@/lib/stage-access";
 import { AVATARS, type AvatarId } from "@/lib/avatars";
 import AvatarPicker from "./AvatarPicker";
 
@@ -31,6 +32,13 @@ export default function RegistrationForm() {
     setErrors(nextErrors);
     if (Object.keys(nextErrors).length > 0) return;
     if (!avatar) return;
+
+    // Un nombre distinto al del jugador anterior = grupo nuevo en este computador:
+    // se borra el avance y los desbloqueos para que vuelva a pedir contraseñas.
+    const anterior = loadPlayer();
+    const mismoJugador =
+      anterior?.name.trim().toLowerCase() === name.trim().toLowerCase();
+    if (!mismoJugador) iniciarNuevaSesion();
 
     savePlayer({ name: name.trim(), avatar });
     router.push("/retos");

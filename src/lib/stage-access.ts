@@ -1,4 +1,4 @@
-import { getMaxCompletedStage } from "./ruta-progress";
+import { getMaxCompletedStage, resetRutaProgress } from "./ruta-progress";
 
 /**
  * Control de acceso a las paradas del mapa.
@@ -58,6 +58,21 @@ export function resetStageUnlocks(): void {
   if (typeof window === "undefined") return;
   try {
     window.localStorage.removeItem(STAGE_UNLOCKS_KEY);
+  } catch {
+    return;
+  }
+}
+
+/**
+ * Deja el computador listo para un grupo nuevo: borra el avance del mapa
+ * y los desbloqueos, así el mapa vuelve a pedir todas las contraseñas.
+ */
+export function iniciarNuevaSesion(): void {
+  if (typeof window === "undefined") return;
+  resetRutaProgress();
+  resetStageUnlocks();
+  try {
+    window.sessionStorage.removeItem("icesi-last-stage-animated");
   } catch {
     return;
   }
