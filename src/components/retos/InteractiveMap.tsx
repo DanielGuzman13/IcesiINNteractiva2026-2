@@ -16,6 +16,8 @@ import {
 import { loadPlayer } from "@/lib/player";
 import { getAvatarSrc } from "@/lib/avatars";
 import { useHasHydrated } from "@/lib/use-has-hydrated";
+import { isStageUnlocked } from "@/lib/stage-access";
+import StagePasswordPrompt from "./StagePasswordPrompt";
 
 interface Point {
   x: number;
@@ -374,6 +376,9 @@ export default function InteractiveMap() {
   const [isLanding, setIsLanding] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
 
+  // Parada que espera contraseña antes de abrirse
+  const [stagePendiente, setStagePendiente] = useState<RutaStage | null>(null);
+
   // Posiciones efectivas de cada estación directamente desde src/lib/ruta-progress.ts
   const stagePositions = useMemo(() => {
     const res: Record<number, Point> = {};
@@ -447,18 +452,27 @@ export default function InteractiveMap() {
     }
   };
 
+  const irAParadaActiva = (stage: RutaStage) => {
+    if (currentStage !== stage.index) {
+      moveAvatarToStage(stage.index);
+      setTimeout(() => {
+        router.push(stage.href);
+      }, 1200);
+    } else {
+      router.push(stage.href);
+    }
+  };
+
   const handleStageClick = (stage: RutaStage, status: StageStatus) => {
     if (status === "locked") return;
 
     if (status === "active") {
-      if (currentStage !== stage.index) {
-        moveAvatarToStage(stage.index);
-        setTimeout(() => {
-          router.push(stage.href);
-        }, 1200);
-      } else {
-        router.push(stage.href);
+      // Cada parada nueva pide la contraseña que entregan los guías
+      if (!isStageUnlocked(stage.index)) {
+        setStagePendiente(stage);
+        return;
       }
+      irAParadaActiva(stage);
       return;
     }
 
@@ -614,6 +628,26 @@ export default function InteractiveMap() {
             </div>
           </motion.div>
         </motion.div>
+      )}
+
+      {/* Contraseña de la parada */}
+      {stagePendiente && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm"
+          onClick={() => setStagePendiente(null)}
+        >
+          <div className="w-full max-w-md" onClick={(event) => event.stopPropagation()}>
+            <StagePasswordPrompt
+              stage={stagePendiente}
+              onUnlocked={() => {
+                const stage = stagePendiente;
+                setStagePendiente(null);
+                irAParadaActiva(stage);
+              }}
+              onCancel={() => setStagePendiente(null)}
+            />
+          </div>
+        </div>
       )}
     </div>
   );
