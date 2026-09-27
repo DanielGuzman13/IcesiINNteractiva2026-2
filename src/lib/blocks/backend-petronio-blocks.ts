@@ -25,14 +25,12 @@ const INGREDIENT_OPTIONS: [string, string][] = INGREDIENTS.map((name) => [name, 
 const OPERATOR_OPTIONS: [string, string][] = [
   ['por lo menos', '>='],
   ['más de', '>'],
-  ['a lo mucho', '<='],
   ['menos de', '<'],
   ['exactamente', '==']
 ];
 
 const RESPONSE_OPTIONS: [string, string][] = [
   ['¡Todo listo, plato servido!', '201'],
-  ['Listo, pedido confirmado', '200'],
   ['Lo sentimos, hoy no hay de eso', '409']
 ];
 
@@ -66,7 +64,7 @@ export function defineBackendBlocks() {
   Blocks['db_get_stock'] = {
     init: function () {
       this.appendDummyInput()
-        .appendField('Consultar cuántos')
+        .appendField('Consultar cuánt@')
         .appendField(new FieldDropdown(INGREDIENT_OPTIONS), 'INGREDIENT')
         .appendField('quedan en la despensa');
       this.setPreviousStatement(true, null);
@@ -141,6 +139,7 @@ export interface BackendPlan {
 
 export type RunKind =
   | 'no-endpoint'
+  | 'invalid'
   | 'created'
   | 'conflict'
   | 'db-error'
@@ -165,6 +164,105 @@ function chainToPseudo(start: Block | null, indent: string, lines: string[]) {
     blockToPseudo(block, indent, lines);
     block = block.getNextBlock();
   }
+}
+
+function collectChain(start: Block | null): Block[] {
+  const blocks: Block[] = [];
+  let block: Block | null = start;
+  while (block) {
+    blocks.push(block);
+    block = block.getNextBlock();
+  }
+  return blocks;
+}
+
+export function validateBackendSemantics(workspace: Workspace): {
+  valid: boolean;
+  errors: string[];
+} {
+  const endpoints = workspace.getBlocksByType('api_endpoint', false);
+  const errors: string[] = [];
+
+  if (endpoints.length === 0) {
+    return {
+      valid: false,
+      errors: ['Debes comenzar tu flujo con el bloque "Cuando llega un pedido a la caseta".']
+    };
+  }
+
+  const endpoint = endpoints[0];
+  const descendants = endpoint.getDescendants(true);
+  const conditional = descendants.find((block) => block.type === 'controls_if_stock');
+
+  if (!conditional) {
+    errors.push(
+      'Falta la condición "Si todavía hay...": debes validar el inventario antes de servir el plato.'
+    );
+    return { valid: false, errors };
+  }
+
+  const ingredient = String(conditional.getFieldValue('INGREDIENT'));
+  const op = String(conditional.getFieldValue('OP'));
+  const amount = Number(conditional.getFieldValue('AMOUNT'));
+
+  if (op === '<') {
+    errors.push(
+      'Error lógico: No puedes servir el plato si quedan MENOS ingredientes de los necesarios.'
+    );
+  } else if (op !== '>=' && op !== '>') {
+    errors.push('El operador de la condición debe ser "por lo menos" (>=) o "más de" (>).');
+  }
+
+  const thenChain = collectChain(conditional.getInputTargetBlock('DO'));
+  const elseChain = collectChain(conditional.getInputTargetBlock('ELSE'));
+
+  const thenUpdates = thenChain.filter((block) => block.type === 'db_update_stock');
+  const elseUpdates = elseChain.filter((block) => block.type === 'db_update_stock');
+  const thenLast = thenChain[thenChain.length - 1];
+  const elseLast = elseChain[elseChain.length - 1];
+
+  if (thenUpdates.length === 0) {
+    errors.push(
+      'En la rama "entonces" debe ir el bloque "Quitar de la despensa" para descontar el ingrediente.'
+    );
+  } else if (thenUpdates.length > 1) {
+    errors.push('El ingrediente de la condición solo debe descontarse una vez en la rama "entonces".');
+  } else {
+    const update = thenUpdates[0];
+    const updateIngredient = String(update.getFieldValue('INGREDIENT'));
+    const updateAmount = Number(update.getFieldValue('AMOUNT'));
+    if (updateIngredient !== ingredient) {
+      errors.push(
+        `Validaste ${ingredient} pero descontaste ${updateIngredient}: deben ser el mismo ingrediente.`
+      );
+    }
+    if (updateAmount !== amount) {
+      errors.push(
+        `Validaste ${amount} plato(s) de ${ingredient} pero descontaste ${updateAmount}: deben coincidir.`
+      );
+    }
+  }
+
+  const thenHasRejection = thenChain.some(
+    (block) => block.type === 'http_response' && Number(block.getFieldValue('STATUS')) === 409
+  );
+  if (thenHasRejection) {
+    errors.push('En la rama "entonces" no se puede enviar un mensaje de rechazo: ahí se sirve el plato.');
+  }
+
+  if (!thenLast || !(thenLast.type === 'http_response' && Number(thenLast.getFieldValue('STATUS')) === 201)) {
+    errors.push('La rama "entonces" debe terminar con el mensaje "¡Todo listo, plato servido!".');
+  }
+
+  if (elseUpdates.length > 0) {
+    errors.push('En la rama "si no" nunca se debe descontar inventario.');
+  }
+
+  if (!elseLast || !(elseLast.type === 'http_response' && Number(elseLast.getFieldValue('STATUS')) === 409)) {
+    errors.push('La rama "si no" debe terminar con el mensaje "Lo sentimos, hoy no hay de eso".');
+  }
+
+  return { valid: errors.length === 0, errors };
 }
 
 function blockToPseudo(block: Block, indent: string, lines: string[]) {
@@ -267,6 +365,9 @@ export function buildBackendPlan(workspace: Workspace): BackendPlan {
     issues.push(`${loose.length} bloque(s) quedaron fuera del punto de inicio y no se ejecutarán.`);
   }
 
+  const semantic = validateBackendSemantics(workspace);
+  issues.push(...semantic.errors);
+
   return {
     hasEndpoint: true,
     pseudo: lines.join('\n'),
@@ -298,9 +399,29 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
 
   const endpoint = endpoints[0];
 
-  const logs: BackendLog[] = [
+  const logs: BackendLog[] = [];
+
+  const semantic = validateBackendSemantics(workspace);
+  if (!semantic.valid) {
+    return {
+      kind: 'invalid',
+      inventory,
+      committed: false,
+      targetIngredient: null,
+      logs: [
+        { tone: 'info', text: 'Un comensal hizo un pedido en la caseta: tu flujo tiene errores de lógica.' },
+        ...semantic.errors.map((text, i) => ({
+          tone: (i === 0 ? 'error' : 'warn') as BackendLog['tone'],
+          text
+        }))
+      ],
+      tip: 'Revisa los errores de lógica del flujo y vuelve a probar cuando sea correcto.'
+    };
+  }
+
+  logs.push(
     { tone: 'info', text: 'Un comensal hizo un pedido en la caseta: empieza tu flujo.' }
-  ];
+  );
 
   const working: Inventory = { ...inventory };
   const updates: { ingredient: string; delta: number; before: number; after: number }[] = [];

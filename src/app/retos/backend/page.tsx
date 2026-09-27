@@ -24,19 +24,6 @@ export default function BackendRetoPage() {
           </svg>
           Volver a los retos
         </Link>
-        <button
-          type="button"
-          onClick={() => setShowIntro(true)}
-          className="flex items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/35"
-          title="Volver a ver la introducción de la actividad"
-        >
-          <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-            <circle cx="12" cy="12" r="9" />
-            <path d="M9.2 9a2.8 2.8 0 0 1 5.5.9c0 1.9-2.4 2.2-2.7 4" />
-            <circle cx="12" cy="17.2" r="0.6" fill="currentColor" stroke="none" />
-          </svg>
-          Ayuda
-        </button>
       </div>
 
       <div
@@ -47,7 +34,7 @@ export default function BackendRetoPage() {
         }
         aria-hidden={showIntro}
       >
-        <BackendPetronioWorkspace nextHref="/retos/frontend" />
+        <BackendPetronioWorkspace nextHref="/retos/frontend" onHelp={() => setShowIntro(true)} />
       </div>
 
       {showIntro && (

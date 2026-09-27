@@ -1,7 +1,7 @@
 'use client';
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { inject, Themes, WorkspaceSvg } from 'blockly';
+import { inject, svgResize, Themes, WorkspaceSvg } from 'blockly';
 import Link from 'next/link';
 import { backendToolbox } from '@/lib/toolbox/backend-petronio-toolbox';
 import {
@@ -17,7 +17,7 @@ import {
 
 type CasetaScene = 'idle' | 'cooking' | 'served' | 'rejected' | 'smoke';
 type ServerState = 'inactive' | 'deployed';
-type TransactionState = 'idle' | 'ok' | 'conflict' | 'rollback' | 'no-updates';
+type TransactionState = 'idle' | 'ok' | 'conflict' | 'rollback' | 'no-updates' | 'invalid';
 
 interface LogEntry extends BackendLog {
   id: number;
@@ -47,8 +47,18 @@ const TX_LABEL: Record<TransactionState, string> = {
   ok: 'Pedido entregado',
   conflict: 'Pedido rechazado',
   rollback: 'Se revirtió el pedido',
-  'no-updates': 'Faltó descontar ingredientes'
+  'no-updates': 'Faltó descontar ingredientes',
+  invalid: 'La lógica del pedido no es válida'
 };
+
+function responsiveBlocklyScale(): number {
+  if (typeof window === 'undefined') return 0.9;
+  return window.innerWidth < 1024 ? 0.78 : 0.9;
+}
+
+function isSmallViewport(width: number): boolean {
+  return width < 1024;
+}
 
 function nowTime(): string {
   return new Date().toLocaleTimeString('es-CO', { hour12: false });
@@ -56,9 +66,11 @@ function nowTime(): string {
 
 function BackendPetronioWorkspace({
   nextHref = '/retos',
+  onHelp,
   onCompleted
 }: {
   nextHref?: string;
+  onHelp?: () => void;
   onCompleted?: () => void;
 }) {
   const blocklyDivRef = useRef<HTMLDivElement>(null);
@@ -129,12 +141,13 @@ function BackendPetronioWorkspace({
       toolbox: backendToolbox,
       grid: { spacing: 24, length: 3, colour: '#ccd4e0', snap: true },
       zoom: {
-        controls: false,
+        controls: true,
         wheel: true,
-        startScale: 1,
-        maxScale: 2.5,
-        minScale: 0.4,
-        scaleSpeed: 1.2
+        startScale: responsiveBlocklyScale(),
+        maxScale: 1.3,
+        minScale: 0.65,
+        scaleSpeed: 1.1,
+        pinch: true
       },
       trashcan: false,
       renderer: 'zelos'
@@ -156,6 +169,44 @@ function BackendPetronioWorkspace({
       clearTimers();
     };
   }, [clearTimers]);
+
+  useEffect(() => {
+    const container = blocklyDivRef.current;
+    if (!container) return;
+
+    const recompute = () => {
+      const ws = workspaceRef.current;
+      if (!ws || !container.isConnected) return;
+      svgResize(ws);
+    };
+
+    const previousSize = { width: window.innerWidth, scale: responsiveBlocklyScale() };
+    const resizeWithBreakpoint = () => {
+      const ws = workspaceRef.current;
+      if (!ws || !container.isConnected) return;
+      svgResize(ws);
+      const nextScale = responsiveBlocklyScale();
+      if (
+        isSmallViewport(previousSize.width) !== isSmallViewport(window.innerWidth) ||
+        nextScale !== previousSize.scale
+      ) {
+        previousSize.width = window.innerWidth;
+        previousSize.scale = nextScale;
+        ws.setScale(nextScale);
+        ws.scrollCenter();
+      }
+    };
+
+    const observer = new ResizeObserver(recompute);
+    observer.observe(container);
+    window.addEventListener('resize', resizeWithBreakpoint);
+    recompute();
+
+    return () => {
+      observer.disconnect();
+      window.removeEventListener('resize', resizeWithBreakpoint);
+    };
+  }, []);
 
   useEffect(() => {
     const terminal = terminalRef.current;
@@ -226,6 +277,14 @@ function BackendPetronioWorkspace({
         setTxState('no-updates');
         setScene('idle');
         break;
+      case 'invalid':
+        setTxState('invalid');
+        setScene('idle');
+        if (completedRef.current) {
+          completedRef.current = false;
+          setCompleted(false);
+        }
+        break;
       default:
         break;
     }
@@ -274,15 +333,31 @@ function BackendPetronioWorkspace({
           </p>
         </div>
         <div className="flex flex-col items-end gap-2">
-          <span
-            className={`rounded-full px-3 py-1 text-xs font-bold uppercase tracking-wide ${
-              serverState === 'inactive'
-                ? 'bg-white/20 text-white'
-                : 'bg-emerald-400/90 text-emerald-950'
-            }`}
-          >
-            {serverState === 'inactive' ? 'Caseta cerrada' : 'Caseta abierta'}
-          </span>
+          {onHelp && (
+            <button
+              type="button"
+              onClick={onHelp}
+              className="flex shrink-0 items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/35"
+              title="Volver a ver la introducción de la actividad"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9.2 9a2.8 2.8 0 0 1 5.5.9c0 1.9-2.4 2.2-2.7 4" />
+                <circle cx="12" cy="17.2" r="0.6" fill="currentColor" stroke="none" />
+              </svg>
+              Ayuda
+            </button>
+          )}
+          
           {completed && (
             <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
               Reto Completado
@@ -291,8 +366,8 @@ function BackendPetronioWorkspace({
         </div>
       </header>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2">
-        <div className="flex min-h-[620px] flex-col border-b border-slate-200 lg:border-b-0 lg:border-r">
+      <div className="flex flex-col lg:flex-row">
+        <div className="flex min-h-[480px] flex-col border-b border-slate-200 lg:w-1/2 lg:flex-none lg:border-b-0 lg:border-r">
           <div className="flex flex-wrap items-center gap-2 border-b border-slate-200 p-3">
             <button
               type="button"
@@ -342,10 +417,39 @@ function BackendPetronioWorkspace({
             </div>
           </div>
 
-          <div ref={blocklyDivRef} className="h-[620px] w-full" />
+          <div ref={blocklyDivRef} className="relative h-full w-full min-h-[420px] max-h-[75vh] flex-1 overflow-hidden rounded-xl border" />
         </div>
 
-        <div className="flex flex-col gap-4 p-4">
+        <div className="flex flex-col gap-4 p-4 lg:w-1/2 lg:flex-none">
+          <div
+            className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 p-4 transition-colors ${
+              completed ? 'border-emerald-400 bg-emerald-50' : 'border-slate-200 bg-white'
+            }`}
+          >
+            <div>
+              <div className="text-sm font-bold text-brand-support">
+                {completed ? '¡Reto Completado!' : 'Completa la caseta con lo que hay en la despensa'}
+              </div>
+
+            </div>
+            {completed ? (
+              <Link
+                href={nextHref}
+                className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
+              >
+                Siguiente actividad →
+              </Link>
+            ) : (
+              <button
+                type="button"
+                disabled
+                className="cursor-not-allowed rounded-xl bg-slate-200 px-5 py-2.5 text-sm font-bold text-slate-400"
+              >
+                Siguiente actividad →
+              </button>
+            )}
+          </div>
+
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
               <span className="text-xs font-bold uppercase tracking-wider text-white/70">
@@ -405,7 +509,7 @@ function BackendPetronioWorkspace({
                       ? 'text-emerald-600'
                       : txState === 'conflict'
                         ? 'text-red-600'
-                        : txState === 'rollback'
+                        : txState === 'rollback' || txState === 'invalid'
                           ? 'text-amber-600'
                           : 'text-slate-600'
                   }`}
@@ -417,7 +521,7 @@ function BackendPetronioWorkspace({
 
             <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
               <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Así se lee tu flujo
+                Pseudocódigo 
               </h3>
               <pre className="h-[168px] overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-emerald-300">
                 {plan?.pseudo ?? '// Tu flujo aparecerá aquí'}
@@ -456,37 +560,6 @@ function BackendPetronioWorkspace({
                 </div>
               )}
             </div>
-          </div>
-
-          <div
-            className={`flex flex-wrap items-center justify-between gap-3 rounded-2xl border-2 p-4 transition-colors ${
-              completed ? 'border-emerald-400 bg-emerald-50' : 'border-slate-200 bg-white'
-            }`}
-          >
-            <div>
-              <div className="text-sm font-bold text-brand-support">
-                {completed ? '¡Reto Completado!' : 'Completa la caseta con lo que hay en la despensa'}
-              </div>
-              <p className="text-xs text-brand-support/70">
-                Abre la caseta, valida cuántos Camarones quedan y responde &quot;¡Todo listo, plato servido!&quot; para completar el reto.
-              </p>
-            </div>
-            {completed ? (
-              <Link
-                href={nextHref}
-                className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
-              >
-                Siguiente actividad →
-              </Link>
-            ) : (
-              <button
-                type="button"
-                disabled
-                className="cursor-not-allowed rounded-xl bg-slate-200 px-5 py-2.5 text-sm font-bold text-slate-400"
-              >
-                Siguiente actividad →
-              </button>
-            )}
           </div>
         </div>
       </div>
@@ -561,12 +634,6 @@ function CasetaCanvas({ scene, banner, targetIngredient }: CasetaCanvasProps) {
     canvas.width = CANVAS_W * dpr;
     canvas.height = CANVAS_H * dpr;
 
-    const stars = Array.from({ length: 36 }, () => ({
-      x: Math.random() * CANVAS_W,
-      y: Math.random() * 200,
-      phase: Math.random() * Math.PI * 2
-    }));
-
     let raf = 0;
     const loop = (now: number) => {
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
@@ -576,8 +643,7 @@ function CasetaCanvas({ scene, banner, targetIngredient }: CasetaCanvasProps) {
         sceneRef.current,
         bannerRef.current,
         targetRef.current,
-        sceneStartRef.current,
-        stars
+        sceneStartRef.current
       );
       raf = requestAnimationFrame(loop);
     };
@@ -602,32 +668,36 @@ function drawCaseta(
   scene: CasetaScene,
   banner: Banner,
   targetIngredient: string | null,
-  sceneStart: number,
-  stars: { x: number; y: number; phase: number }[]
+  sceneStart: number
 ) {
   const elapsed = now - sceneStart;
   const t = now;
 
   const sky = ctx.createLinearGradient(0, 0, 0, 300);
-  sky.addColorStop(0, '#10163a');
-  sky.addColorStop(1, '#392b5e');
+  sky.addColorStop(0, '#4aa0e0');
+  sky.addColorStop(0.6, '#8ccdf2');
+  sky.addColorStop(1, '#dff2ff');
   ctx.fillStyle = sky;
   ctx.fillRect(0, 0, CANVAS_W, 300);
 
-  ctx.fillStyle = 'rgba(255,255,255,0.9)';
-  for (const star of stars) {
-    ctx.globalAlpha = 0.35 + 0.6 * Math.abs(Math.sin(t / 800 + star.phase));
-    ctx.fillRect(star.x, star.y, 2, 2);
-  }
-  ctx.globalAlpha = 1;
-
-  ctx.fillStyle = '#f5e6a3';
+  const sunX = 540;
+  const sunY = 78;
+  const sunGlow = ctx.createRadialGradient(sunX, sunY, 6, sunX, sunY, 90);
+  sunGlow.addColorStop(0, 'rgba(255,236,150,0.85)');
+  sunGlow.addColorStop(1, 'rgba(255,236,150,0)');
+  ctx.fillStyle = sunGlow;
+  ctx.fillRect(sunX - 90, sunY - 90, 180, 180);
+  ctx.fillStyle = '#ffdf70';
   ctx.beginPath();
-  ctx.arc(566, 64, 22, 0, Math.PI * 2);
+  ctx.arc(sunX, sunY, 24, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = '#392b5e';
+
+  ctx.fillStyle = 'rgba(255,255,255,0.85)';
   ctx.beginPath();
-  ctx.arc(556, 56, 18, 0, Math.PI * 2);
+  ctx.ellipse(150, 118, 62, 12, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.beginPath();
+  ctx.ellipse(462, 150, 48, 10, 0.2, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = '#8a5236';
@@ -636,7 +706,9 @@ function drawCaseta(
   ctx.fillRect(0, 300, CANVAS_W, 5);
 
   drawPalapa(ctx);
-  drawLights(ctx, t);
+  drawBanderines(ctx, t);
+  drawHandkerchiefs(ctx, t);
+  drawPantry(ctx);
   drawStove(ctx, scene, t);
   drawCook(ctx, scene, t);
   drawDiner(ctx, scene);
@@ -657,64 +729,208 @@ function drawCaseta(
 }
 
 function drawPalapa(ctx: CanvasRenderingContext2D) {
-  ctx.fillStyle = '#6b4a2f';
-  ctx.fillRect(40, 150, 14, 150);
-  ctx.fillRect(586, 150, 14, 150);
+  ctx.fillStyle = '#4a2e1b';
+  ctx.fillRect(40, 150, 14, 152);
+  ctx.fillRect(586, 150, 14, 152);
+  ctx.fillStyle = '#6b4530';
+  ctx.fillRect(40, 150, 5, 152);
+  ctx.fillRect(591, 150, 5, 152);
+  ctx.fillStyle = '#5f3a22';
+  ctx.fillRect(36, 162, 24, 7);
+  ctx.fillRect(580, 162, 24, 7);
 
-  ctx.fillStyle = '#3f6f43';
+  const peakX = 320;
+  const peakY = 40;
+  const eaveL = 16;
+  const eaveR = 624;
+  const eaveY = 178;
+
+  ctx.fillStyle = '#3a2012';
+  ctx.fillRect(eaveL, eaveY - 2, eaveR - eaveL, 8);
+
+  const thatch = ctx.createLinearGradient(0, peakY, 0, eaveY + 16);
+  thatch.addColorStop(0, '#c98a3d');
+  thatch.addColorStop(0.5, '#a0522d');
+  thatch.addColorStop(1, '#7c3f1d');
+  ctx.fillStyle = thatch;
   ctx.beginPath();
-  ctx.moveTo(20, 152);
-  ctx.quadraticCurveTo(320, 42, 620, 152);
-  ctx.lineTo(620, 164);
-  ctx.quadraticCurveTo(320, 58, 20, 164);
+  ctx.moveTo(peakX, peakY);
+  ctx.lineTo(eaveR, eaveY);
+  ctx.lineTo(eaveR + 12, eaveY + 14);
+  ctx.lineTo(eaveL - 12, eaveY + 14);
+  ctx.lineTo(eaveL, eaveY);
   ctx.closePath();
   ctx.fill();
 
-  ctx.strokeStyle = 'rgba(20,40,22,0.75)';
-  ctx.lineWidth = 2;
-  for (let i = 0; i <= 12; i++) {
-    const p = i / 12;
-    const x = 20 + p * 600;
-    const yTop = 152 - Math.sin((p - 0.5) * 0.9) * 90 - 20;
+  ctx.fillStyle = '#8b5a2b';
+  for (let x = eaveL + 10; x <= eaveR - 20; x += 26) {
     ctx.beginPath();
-    ctx.moveTo(x, yTop + 8);
-    ctx.lineTo(x - 34, yTop + 40);
+    ctx.ellipse(x, eaveY + 2, 14, 8, 0, Math.PI, Math.PI * 2);
+    ctx.fill();
+  }
+
+  ctx.strokeStyle = 'rgba(85,45,22,0.5)';
+  ctx.lineWidth = 1.4;
+  for (let i = 0; i < 12; i++) {
+    const p = i / 11;
+    const yRow = peakY + 12 + p * (eaveY - peakY - 16);
+    const half = 30 + p * 300;
+    ctx.beginPath();
+    ctx.moveTo(peakX - half, yRow);
+    ctx.lineTo(peakX + half, yRow + 12);
     ctx.stroke();
   }
 
-  ctx.strokeStyle = 'rgba(20,40,22,0.55)';
+  ctx.strokeStyle = '#3a2012';
+  ctx.lineWidth = 7;
+  ctx.lineCap = 'round';
   ctx.beginPath();
-  ctx.moveTo(120, 142);
-  ctx.quadraticCurveTo(320, 66, 520, 142);
+  ctx.moveTo(peakX - 24, peakY + 10);
+  ctx.lineTo(peakX + 24, peakY + 10);
   ctx.stroke();
+
+  ctx.lineWidth = 6;
+  ctx.beginPath();
+  ctx.moveTo(eaveL - 6, eaveY + 10);
+  ctx.lineTo(eaveR + 6, eaveY + 10);
+  ctx.stroke();
+
+  ctx.lineWidth = 2.6;
+  ctx.strokeStyle = 'rgba(56,30,15,0.6)';
+  for (let i = -4; i <= 4; i++) {
+    const xTop = peakX + i * 16;
+    const yTop = peakY + 8 + Math.abs(i) * 9;
+    const side = i < 0 ? -1 : 1;
+    const xBottom = peakX + side * (22 + Math.abs(i) * 58);
+    ctx.beginPath();
+    ctx.moveTo(xTop, yTop);
+    ctx.lineTo(xBottom, eaveY + 4);
+    ctx.stroke();
+  }
 }
 
-function drawLights(ctx: CanvasRenderingContext2D, t: number) {
-  const cx = 320;
-  const cy = 96;
-  ctx.strokeStyle = 'rgba(255,255,255,0.4)';
-  ctx.lineWidth = 1.5;
+function drawBanderines(ctx: CanvasRenderingContext2D, t: number) {
+  const x0 = 56;
+  const x1 = 584;
+  const ropeY = 188;
+  const colors = ['#ffd23f', '#3aa04f', '#f8f4e4', '#e2743a'];
+
+  ctx.strokeStyle = 'rgba(255,244,214,0.5)';
+  ctx.lineWidth = 2;
   ctx.beginPath();
-  ctx.moveTo(40, 92);
-  ctx.quadraticCurveTo(cx, cy + 34, 600, 92);
+  ctx.moveTo(x0, ropeY);
+  ctx.quadraticCurveTo(320, ropeY + 18, x1, ropeY);
   ctx.stroke();
 
-  const colors = ['#ff5d6c', '#ffd166', '#4cc9f0', '#06d6a0'];
   for (let i = 0; i <= 14; i++) {
     const p = i / 14;
-    const x = 40 + p * 560;
-    const y = 92 + Math.sin(Math.PI * p) * 38;
-    const color = colors[i % colors.length];
-    ctx.fillStyle = color;
-    ctx.globalAlpha = 0.75 + 0.25 * Math.sin(t / 300 + i);
+    const x = x0 + p * (x1 - x0);
+    const y = ropeY + Math.sin(Math.PI * p) * 18;
+    const sway = Math.sin(t / 700 + i * 0.8) * 2.5;
+    ctx.fillStyle = colors[i % colors.length];
     ctx.beginPath();
-    ctx.arc(x, y, 4, 0, Math.PI * 2);
+    ctx.moveTo(x - 13, y);
+    ctx.lineTo(x + 13, y);
+    ctx.lineTo(x + sway, y + 18);
+    ctx.closePath();
     ctx.fill();
-    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = 'rgba(0,0,0,0.18)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+}
+
+function drawHandkerchiefs(ctx: CanvasRenderingContext2D, t: number) {
+  const xs = [64, 92, 120];
+  const hues = ['#fdfaf0', '#f5f0e1', '#fbf7ec'];
+  for (let i = 0; i < 3; i++) {
+    const wave = Math.sin(t / 700 + i * 1.8) * 5;
+    ctx.fillStyle = hues[i];
     ctx.beginPath();
-    ctx.arc(x, y, 9 + 2 * Math.sin(t / 300 + i), 0, Math.PI * 2);
+    ctx.moveTo(xs[i] - 9, 178);
+    ctx.quadraticCurveTo(xs[i] - 15 + wave, 200, xs[i] - 10, 222);
+    ctx.lineTo(xs[i] + 4, 226 + wave);
+    ctx.quadraticCurveTo(xs[i] + 14 + wave, 200, xs[i] + 9, 178);
+    ctx.closePath();
     ctx.fill();
-    ctx.globalAlpha = 1;
+    ctx.strokeStyle = 'rgba(160,120,70,0.4)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#caa05a';
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.arc(xs[i], 178, 3.4, 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+function drawPantry(ctx: CanvasRenderingContext2D) {
+  const bx = 112;
+  const by = 296;
+
+  ctx.fillStyle = '#a06a3c';
+  ctx.beginPath();
+  ctx.moveTo(bx - 22, by);
+  ctx.lineTo(bx - 16, by - 26);
+  ctx.lineTo(bx + 16, by - 26);
+  ctx.lineTo(bx + 22, by);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(80,50,20,0.6)';
+  ctx.lineWidth = 1.4;
+  for (let i = 1; i < 5; i++) {
+    ctx.beginPath();
+    ctx.moveTo(bx - 20 + i * 3, by);
+    ctx.lineTo(bx - 14 + i * 3, by - 25);
+    ctx.stroke();
+  }
+  ctx.beginPath();
+  ctx.moveTo(bx - 18, by - 13);
+  ctx.lineTo(bx + 18, by - 13);
+  ctx.stroke();
+  ctx.beginPath();
+  ctx.moveTo(bx - 15, by - 26);
+  ctx.lineTo(bx + 15, by - 26);
+  ctx.stroke();
+
+  ctx.fillStyle = '#6c9a3f';
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.ellipse(bx + (i - 1) * 8, by - 32, 5, 12, i % 2 ? 0.3 : -0.2, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.fillStyle = '#4e7a2b';
+  ctx.beginPath();
+  ctx.ellipse(bx + 2, by - 30, 3, 7, 0.2, 0, Math.PI * 2);
+  ctx.fill();
+
+  const cy = 292;
+  for (let i = 0; i < 2; i++) {
+    const cxx = 146 + i * 18;
+    ctx.fillStyle = '#5f3a1f';
+    ctx.beginPath();
+    ctx.arc(cxx, cy, 9, Math.PI, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.fillStyle = '#f3e9d2';
+    ctx.beginPath();
+    ctx.arc(cxx, cy, 9, 0, Math.PI);
+    ctx.closePath();
+    ctx.fill();
+    ctx.strokeStyle = '#45301a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.arc(cxx, cy, 9, 0, Math.PI);
+    ctx.stroke();
+    ctx.strokeStyle = 'rgba(70,40,25,0.8)';
+    ctx.lineWidth = 1.2;
+    ctx.beginPath();
+    ctx.moveTo(cxx - 8, cy + 2);
+    ctx.lineTo(cxx + 7, cy + 2);
+    ctx.moveTo(cxx - 6, cy + 5);
+    ctx.lineTo(cxx + 5, cy + 5);
+    ctx.stroke();
   }
 }
 
@@ -799,6 +1015,25 @@ function drawStove(ctx: CanvasRenderingContext2D, scene: CasetaScene, t: number)
     }
     ctx.globalAlpha = 1;
   }
+
+  ctx.save();
+  ctx.translate(potX - 26, potY + 2);
+  ctx.rotate(-0.45);
+  ctx.strokeStyle = '#7b4b27';
+  ctx.lineWidth = 6;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(0, 0);
+  ctx.lineTo(10, -40);
+  ctx.stroke();
+  ctx.fillStyle = '#a05a2c';
+  ctx.beginPath();
+  ctx.ellipse(16, -44, 12, 8, -0.4, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = '#5f3a22';
+  ctx.lineWidth = 1.8;
+  ctx.stroke();
+  ctx.restore();
 }
 
 function drawCook(ctx: CanvasRenderingContext2D, scene: CasetaScene, t: number) {
@@ -825,14 +1060,25 @@ function drawCook(ctx: CanvasRenderingContext2D, scene: CasetaScene, t: number) 
     ctx.moveTo(214, 204);
     ctx.lineTo(handX, 226);
     ctx.stroke();
+    ctx.strokeStyle = '#cfceb2';
+    ctx.lineWidth = 3;
     ctx.beginPath();
     ctx.moveTo(186, 204);
     ctx.lineTo(180, 244);
     ctx.stroke();
-    ctx.strokeStyle = '#cfceb2';
+    ctx.strokeStyle = '#7b4b27';
+    ctx.lineWidth = 5;
+    ctx.lineCap = 'round';
     ctx.beginPath();
-    ctx.moveTo(handX, 226);
-    ctx.lineTo(handX + 12, 240);
+    ctx.moveTo(214, 204);
+    ctx.lineTo(handX, 226);
+    ctx.stroke();
+    ctx.fillStyle = '#a05a2c';
+    ctx.beginPath();
+    ctx.ellipse(handX + 12, 230, 10, 7, -0.3, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.strokeStyle = '#5f3a22';
+    ctx.lineWidth = 1.5;
     ctx.stroke();
   } else if (scene === 'smoke') {
     ctx.beginPath();
@@ -876,8 +1122,39 @@ function drawCook(ctx: CanvasRenderingContext2D, scene: CasetaScene, t: number) 
   ctx.closePath();
   ctx.fill();
 
-  ctx.fillStyle = 'rgba(250,244,220,0.9)';
-  ctx.fillRect(188, 210, 24, 30);
+  ctx.fillStyle = '#3f3152';
+  ctx.beginPath();
+  ctx.moveTo(182, 206);
+  ctx.lineTo(200, 194);
+  ctx.lineTo(218, 206);
+  ctx.lineTo(222, 244);
+  ctx.lineTo(178, 244);
+  ctx.closePath();
+  ctx.fill();
+
+  ctx.fillStyle = '#fdfcf6';
+  ctx.beginPath();
+  ctx.moveTo(184, 206);
+  ctx.lineTo(198, 197);
+  ctx.lineTo(202, 197);
+  ctx.lineTo(216, 206);
+  ctx.lineTo(219, 252);
+  ctx.lineTo(181, 252);
+  ctx.closePath();
+  ctx.fill();
+  ctx.strokeStyle = 'rgba(120,85,55,0.35)';
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  ctx.fillStyle = 'rgba(180,140,90,0.28)';
+  ctx.fillRect(196, 226, 12, 11);
+  ctx.strokeStyle = '#fdfcf6';
+  ctx.lineWidth = 2;
+  ctx.beginPath();
+  ctx.moveTo(183, 206);
+  ctx.lineTo(176, 214);
+  ctx.moveTo(217, 206);
+  ctx.lineTo(226, 214);
+  ctx.stroke();
 
   ctx.strokeStyle = '#2f1d0e';
   ctx.lineWidth = 3;
@@ -889,11 +1166,26 @@ function drawCook(ctx: CanvasRenderingContext2D, scene: CasetaScene, t: number) 
   ctx.beginPath();
   ctx.arc(cx, headY + 4, 17, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillStyle = '#3f2d19';
+
+  const turban = ctx.createLinearGradient(cx - 24, headY - 26, cx + 24, headY + 2);
+  turban.addColorStop(0, '#e2723f');
+  turban.addColorStop(0.5, '#c0392b');
+  turban.addColorStop(1, '#8e2f1d');
+  ctx.fillStyle = turban;
   ctx.beginPath();
-  ctx.arc(cx, headY - 14, 9, 0, Math.PI * 2);
+  ctx.ellipse(cx, headY - 9, 19, 12, 0, 0, Math.PI * 2);
   ctx.fill();
-  ctx.fillRect(cx - 16, headY - 2, 32, 7);
+  ctx.strokeStyle = 'rgba(96,24,12,0.55)';
+  ctx.lineWidth = 1.6;
+  for (let i = -1; i <= 1; i++) {
+    ctx.beginPath();
+    ctx.ellipse(cx + i * 5, headY - 9, 17, 9.5, 0, Math.PI * 0.12, Math.PI * 0.88);
+    ctx.stroke();
+  }
+  ctx.fillStyle = '#e2723f';
+  ctx.beginPath();
+  ctx.ellipse(cx, headY - 20, 6, 5, 0, 0, Math.PI * 2);
+  ctx.fill();
 
   ctx.fillStyle = '#2f1d0e';
   ctx.beginPath();
@@ -949,7 +1241,19 @@ function drawDiner(ctx: CanvasRenderingContext2D, scene: CasetaScene) {
   ctx.fillRect(counterX + 4, counterY + 20, 144, 22);
 
   ctx.fillStyle = '#27597e';
-  ctx.fillRect(headX - 26, 262, 52, 38);
+  ctx.fillRect(headX - 26, 254, 52, 46);
+
+  ctx.strokeStyle = '#27597e';
+  ctx.lineWidth = 9;
+  ctx.lineCap = 'round';
+  ctx.beginPath();
+  ctx.moveTo(headX + 12, 256);
+  ctx.lineTo(headX + 30, 268);
+  ctx.stroke();
+  ctx.fillStyle = '#e9b98a';
+  ctx.beginPath();
+  ctx.arc(headX + 32, 270, 5, 0, Math.PI * 2);
+  ctx.fill();
 
   ctx.fillStyle = '#e9b98a';
   ctx.beginPath();

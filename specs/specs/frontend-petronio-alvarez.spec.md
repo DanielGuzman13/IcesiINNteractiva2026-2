@@ -39,7 +39,7 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 ## Banco de Preguntas: Heurísticas, Color y UI Components
 
 ### Pregunta 1: Visibilidad del estado del sistema (Heurística 1 de Nielsen)
-- **Caso:** Un usuario pulsa el botón "Reproducir Marimba de Chonta" en la app, pero la canción tarda 3 segundos en cargar debido a la congestión de red en el festival.
+- **Caso:** Un usuario pulsa el botón "Reproducir Marimba" en la app, pero la canción tarda 3 segundos en cargar debido a la congestión de red en el festival.
 - **Opciones Visuales (Screenshots / Mockups):**
   - *Opción A:* El botón no cambia en absoluto; se queda estático mientras carga.
   - *Opción B (Correcta):* El botón cambia inmediatamente su texto a un spinner de carga animado con el mensaje *"Cargando audio..."*.
