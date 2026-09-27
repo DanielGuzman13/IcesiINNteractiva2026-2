@@ -10,7 +10,7 @@ import TextoCaleno from "@/components/personajes/TextoCaleno";
 
 const MENSAJES_ERROR = [
   "¡*Pailas*! Esa no es la contraseña. Pedísela a tu guía cuando sea el momento de empezar.",
-  "Uy, no… todavía no es esa. Revisá bien con tu guía, ¡ya casi arrancamos!",
+  "¡*Oís*! Todavía no es esa. Revisá bien con tu guía, ¡ya casi arrancamos!",
   "Esa tampoco es, *ve*. Acordate: la contraseña la tiene tu guía.",
 ];
 
@@ -44,7 +44,7 @@ export default function StagePasswordPrompt({
     ? `¡*Eso, ve*! Contraseña correcta. ¡*Vamos pues* a ${stage.title}!`
     : intentos > 0
       ? MENSAJES_ERROR[(intentos - 1) % MENSAJES_ERROR.length]
-      : `¡*Quiubo*! Soy ${personaje.presentacion}. Para abrir ${stage.title} necesito la contraseña que te dará tu guía.`;
+      : `¡*Mirá ve*! Soy ${personaje.presentacion}. Para abrir ${stage.title} necesito la contraseña que te dará tu guía.`;
 
   function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();

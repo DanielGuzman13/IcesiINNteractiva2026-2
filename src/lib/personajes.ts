@@ -41,12 +41,12 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     presentacion: "la Analista de Requerimientos",
     imagen: "/personajes/analista.webp",
     intro: [
-      "¡*Ve*, {nombre}! ¿Todo bien? Soy la Analista de Requerimientos. En los equipos también me dicen Product Owner.",
+      "¡*Háblame ve*, {nombre}! ¿Cómo va todo? Soy la Analista de Requerimientos. En los equipos también me dicen Product Owner.",
       "Mi trabajo es entender la lógica del negocio: escucho a la gente, averiguo qué necesita de verdad y lo escribo tan clarito que todo el equipo sabe qué construir.",
-      "*Mirá*: estamos en el Mundial de Salsa de Cali. El público quiere votar en vivo, comprar boletas y ver los puntajes del jurado desde el celular. Tu reto es armar un requerimiento sin enredos, separando lo importante de lo que sobra. ¿Le hacemos? ¡*De una*!",
+      "*Mirá ve*: estamos en el Mundial de Salsa, porque aquí se baila la mejor salsa del mundo, ¡*vojabés*! El público quiere votar en vivo, comprar boletas y ver los puntajes del jurado desde el celular. Tu reto es armar un requerimiento sin enredos, separando lo importante de lo que sobra. ¿Le hacemos? ¡*De una*!",
     ],
     cierre: [
-      "¡*Uy, qué nota*, {nombre}! Encontraste la condición, la acción y el resultado, y dejaste por fuera lo que no tenía nada que ver.",
+      "¡*Vea pues*, {nombre}! Encontraste la condición, la acción y el resultado, y dejaste por fuera lo que no tenía nada que ver.",
       "Eso evita que el equipo construya algo que nadie pidió. Un requerimiento clarito ahorra semanas de trabajo y muchos dolores de cabeza, ¿*oís*?",
       "Yo soy la primera pieza del ciclo de vida del software: si no entendemos bien el problema, *pailas* con la solución. ¡Me *encarreta* hacer preguntas y conectar a la gente con la tecnología! Volvamos al mapa, *pues*.",
     ],
@@ -61,7 +61,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     intro: [
       "¡*Quiubo*, {nombre}! Soy el Arquitecto de Software.",
       "*Mirá*: así como un arquitecto dibuja el plano antes de levantar un edificio, yo diseño la estructura de un programa antes de que alguien escriba una sola línea de código.",
-      "La Alcaldía quiere la app oficial de la Feria de Cali: boletas, desfiles, orquestas y escuelas de salsa. *Vení* y diseñamos juntos el plano de esa app, ¡que quede *bien bacano*!",
+      "La Alcaldía quiere la app oficial de la Feria de Cali: boletas, desfiles, orquestas y escuelas de salsa. *Haceme el 14* y diseñamos juntos el plano de esa app, ¡que quede *bien bacano*!",
     ],
     cierre: [
       "¡*Eso, ve*, {nombre}! Separaste los moldes de los ejemplos, les diste características y los conectaste entre sí.",
@@ -77,13 +77,13 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     presentacion: "la Desarrolladora Backend",
     imagen: "/personajes/backend.webp",
     intro: [
-      "¡*Ve*, {nombre}, qué bueno verte! Soy la Desarrolladora Backend.",
+      "¡*Oís*, {nombre}, qué bueno verte! Soy la Desarrolladora Backend.",
       "Yo trabajo detrás de escena: programo la lógica, las reglas y los datos que hacen funcionar una app, aunque nadie los vea. Si algo se *totea* por dentro, ¡me toca a mí!",
       "En el Petronio Álvarez, una caseta de comida del Pacífico necesita saber si puede preparar cada pedido con lo que queda en la despensa. *Pilas*, que vamos a programar esa lógica con bloques.",
     ],
     cierre: [
       "¡Pedido servido, {nombre}! Tu lógica revisó los ingredientes, descontó lo usado y le respondió al visitante. ¡Quedó *sabroso*!",
-      "Eso es el backend: reglas claras que cuidan los datos. Imaginate prometer una cazuela de mariscos y no tener mariscos: ¡*qué oso*!",
+      "Eso es el backend: reglas claras que cuidan los datos. Imaginate prometer una cazuela de mariscos y entregar la *chuspa* vacía: ¡*qué oso*!",
       "Soy clave en el ciclo de vida del software porque convierto el diseño en código que funciona de verdad. ¡Me *encarreta* resolver problemas paso a paso! *Vamos pues* donde mi compañera de Frontend, que te está esperando.",
     ],
     botonIntro: "¡A programar!",
@@ -101,7 +101,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     ],
     cierre: [
       "¡Quedó una *mera app*, {nombre}! Tus decisiones la hicieron más clara, legible y fácil de usar.",
-      "Una app puede funcionar perfecto por dentro, pero si la gente no entiende cómo usarla, *pailas*. Por eso el diseño de la interfaz importa tanto como el código.",
+      "Una app puede funcionar perfecto por dentro, pero si es confusa y aburrida es un *desparche*: la gente la cierra y no vuelve. Por eso el diseño de la interfaz importa tanto como el código.",
       "Soy el puente entre el código y las personas dentro del ciclo de vida del software. ¡Me *encarreta* mezclar la creatividad del arte con la lógica de la programación! Volvamos al mapa, *pues*.",
     ],
     botonIntro: "¡A diseñar la interfaz!",
@@ -120,7 +120,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡Qué buen ojo, {nombre}! Encontraste los errores escondidos del formulario.",
       "Cada error que se detecta antes de lanzar una app le ahorra problemas a miles de corredores que se van a inscribir.",
-      "Pero *ve*, esto no termina aquí: alguien atacó el servidor de resultados de la carrera. ¡*Vení*, seguime, que ahora nos toca defenderlo!",
+      "Pero *mirá ve*, esto no termina aquí: alguien atacó el servidor de resultados de la carrera. Ahora nos toca defenderlo, ¿*vajaír* conmigo?",
     ],
     botonIntro: "¡A buscar errores!",
     destinoCierre: "/retos/ciberseguridad",
@@ -138,7 +138,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡Servidor restaurado, {nombre}! Descifraste la clave y recuperaste los resultados oficiales. ¡*Eso, ve*!",
       "La seguridad protege los datos y la confianza de la gente que usa la tecnología. Sin ella, cualquiera podría cambiar los resultados de una carrera.",
-      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Me *encarretan* los acertijos y ver lo que otros no ven! Con esto completaste toda la ruta. ¡Cali nos une!",
+      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Me *encarretan* los acertijos y ver lo que otros no ven! Con esto completaste toda la ruta: ahora sí, date un *borondo* por el mapa y celebrá. ¡Cali nos une!",
     ],
     botonIntro: "¡A defender el servidor!",
     destinoCierre: "/retos",
