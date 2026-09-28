@@ -20,7 +20,7 @@ export const DEFAULT_STAGES_POSITIONS: Record<number, { x: number; y: number }> 
   3: { x: 47, y: 35 },
   4: { x: 54, y: 19 },
 };
-
+ 
 export const DEFAULT_MAP_CUSTOMIZATION: MapCustomization = {
   backgroundImageUrl: "/mapa/4.jpeg",
   fillScreen: true,
