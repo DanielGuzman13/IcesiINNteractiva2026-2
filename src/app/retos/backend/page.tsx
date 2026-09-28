@@ -12,13 +12,13 @@ export default function BackendRetoPage() {
     <main
       className="flex min-h-screen flex-col items-center px-4 py-8"
       style={{
-        background: 'linear-gradient(160deg, #719FC1 0%, #6E7FA2 60%, #45609B 100%)'
+        background: 'linear-gradient(160deg, #F9F9FB 0%, #E2ECDF 100%)'
       }}
     >
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
-          className="flex items-center gap-1 text-sm font-semibold text-white/80 transition-colors hover:text-white"
+          className="flex items-center gap-1 text-sm font-semibold text-brand-support/80 transition-colors hover:text-brand-primary"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -50,7 +50,7 @@ export default function BackendRetoPage() {
           <div className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div
               className="px-6 py-6 text-white"
-              style={{ background: 'linear-gradient(120deg, #45609B 0%, #719FC1 100%)' }}
+              style={{ background: 'linear-gradient(120deg, #C63254 0%, #EC6449 100%)' }}
             >
               <div className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
                 Ruta de Ingeniería de Software · Festival Petronio Álvarez

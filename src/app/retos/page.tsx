@@ -5,7 +5,7 @@ import InteractiveMap from "@/components/retos/InteractiveMap";
 
 export default function RetosPage() {
   return (
-    <main className="relative h-dvh w-screen overflow-hidden bg-[#98d9b4] flex items-center justify-center">
+    <main className="relative h-dvh w-screen overflow-hidden bg-cali-farallones flex items-center justify-center">
       {/* Botón discreto para volver al registro/perfil */}
       <Link
         href="/registro"

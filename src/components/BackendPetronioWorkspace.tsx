@@ -319,7 +319,7 @@ function BackendPetronioWorkspace({
     <section className="w-full overflow-hidden rounded-3xl bg-white shadow-2xl">
       <header
         className="flex flex-wrap items-center justify-between gap-4 px-6 py-5 text-white"
-        style={{ background: 'linear-gradient(90deg, #45609B 0%, #719FC1 100%)' }}
+        style={{ background: 'linear-gradient(90deg, #C63254 0%, #EC6449 100%)' }}
       >
         <div>
           <div className="text-xs font-semibold uppercase tracking-widest text-white/70">

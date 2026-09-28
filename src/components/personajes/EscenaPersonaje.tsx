@@ -39,7 +39,7 @@ export default function EscenaPersonaje({
 
   return (
     <div
-      className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-brand-primary/75 p-4 backdrop-blur-md"
+      className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-brand-support/75 p-4 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
       aria-label={`${personaje.titulo} te habla`}

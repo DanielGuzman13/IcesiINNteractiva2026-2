@@ -10,7 +10,7 @@ import StagePasswordPrompt from "./StagePasswordPrompt";
 import EscenaPersonaje from "@/components/personajes/EscenaPersonaje";
 import CierrePersonajeHost from "@/components/personajes/CierrePersonajeHost";
 
-const FONDO = "min-h-dvh bg-gradient-to-br from-brand-primary via-brand-support to-brand-mid";
+const FONDO = "min-h-dvh bg-gradient-to-br from-cali-marfil to-cali-farallones";
 
 /**
  * Envuelve cada actividad:

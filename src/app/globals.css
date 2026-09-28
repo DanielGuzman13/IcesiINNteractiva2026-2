@@ -1,11 +1,46 @@
 @import "tailwindcss";
 
 @theme {
-  --color-brand-light: #b2bccc;
-  --color-brand-soft: #91a4bc;
-  --color-brand-mid: #719fc1;
-  --color-brand-support: #6e7fa2;
-  --color-brand-primary: #45609b;
+  /* Paleta "Cali nos une" */
+  --color-cali-rojo: #c63254; /* Primario: CTA, elementos activos, branding */
+  --color-cali-atardecer: #ec6449; /* Secundario: destacados, notificaciones, degradados */
+  --color-cali-pacifico: #2aa2a3; /* Acento: enlaces, iconos, éxito, categorías */
+  --color-cali-marfil: #f9f9fb; /* Fondo claro: pantallas y tarjetas */
+  --color-cali-farallones: #e2ecdf; /* Superficie: banners sutiles, estados vacíos, lectura */
+  --color-cali-asfalto: #1e232a; /* Texto principal, títulos y modo oscuro */
+
+  /* Roles que usa toda la app (nombres históricos de los tokens) */
+  --color-brand-primary: #c63254; /* = cali-rojo */
+  --color-brand-mid: #ec6449; /* = cali-atardecer */
+  --color-brand-soft: #2aa2a3; /* = cali-pacifico */
+  --color-brand-support: #1e232a; /* = cali-asfalto */
+  --color-brand-light: #e2ecdf; /* = cali-farallones */
+
+  /* Destacados y avisos en tonos de Atardecer caleño */
+  --color-amber-50: #fef4f2;
+  --color-amber-100: #fce8e4;
+  --color-amber-200: #f9cdc5;
+  --color-amber-300: #f5aa9b;
+  --color-amber-400: #f0836d;
+  --color-amber-500: #ec6449;
+  --color-amber-600: #c75843;
+  --color-amber-700: #a24d3e;
+  --color-amber-800: #7d4138;
+  --color-amber-900: #5c3633;
+  --color-amber-950: #432f30;
+
+  /* Éxito en tonos de Pacífico / Sucursal */
+  --color-emerald-50: #f0f8f9;
+  --color-emerald-100: #dff1f1;
+  --color-emerald-200: #bbe1e2;
+  --color-emerald-300: #8acccc;
+  --color-emerald-400: #55b5b5;
+  --color-emerald-500: #2aa2a3;
+  --color-emerald-600: #288b8d;
+  --color-emerald-700: #267477;
+  --color-emerald-800: #245d62;
+  --color-emerald-900: #22494e;
+  --color-emerald-950: #203a40;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 
@@ -24,8 +59,8 @@
 }
 
 body {
-  background-color: var(--color-brand-light);
-  color: #2f3b56;
+  background-color: var(--color-cali-marfil);
+  color: var(--color-cali-asfalto);
   font-family: var(--font-sans), Arial, Helvetica, sans-serif;
 }
 

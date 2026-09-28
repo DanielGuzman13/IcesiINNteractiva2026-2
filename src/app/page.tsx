@@ -10,7 +10,7 @@ export default function Home() {
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(43,58,86,0.45) 0%, rgba(43,58,86,0.75) 100%)",
+            "radial-gradient(ellipse at center, rgba(30,35,42,0.45) 0%, rgba(30,35,42,0.75) 100%)",
         }}
       />
 
