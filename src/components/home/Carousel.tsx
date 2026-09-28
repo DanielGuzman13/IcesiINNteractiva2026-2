@@ -113,7 +113,7 @@ export default function Carousel({
                     className="h-full w-full"
                     style={{
                       background:
-                        "linear-gradient(135deg,#45609B,#719FC1,#91A4BC,#B2BCCC)",
+                        "linear-gradient(135deg,#C63254,#EC6449,#2AA2A3,#1E232A)",
                     }}
                   />
                 )}

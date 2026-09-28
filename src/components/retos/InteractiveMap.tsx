@@ -523,7 +523,7 @@ export default function InteractiveMap() {
             <path
               d={traversedPathD}
               fill="none"
-              stroke="#fbbf24"
+              stroke="#EC6449"
               strokeWidth="1.7"
               strokeDasharray="1.8 2.2"
               strokeLinecap="round"
@@ -531,7 +531,7 @@ export default function InteractiveMap() {
             <path
               d={traversedPathD}
               fill="none"
-              stroke="#d97706"
+              stroke="#C63254"
               strokeWidth="0.9"
               strokeDasharray="1.8 2.2"
               strokeLinecap="round"

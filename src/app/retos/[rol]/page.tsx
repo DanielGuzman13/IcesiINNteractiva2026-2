@@ -15,7 +15,7 @@ export default async function RolActivityPage(
       className="flex min-h-dvh flex-col px-4 py-10 sm:px-8 sm:py-14"
       style={{
         background:
-          "linear-gradient(160deg, #B2BCCC 0%, #91A4BC 45%, #6E7FA2 100%)",
+          "linear-gradient(160deg, #F9F9FB 0%, #E2ECDF 100%)",
       }}
     >
       <Link

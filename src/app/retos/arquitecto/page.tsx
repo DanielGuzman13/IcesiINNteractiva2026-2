@@ -118,11 +118,11 @@ export default function ArquitectoRetoPage() {
     paso === "intro" ? 0 : paso === "nivel1" ? 1 : paso === "nivel2" ? 2 : paso === "nivel3" ? 3 : 4;
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-brand-primary via-brand-support to-brand-mid px-4 py-8">
+    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-cali-marfil to-cali-farallones px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
-          className="flex items-center gap-1 text-sm font-semibold text-white/80 transition-colors hover:text-white"
+          className="flex items-center gap-1 text-sm font-semibold text-brand-support/80 transition-colors hover:text-brand-primary"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -134,13 +134,13 @@ export default function ArquitectoRetoPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className={`h-3 w-3 rounded-full border-2 border-white transition-all ${
-                  progreso > i || paso === "resultado" ? "bg-brand-light" : progreso === i ? "bg-white" : "bg-white/20"
+                className={`h-3 w-3 rounded-full border-2 border-brand-primary transition-all ${
+                  progreso > i || paso === "resultado" ? "bg-brand-primary" : progreso === i ? "bg-brand-mid" : "bg-transparent"
                 }`}
               />
             ))}
           </div>
-          <span className="text-xs text-white/70">
+          <span className="text-xs text-brand-support/70">
             {Math.min(Math.max(progreso - 1, 0), 3)}/3 niveles
           </span>
         </div>
@@ -155,7 +155,7 @@ export default function ArquitectoRetoPage() {
       <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
         <div
           className="px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, #45609B 0%, #719FC1 100%)" }}
+          style={{ background: "linear-gradient(90deg, #C63254 0%, #EC6449 100%)" }}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">

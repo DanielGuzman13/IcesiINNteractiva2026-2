@@ -22,7 +22,7 @@ export const ROLES: Role[] = [
     description:
       "Diseña la solución: define la estructura, los componentes y la experiencia del reto.",
     icon: "blueprint",
-    accent: "#719FC1",
+    accent: "#C63254",
   },
   {
     slug: "qa-ciberseguridad",
@@ -31,7 +31,7 @@ export const ROLES: Role[] = [
     description:
       "Asegura la calidad y la seguridad: valida escenarios, prueba y protege cada detalle.",
     icon: "shield",
-    accent: "#6E7FA2",
+    accent: "#2AA2A3",
     href: "/retos/qa",
   },
   {
@@ -41,7 +41,7 @@ export const ROLES: Role[] = [
     description:
       "Lleva el reto a código: construye la interfaz y el backend de principio a fin.",
     icon: "code",
-    accent: "#45609B",
+    accent: "#EC6449",
     href: "/retos/backend",
   },
   {
@@ -51,7 +51,7 @@ export const ROLES: Role[] = [
     description:
       "Interpreta datos y estrategia: modela la información y guía las decisiones del equipo.",
     icon: "chart",
-    accent: "#91A4BC",
+    accent: "#1E232A",
   },
 ];
 
