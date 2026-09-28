@@ -51,14 +51,12 @@ export default function RegistrationForm() {
       className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10"
     >
       <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-          Paso 2 de 3
-        </span>
+
         <h2 className="mt-4 text-3xl font-black tracking-tight text-brand-support sm:text-4xl">
           Crea tu perfil
         </h2>
         <p className="mt-2 text-sm text-brand-support/80 sm:text-base">
-          Cuéntanos tu nombre y elige un avatar para el reto.
+          Escribe tu nombre y elige un avatar para el reto.
         </p>
       </div>
 

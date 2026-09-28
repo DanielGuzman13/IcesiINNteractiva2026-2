@@ -20,23 +20,23 @@ interface CarouselProps {
 const DEFAULT_SLIDES: MediaSlide[] = [
   {
     type: "image",
-    src: "/media/cali-skyline.svg",
+    src: "/media/carrusel/Principal.jpg",
     alt: "Skyline de Cali con colores de la marca",
   },
   {
-    type: "video",
-    src: "/media/cali-demo.mp4",
+    type: "image",
+    src: "/media/carrusel/Sesión 2.jpg",
     alt: "Video de bienvenida Cali nos une",
     poster: "/media/cali-unite.svg",
   },
   {
     type: "image",
-    src: "/media/cali-sunrise.svg",
+    src: "/media/carrusel/Sesión 4.jpg",
     alt: "Amanecer en Cali",
   },
   {
     type: "image",
-    src: "/media/cali-unite.svg",
+    src: "/media/carrusel/Sesión 1.jpg",
     alt: "Cali nos une",
   },
 ];

@@ -13,7 +13,11 @@ export default function AvatarPicker({
   onSelect,
 }: AvatarPickerProps) {
   return (
-    <div className="grid grid-cols-4 gap-3 sm:gap-5" role="radiogroup" aria-label="Selecciona tu avatar">
+    <div
+      className="grid grid-cols-4 gap-4 sm:gap-6"
+      role="radiogroup"
+      aria-label="Selecciona tu avatar"
+    >
       {AVATARS.map((avatar) => {
         const isSelected = selected === avatar.id;
         return (
@@ -23,6 +27,7 @@ export default function AvatarPicker({
             role="radio"
             aria-checked={isSelected}
             aria-label={avatar.label}
+            title={avatar.label}
             onClick={() => onSelect(avatar.id)}
             className={`group relative aspect-square w-full rounded-full transition-all duration-300 focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-mid ${
               isSelected
@@ -34,14 +39,14 @@ export default function AvatarPicker({
               src={avatar.src}
               alt={avatar.label}
               fill
-              sizes="(max-width: 640px) 22vw, 96px"
-              className="rounded-full object-cover"
+              sizes="(max-width: 640px) 22vw, 120px"
+              className="rounded-full object-contain p-0.5"
             />
             {isSelected && (
-              <span className="absolute -right-1 -top-1 flex h-7 w-7 items-center justify-center rounded-full bg-brand-primary text-white shadow-md">
+              <span className="absolute -right-1 -top-1 flex h-6 w-6 sm:h-7 sm:w-7 items-center justify-center rounded-full bg-brand-primary text-white shadow-md z-10">
                 <svg
                   viewBox="0 0 24 24"
-                  className="h-4 w-4"
+                  className="h-3.5 w-3.5 sm:h-4 sm:w-4"
                   fill="none"
                   stroke="currentColor"
                   strokeWidth="3"

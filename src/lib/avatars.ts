@@ -1,23 +1,43 @@
 export const AVATARS = [
   {
-    id: "companion",
-    label: "Compañero",
-    src: "/media/avatars/av-companion.svg",
+    id: "aborrajado",
+    label: "Aborrajado",
+    src: "/media/avatars/aborrajado.png",
   },
   {
-    id: "guardian",
-    label: "Guardian",
-    src: "/media/avatars/av-guardian.svg",
+    id: "arepa",
+    label: "Arepa",
+    src: "/media/avatars/arepa.png",
   },
   {
-    id: "coder",
-    label: "Coder",
-    src: "/media/avatars/av-coder.svg",
+    id: "cholado",
+    label: "Cholado",
+    src: "/media/avatars/cholado.png",
   },
   {
-    id: "analyst",
-    label: "Analista",
-    src: "/media/avatars/av-analyst.svg",
+    id: "chontaduro",
+    label: "Chontaduro",
+    src: "/media/avatars/chontaduro.png",
+  },
+  {
+    id: "empanada",
+    label: "Empanada",
+    src: "/media/avatars/empanada.png",
+  },
+  {
+    id: "lulada",
+    label: "Lulada",
+    src: "/media/avatars/lulada.png",
+  },
+  {
+    id: "pandebono",
+    label: "Pandebono",
+    src: "/media/avatars/padebono.png",
+  },
+  {
+    id: "raspado",
+    label: "Raspado",
+    src: "/media/avatars/raspado.png",
   },
 ] as const;
 
