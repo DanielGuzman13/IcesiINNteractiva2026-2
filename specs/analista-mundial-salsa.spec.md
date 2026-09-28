@@ -1,39 +1,37 @@
-# Feature: Módulo Analista de Requerimientos - Mundial de Salsa Cali
+
+# Feature: Módulo Analista de Requerimientos - Flujos Multi-Nivel del Mundial de Salsa Cali
 
 ## Contexto General del Taller
 
-Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software", donde los estudiantes asumen distintos roles del ciclo de vida del desarrollo de software a través de escenarios y eventos clave. En este módulo, el estudiante asume el rol de **Analista de Requerimientos / Product Owner**.
+Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software". En este módulo, el estudiante asume el rol de **Analista de Requerimientos / Product Owner**.
 
-## Escenario
+## Estructura de Progresión (2 Ejercicios por Flujo)
 
-- **Evento:** Sistema de Calificación y Votación en Vivo del Mundial de Salsa (Cali, Colombia).
-- **Rol:** Requirements Analyst / Business Analyst.
-- **Flujo de Pantalla:**
-  1. **Pantalla 1 (Explicación Contextual):** Muestra un ejemplo claro y visual de cómo se estructura una historia de usuario usando la sintaxis BDD (Gherkin: Given, When, Then) antes de iniciar la prueba.
-  2. **Pantalla 2 (Desafío Drag and Drop):** El estudiante debe seleccionar los 3 bloques correctos entre un banco amplio de opciones (sin pistas de etiqueta en las tarjetas) y soltarlos en sus zonas correspondientes.
+El sistema selecciona aleatoriamente **1 de 3 Flujos Temáticos** al iniciar. Cada flujo consta de **2 ejercicios consecutivos** del mismo contexto pero con mayor profundidad en el Nivel 2:
 
----
+- **Flujo 1: Votación del Público en Vivo**
+  - Ejercicio 1.1: Registrar el voto del público durante una presentación.
+  - Ejercicio 1.2: Validación de límite de votos y prevención de duplicados por IP/Usuario.
+- **Flujo 2: Boletería Digital - Coliseo El Pueblo**
+  - Ejercicio 2.1: Compra exitosa de entradas VIP categoría Ensambles.
+  - Ejercicio 2.2: Aplicación de código de descuento promocional en el checkout.
+- **Flujo 3: Calificación Oficial de Jurados Internacionales**
+  - Ejercicio 3.1: Registro de puntaje en el criterio de Ritmo y Cadencia.
+  - Ejercicio 3.2: Impugnación y recalificación reglamentaria de una rutina por parte del jurado principal.
 
-## Modificaciones de Reglas y Complejidad
-
-1. **Ocultamiento de Etiquetas (Sin Pistas):** Las tarjetas arrastrables NO contienen los prefijos "GIVEN", "WHEN" o "THEN" ni títulos que delaten su posición. Cada tarjeta muestra únicamente el texto descriptivo del comportamiento.
-2. **Banco de Opciones Ampliado (7 Tarjetas por Reto):** Para aumentar la dificultad, el estudiante debe elegir entre **7 tarjetas en total**:
-   - **1** opción correcta para `GIVEN` (Contexto/Condición inicial).
-   - **1** opción correcta para `WHEN` (Acción o evento del usuario).
-   - **1** opción correcta para `THEN` (Resultado o reacción esperada del sistema).
-   - **4** distractores verosímiles que pertenecen a otros contextos, roles o pasos incorrectos.
+Al validar correctamente el Ejercicio 1 de cualquier flujo, la interfaz habilita el botón **"Siguiente Ejercicio del Flujo"**, cargando inmediatamente la segunda actividad del mismo tema antes de finalizar el módulo.
 
 ---
 
-## Banco de Historias de Usuario
+## Banco de Historias de Usuario (6 Ejercicios en Total)
 
-El sistema selecciona **1 de 3 Retos** aleatoriamente al hacer clic en "Comenzar Reto".
+### FLUJO 1: VOTACIÓN DEL PÚBLICO
 
-### Reto 1: Votación del Público en Vivo para Parejas de Salsa
+#### Ejercicio 1.1: Votación Básica
 
 - **Feature:** Votación del Público
 - **Scenario:** Registrar el voto del público durante una presentación
-- **Tarjetas Arrastrables (Desordenadas sin etiquetas):**
+- **Tarjetas Arrastrables (7 Opciones):**
   1. `El espectador tiene la app oficial abierta y la pareja de baile está ejecutando su rutina en la pista` *(Correcto - GIVEN)*
   2. `El espectador presiona el botón "Votar por esta Pareja" y selecciona un puntaje de 10` *(Correcto - WHEN)*
   3. `El sistema suma el voto al promedio en tiempo real y muestra la confirmación "¡Voto registrado!"` *(Correcto - THEN)*
@@ -42,11 +40,28 @@ El sistema selecciona **1 de 3 Retos** aleatoriamente al hacer clic en "Comenzar
   6. `El bailarín principal se resbala durante la ejecución del paso caleño "El Repique"` *(Distractor)*
   7. `La app envía un correo promocional con descuento para la tienda oficial de salsa` *(Distractor)*
 
-### Reto 2: Compra de Boletas VIP para la Gran Final en el Coliseo El Pueblo
+#### Ejercicio 1.2: Control de Voto Duplicado (Nivel Avanzado)
+
+- **Feature:** Votación del Público
+- **Scenario:** Control de votación duplicada en un mismo dispositivo
+- **Tarjetas Arrastrables (7 Opciones):**
+  1. `El usuario ya emitió su voto para la pareja en competencia desde su cuenta verificada` *(Correcto - GIVEN)*
+  2. `Intenta presionar nuevamente el botón de votación para la misma presentación` *(Correcto - WHEN)*
+  3. `El sistema deshabilita la acción, mantiene el voto previo y despliega el aviso "Ya has votado por este participante"` *(Correcto - THEN)*
+  4. `El administrador del evento elimina la cuenta del usuario por intento de fraude` *(Distractor)*
+  5. `La app cierra la sesión automáticamente y reinicia los valores del servidor` *(Distractor)*
+  6. `El conteo total de votos retrocede a cero para todas las parejas de la categoría` *(Distractor)*
+  7. `El dispositivo del usuario recibe una notificación push con la programación del día siguiente` *(Distractor)*
+
+---
+
+### FLUJO 2: BOLETERÍA DIGITAL
+
+#### Ejercicio 2.1: Compra VIP
 
 - **Feature:** Boletería Digital
 - **Scenario:** Compra exitosa de entradas en categoría Ensambles
-- **Tarjetas Arrastrables (Desordenadas sin etiquetas):**
+- **Tarjetas Arrastrables (7 Opciones):**
   1. `El usuario está autenticado en la plataforma y existen entradas disponibles en Zona VIP` *(Correcto - GIVEN)*
   2. `Selecciona 2 boletas y completa la transacción ingresando los datos de pago` *(Correcto - WHEN)*
   3. `El sistema reserva los asientos, descuenta las entradas del inventario y genera el código QR` *(Correcto - THEN)*
@@ -55,62 +70,59 @@ El sistema selecciona **1 de 3 Retos** aleatoriamente al hacer clic en "Comenzar
   6. `El organizador del evento habilita el ingreso de comida y bebidas al coliseo` *(Distractor)*
   7. `El banco rechaza la tarjeta por saldo insuficiente y bloquea la cuenta del usuario` *(Distractor)*
 
-### Reto 3: Calificación Oficial de los Jurados Internacionales
+#### Ejercicio 2.2: Redención de Cupón Promocional
+
+- **Feature:** Boletería Digital
+- **Scenario:** Aplicación de código de descuento instituido por la Alcaldía
+- **Tarjetas Arrastrables (7 Opciones):**
+  1. `El comprador se encuentra en la pantalla de resumen de pago con 2 boletas en su carrito` *(Correcto - GIVEN)*
+  2. `Ingresa el código promocional "FERIADECALI" y presiona el botón "Aplicar"` *(Correcto - WHEN)*
+  3. `El sistema descuenta el 20% del total a pagar, actualiza el monto y muestra el desglose del ahorro` *(Correcto - THEN)*
+  4. `La pasarela de pago duplica el valor del pedido por cobro de comisiones bancarias` *(Distractor)*
+  5. `El usuario se registra como participante en la maratón de salsa de la ciudad` *(Distractor)*
+  6. `El sistema envía una alerta SMS al organizador notificando la compra` *(Distractor)*
+  7. `El cupón expira y el carrito de compras elimina las boletas seleccionadas` *(Distractor)*
+
+---
+
+### FLUJO 3: CALIFICACIÓN DE JURADOS
+
+#### Ejercicio 3.1: Registro de Calificación
 
 - **Feature:** Calificación de Jurados
 - **Scenario:** Registro del puntaje en el criterio de Ritmo y Cadencia
-- **Bloques Arrastrables (Desordenados sin etiquetas):**
+- **Tarjetas Arrastrables (7 Opciones):**
   1. `El jurado oficial tiene la sesión activa en la tablet de juzgamiento del evento` *(Correcto - GIVEN)*
   2. `Ingresa una calificación de "9.8" en la casilla de Ritmo y presiona "Guardar Puntaje"` *(Correcto - WHEN)*
   3. `El sistema calcula el promedio de la pareja, bloquea la celda y actualiza la tabla de posiciones` *(Correcto - THEN)*
   4. `El público asistente en el coliseo empieza a ovacionar a la delegación internacional` *(Distractor)*
-  5. `La parejarealiza un cambio de vestuario de emergencia antes de salir a la pista` *(Distractor)*
+  5. `La pareja realiza un cambio de vestuario de emergencia antes de salir a la pista` *(Distractor)*
   6. `El presentador del evento anuncia a los patrocinadores oficiales por el micrófono` *(Distractor)*
   7. `El sistema imprime un certificado en papel firmado por el alcalde de Cali` *(Distractor)*
+
+#### Ejercicio 3.2: Impugnación y Recalificación
+
+- **Feature:** Calificación de Jurados
+- **Scenario:** Modificación justificada de puntaje por penalización técnica
+- **Tarjetas Arrastrables (7 Opciones):**
+  1. `El juez principal ha abierto la solicitud de revisión técnica sobre una rutina finalizada` *(Correcto - GIVEN)*
+  2. `Registra la deducción de 0.5 puntos por caída de accesorio y confirma con su clave de juez` *(Correcto - WHEN)*
+  3. `El sistema recalcula la nota final, registra el motivo en la bitácora de auditoría y notifica a la mesa central` *(Correcto - THEN)*
+  4. `La transmisión de televisión interrumpe la señal para emitir comerciales` *(Distractor)*
+  5. `El público vota a través de redes sociales para anular la decisión del juez` *(Distractor)*
+  6. `El sistema deshabilita la conexión Wi-Fi de todas las tablets de juzgamiento` *(Distractor)*
+  7. `Los participantes solicitan repetir la rutina desde el inicio del tema musical` *(Distractor)*
 
 ---
 
 ## Criterios de Aceptación (Gherkin)
 
-### Scenario: Pantalla de Introducción y Explicación Gherkin
+### Scenario: Flujo de 2 Pasos y Transición de Ejercicio
 
-  Given que el estudiante navega a la ruta "http://localhost:3000/retos/analista"
-  Then la interfaz debe presentar una tarjeta educativa interactiva explicando la sintaxis BDD:
-    | Palabra Clave | Significado | Ejemplo Contextual |
-    | GIVEN (Dado que...) | Contexto o condición inicial necesaria | Dado que el usuario está registrado |
-    | WHEN (Cuando...) | Acción o evento realizado por el usuario | Cuando presiona el botón de comprar |
-    | THEN (Entonces...) | Resultado esperado del sistema | Entonces se genera su comprobante |
-  And mostrar un botón destacado con la etiqueta "Comenzar Reto de Análisis".
-
----
-
-### Scenario: Carga e Interfaz del Desafío Drag and Drop
-
-  Given que el estudiante hace clic en "Comenzar Reto de Análisis"
-  Then la interfaz debe cargar el escenario asignado aleatoriamente
-  And mostrar tres zonas de soltar vacías etiquetadas como:
-    - Zona GIVEN: "1. Condición Inicial (GIVEN)"
-    - Zona WHEN: "2. Acción del Usuario (WHEN)"
-    - Zona THEN: "3. Resultado del Sistema (THEN)"
-  And mostrar un contenedor con 7 tarjetas arrastrables desordenadas sin etiquetas que delaten su posición
-  And un botón con la etiqueta "Validar Requerimiento".
-
----
-
-### Scenario: Validación Exitosa de la Estructura BDD
-
-  Given que el estudiante arrastra la tarjeta correcta a la zona GIVEN, la tarjeta de acción a WHEN y el resultado a THEN
+  Given que el estudiante completa con éxito el Ejercicio 1 del flujo asignado aleatoriamente
   When hace clic en el botón "Validar Requerimiento"
-  Then la interfaz debe mostrar una animación de éxito con confeti y sonido/estilo festivo caleño
-  And mostrar el mensaje: "¡Excelente trabajo de Análisis! Has filtrado los distractores y estructurado el requerimiento correctamente."
-  And habilitar el botón "Avanzar a la Siguiente Actividad".
-
----
-
-### Scenario: Validación Errónea o Incompleta
-
-  Given que el estudiante coloca tarjetas en orden incorrecto, ubica un distractor o deja zonas vacías
-  When hace clic en el botón "Validar Requerimiento"
-  Then el sistema debe resaltar en color rojo las zonas que tienen errores o están vacías
-  And mostrar un mensaje de ayuda: "⚠️ Requerimiento no válido. Asegúrate de identificar el contexto inicial, la acción y el resultado del sistema entre las opciones."
-  And aplicar una animación de sacudida (shake) a las casillas erróneas.
+  Then el sistema muestra la confirmación de éxito
+  And habilita el botón "Avanzar al Ejercicio 2 de [Nombre del Flujo]"
+  When el estudiante hace clic en "Avanzar al Ejercicio 2"
+  Then la interfaz carga las 7 tarjetas correspondientes al Ejercicio 2 manteniendo la continuidad contextual del flujo
+  And al completar el Ejercicio 2 habilita el botón "Completar Módulo de Análisis".

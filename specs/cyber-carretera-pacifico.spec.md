@@ -1,4 +1,3 @@
-
 # Feature: Módulo Ciberseguridad / Incident Response - Carrera del Pacífico
 
 ## Contexto General del Taller

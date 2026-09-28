@@ -20,6 +20,11 @@ interface Feature {
   bloques: Bloque[];
 }
 
+interface Flujo {
+  nombre: string;
+  ejercicios: Feature[];
+}
+
 const ZONAS: { tipo: TipoBloque; etiqueta: string }[] = [
   { tipo: "given", etiqueta: "1. Condición Inicial (GIVEN)" },
   { tipo: "when", etiqueta: "2. Acción del Usuario (WHEN)" },
@@ -44,148 +49,307 @@ const TABLA_GHERKIN: { palabra: string; significado: string; ejemplo: string }[]
   },
 ];
 
-const FEATURES: Feature[] = [
+const FLUJOS: Flujo[] = [
   {
     nombre: "Votación del Público",
-    scenario: "Registrar el voto del público durante una presentación",
-    bloques: [
+    ejercicios: [
       {
-        id: "f1-given",
-        tipo: "given",
-        texto:
-          "El espectador tiene la app oficial abierta y la pareja de baile está ejecutando su rutina en la pista",
+        nombre: "Votación del Público",
+        scenario: "Registrar el voto del público durante una presentación",
+        bloques: [
+          {
+            id: "f1e1-given",
+            tipo: "given",
+            texto:
+              "El espectador tiene la app oficial abierta y la pareja de baile está ejecutando su rutina en la pista",
+          },
+          {
+            id: "f1e1-when",
+            tipo: "when",
+            texto:
+              'El espectador presiona el botón "Votar por esta Pareja" y selecciona un puntaje de 10',
+          },
+          {
+            id: "f1e1-then",
+            tipo: "then",
+            texto:
+              'El sistema suma el voto al promedio en tiempo real y muestra la confirmación "¡Voto registrado!"',
+          },
+          {
+            id: "f1e1-d1",
+            tipo: "distractor",
+            texto:
+              "El jurado internacional califica el vestuario y la coordinación de la escuela de baile",
+          },
+          {
+            id: "f1e1-d2",
+            tipo: "distractor",
+            texto:
+              "El servidor web reinicia la transmisión en vivo por saturación de usuarios",
+          },
+          {
+            id: "f1e1-d3",
+            tipo: "distractor",
+            texto:
+              'El bailarín principal se resbala durante la ejecución del paso caleño "El Repique"',
+          },
+          {
+            id: "f1e1-d4",
+            tipo: "distractor",
+            texto:
+              "La app envía un correo promocional con descuento para la tienda oficial de salsa",
+          },
+        ],
       },
       {
-        id: "f1-when",
-        tipo: "when",
-        texto:
-          'El espectador presiona el botón "Votar por esta Pareja" y selecciona un puntaje de 10',
-      },
-      {
-        id: "f1-then",
-        tipo: "then",
-        texto:
-          'El sistema suma el voto al promedio en tiempo real y muestra la confirmación "¡Voto registrado!"',
-      },
-      {
-        id: "f1-d1",
-        tipo: "distractor",
-        texto:
-          "El jurado internacional califica el vestuario y la coordinación de la escuela de baile",
-      },
-      {
-        id: "f1-d2",
-        tipo: "distractor",
-        texto:
-          "El servidor web reinicia la transmisión en vivo por saturación de usuarios",
-      },
-      {
-        id: "f1-d3",
-        tipo: "distractor",
-        texto:
-          'El bailarín principal se resbala durante la ejecución del paso caleño "El Repique"',
-      },
-      {
-        id: "f1-d4",
-        tipo: "distractor",
-        texto:
-          "La app envía un correo promocional con descuento para la tienda oficial de salsa",
+        nombre: "Control de Voto Duplicado",
+        scenario: "Control de votación duplicada en un mismo dispositivo",
+        bloques: [
+          {
+            id: "f1e2-given",
+            tipo: "given",
+            texto:
+              "El usuario ya emitió su voto para la pareja en competencia desde su cuenta verificada",
+          },
+          {
+            id: "f1e2-when",
+            tipo: "when",
+            texto:
+              "Intenta presionar nuevamente el botón de votación para la misma presentación",
+          },
+          {
+            id: "f1e2-then",
+            tipo: "then",
+            texto:
+              'El sistema deshabilita la acción, mantiene el voto previo y despliega el aviso "Ya has votado por este participante"',
+          },
+          {
+            id: "f1e2-d1",
+            tipo: "distractor",
+            texto:
+              "El administrador del evento elimina la cuenta del usuario por intento de fraude",
+          },
+          {
+            id: "f1e2-d2",
+            tipo: "distractor",
+            texto:
+              "La app cierra la sesión automáticamente y reinicia los valores del servidor",
+          },
+          {
+            id: "f1e2-d3",
+            tipo: "distractor",
+            texto:
+              "El conteo total de votos retrocede a cero para todas las parejas de la categoría",
+          },
+          {
+            id: "f1e2-d4",
+            tipo: "distractor",
+            texto:
+              "El dispositivo del usuario recibe una notificación push con la programación del día siguiente",
+          },
+        ],
       },
     ],
   },
   {
     nombre: "Boletería Digital",
-    scenario: "Compra exitosa de entradas en categoría Ensambles",
-    bloques: [
+    ejercicios: [
       {
-        id: "f2-given",
-        tipo: "given",
-        texto:
-          "El usuario está autenticado en la plataforma y existen entradas disponibles en Zona VIP",
+        nombre: "Boletería Digital",
+        scenario: "Compra exitosa de entradas en categoría Ensambles",
+        bloques: [
+          {
+            id: "f2e1-given",
+            tipo: "given",
+            texto:
+              "El usuario está autenticado en la plataforma y existen entradas disponibles en Zona VIP",
+          },
+          {
+            id: "f2e1-when",
+            tipo: "when",
+            texto:
+              "Selecciona 2 boletas y completa la transacción ingresando los datos de pago",
+          },
+          {
+            id: "f2e1-then",
+            tipo: "then",
+            texto:
+              "El sistema reserva los asientos, descuenta las entradas del inventario y genera el código QR",
+          },
+          {
+            id: "f2e1-d1",
+            tipo: "distractor",
+            texto:
+              'La orquesta en vivo comienza a interpretar el tema "Cali Pachanguero"',
+          },
+          {
+            id: "f2e1-d2",
+            tipo: "distractor",
+            texto:
+              "El usuario descarga la lista de reproducción oficial del evento en Spotify",
+          },
+          {
+            id: "f2e1-d3",
+            tipo: "distractor",
+            texto:
+              "El organizador del evento habilita el ingreso de comida y bebidas al coliseo",
+          },
+          {
+            id: "f2e1-d4",
+            tipo: "distractor",
+            texto:
+              "El banco rechaza la tarjeta por saldo insuficiente y bloquea la cuenta del usuario",
+          },
+        ],
       },
       {
-        id: "f2-when",
-        tipo: "when",
-        texto:
-          "Selecciona 2 boletas y completa la transacción ingresando los datos de pago",
-      },
-      {
-        id: "f2-then",
-        tipo: "then",
-        texto:
-          "El sistema reserva los asientos, descuenta las entradas del inventario y genera el código QR",
-      },
-      {
-        id: "f2-d1",
-        tipo: "distractor",
-        texto:
-          'La orquesta en vivo comienza a interpretar el tema "Cali Pachanguero"',
-      },
-      {
-        id: "f2-d2",
-        tipo: "distractor",
-        texto:
-          "El usuario descarga la lista de reproducción oficial del evento en Spotify",
-      },
-      {
-        id: "f2-d3",
-        tipo: "distractor",
-        texto:
-          "El organizador del evento habilita el ingreso de comida y bebidas al coliseo",
-      },
-      {
-        id: "f2-d4",
-        tipo: "distractor",
-        texto:
-          "El banco rechaza la tarjeta por saldo insuficiente y bloquea la cuenta del usuario",
+        nombre: "Redención de Cupón Promocional",
+        scenario: "Aplicación de código de descuento instituido por la Alcaldía",
+        bloques: [
+          {
+            id: "f2e2-given",
+            tipo: "given",
+            texto:
+              "El comprador se encuentra en la pantalla de resumen de pago con 2 boletas en su carrito",
+          },
+          {
+            id: "f2e2-when",
+            tipo: "when",
+            texto:
+              'Ingresa el código promocional "FERIADECALI" y presiona el botón "Aplicar"',
+          },
+          {
+            id: "f2e2-then",
+            tipo: "then",
+            texto:
+              "El sistema descuenta el 20% del total a pagar, actualiza el monto y muestra el desglose del ahorro",
+          },
+          {
+            id: "f2e2-d1",
+            tipo: "distractor",
+            texto:
+              "La pasarela de pago duplica el valor del pedido por cobro de comisiones bancarias",
+          },
+          {
+            id: "f2e2-d2",
+            tipo: "distractor",
+            texto:
+              "El usuario se registra como participante en la maratón de salsa de la ciudad",
+          },
+          {
+            id: "f2e2-d3",
+            tipo: "distractor",
+            texto:
+              "El sistema envía una alerta SMS al organizador notificando la compra",
+          },
+          {
+            id: "f2e2-d4",
+            tipo: "distractor",
+            texto:
+              "El cupón expira y el carrito de compras elimina las boletas seleccionadas",
+          },
+        ],
       },
     ],
   },
   {
     nombre: "Calificación de Jurados",
-    scenario: "Registro del puntaje en el criterio de Ritmo y Cadencia",
-    bloques: [
+    ejercicios: [
       {
-        id: "f3-given",
-        tipo: "given",
-        texto:
-          "El jurado oficial tiene la sesión activa en la tablet de juzgamiento del evento",
+        nombre: "Calificación de Jurados",
+        scenario: "Registro del puntaje en el criterio de Ritmo y Cadencia",
+        bloques: [
+          {
+            id: "f3e1-given",
+            tipo: "given",
+            texto:
+              "El jurado oficial tiene la sesión activa en la tablet de juzgamiento del evento",
+          },
+          {
+            id: "f3e1-when",
+            tipo: "when",
+            texto:
+              'Ingresa una calificación de "9.8" en la casilla de Ritmo y presiona "Guardar Puntaje"',
+          },
+          {
+            id: "f3e1-then",
+            tipo: "then",
+            texto:
+              "El sistema calcula el promedio de la pareja, bloquea la celda y actualiza la tabla de posiciones",
+          },
+          {
+            id: "f3e1-d1",
+            tipo: "distractor",
+            texto:
+              "El público asistente en el coliseo empieza a ovacionar a la delegación internacional",
+          },
+          {
+            id: "f3e1-d2",
+            tipo: "distractor",
+            texto:
+              "La pareja realiza un cambio de vestuario de emergencia antes de salir a la pista",
+          },
+          {
+            id: "f3e1-d3",
+            tipo: "distractor",
+            texto:
+              "El presentador del evento anuncia a los patrocinadores oficiales por el micrófono",
+          },
+          {
+            id: "f3e1-d4",
+            tipo: "distractor",
+            texto:
+              "El sistema imprime un certificado en papel firmado por el alcalde de Cali",
+          },
+        ],
       },
       {
-        id: "f3-when",
-        tipo: "when",
-        texto:
-          'Ingresa una calificación de "9.8" en la casilla de Ritmo y presiona "Guardar Puntaje"',
-      },
-      {
-        id: "f3-then",
-        tipo: "then",
-        texto:
-          "El sistema calcula el promedio de la pareja, bloquea la celda y actualiza la tabla de posiciones",
-      },
-      {
-        id: "f3-d1",
-        tipo: "distractor",
-        texto:
-          "El público asistente en el coliseo empieza a ovacionar a la delegación internacional",
-      },
-      {
-        id: "f3-d2",
-        tipo: "distractor",
-        texto:
-          "La pareja realiza un cambio de vestuario de emergencia antes de salir a la pista",
-      },
-      {
-        id: "f3-d3",
-        tipo: "distractor",
-        texto:
-          "El presentador del evento anuncia a los patrocinadores oficiales por el micrófono",
-      },
-      {
-        id: "f3-d4",
-        tipo: "distractor",
-        texto:
-          "El sistema imprime un certificado en papel firmado por el alcalde de Cali",
+        nombre: "Impugnación y Recalificación",
+        scenario: "Modificación justificada de puntaje por penalización técnica",
+        bloques: [
+          {
+            id: "f3e2-given",
+            tipo: "given",
+            texto:
+              "El juez principal ha abierto la solicitud de revisión técnica sobre una rutina finalizada",
+          },
+          {
+            id: "f3e2-when",
+            tipo: "when",
+            texto:
+              "Registra la deducción de 0.5 puntos por caída de accesorio y confirma con su clave de juez",
+          },
+          {
+            id: "f3e2-then",
+            tipo: "then",
+            texto:
+              "El sistema recalcula la nota final, registra el motivo en la bitácora de auditoría y notifica a la mesa central",
+          },
+          {
+            id: "f3e2-d1",
+            tipo: "distractor",
+            texto:
+              "La transmisión de televisión interrumpe la señal para emitir comerciales",
+          },
+          {
+            id: "f3e2-d2",
+            tipo: "distractor",
+            texto:
+              "El público vota a través de redes sociales para anular la decisión del juez",
+          },
+          {
+            id: "f3e2-d3",
+            tipo: "distractor",
+            texto:
+              "El sistema deshabilita la conexión Wi-Fi de todas las tablets de juzgamiento",
+          },
+          {
+            id: "f3e2-d4",
+            tipo: "distractor",
+            texto:
+              "Los participantes solicitan repetir la rutina desde el inicio del tema musical",
+          },
+        ],
       },
     ],
   },
@@ -212,7 +376,8 @@ function barajar<T>(items: T[]): T[] {
 
 export default function AnalistaSalsaChallenge() {
   const [pantalla, setPantalla] = useState<"intro" | "desafio">("intro");
-  const [featureIndex, setFeatureIndex] = useState(0);
+  const [flujoIndex, setFlujoIndex] = useState(0);
+  const [ejercicioIndex, setEjercicioIndex] = useState(0);
   const [banco, setBanco] = useState<string[]>([]);
   const [zonas, setZonas] = useState<(string | null)[]>([null, null, null]);
   const [estado, setEstado] = useState<"idle" | "correcto" | "incorrecto">(
@@ -222,9 +387,14 @@ export default function AnalistaSalsaChallenge() {
   const [intento, setIntento] = useState(0);
 
   function handleComenzar() {
-    const indice = Math.floor(Math.random() * FEATURES.length);
-    setFeatureIndex(indice);
-    setBanco(barajar(FEATURES[indice].bloques.map((bloque) => bloque.id)));
+    const indiceFlujo = Math.floor(Math.random() * FLUJOS.length);
+    setFlujoIndex(indiceFlujo);
+    setEjercicioIndex(0);
+    setBanco(
+      barajar(
+        FLUJOS[indiceFlujo].ejercicios[0].bloques.map((bloque) => bloque.id),
+      ),
+    );
     setZonas([null, null, null]);
     setEstado("idle");
     setZonasInvalidas([]);
@@ -236,7 +406,8 @@ export default function AnalistaSalsaChallenge() {
     return <PantallaIntro onComenzar={handleComenzar} />;
   }
 
-  const feature = FEATURES[featureIndex];
+  const flujo = FLUJOS[flujoIndex];
+  const feature = flujo.ejercicios[ejercicioIndex];
   const bloquesEnBanco = banco.filter((id) => !zonas.includes(id));
 
   function encontrarBloque(id: string) {
@@ -290,8 +461,10 @@ export default function AnalistaSalsaChallenge() {
     if (invalidas.length === 0) {
       setEstado("correcto");
       setZonasInvalidas([]);
-      completeStage(1);
-      anunciarCierrePersonaje("analista", 1800);
+      if (ejercicioIndex === 1) {
+        completeStage(1);
+        anunciarCierrePersonaje("analista", 1800);
+      }
       return;
     }
     setEstado("incorrecto");
@@ -299,15 +472,27 @@ export default function AnalistaSalsaChallenge() {
     setIntento((actual) => actual + 1);
   }
 
+  function handleAvanzarEjercicio() {
+    setEjercicioIndex(1);
+    setBanco(
+      barajar(flujo.ejercicios[1].bloques.map((bloque) => bloque.id)),
+    );
+    setZonas([null, null, null]);
+    setEstado("idle");
+    setZonasInvalidas([]);
+    setIntento(0);
+  }
+
   return (
     <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
       <section className="space-y-6">
         <div className="rounded-3xl border-2 border-brand-soft bg-brand-light/30 p-6 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Analista de Requerimientos · Mundial de Salsa
+            Analista de Requerimientos · Mundial de Salsa · Ejercicio{" "}
+            {ejercicioIndex + 1} de 2
           </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
-            {feature.nombre}
+            {flujo.nombre}
           </h2>
           <p className="mt-2 text-sm text-brand-support/80">
             Scenario: <strong>{feature.scenario}</strong>
@@ -452,23 +637,44 @@ export default function AnalistaSalsaChallenge() {
                 ¡Excelente trabajo de Análisis! Has filtrado los distractores y
                 estructurado el requerimiento correctamente.
               </p>
-              <Link
-                href="/retos"
-                className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
-              >
-                Continuar
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
+              {ejercicioIndex === 0 ? (
+                <button
+                  type="button"
+                  onClick={handleAvanzarEjercicio}
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
                 >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </Link>
+                  Avanzar al Ejercicio 2 de {flujo.nombre}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              ) : (
+                <Link
+                  href="/retos"
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+                >
+                  Completar Módulo de Análisis
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </Link>
+              )}
             </div>
           </div>
         )}
