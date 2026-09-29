@@ -257,7 +257,7 @@ const FLUJOS: Flujo[] = [
     ejercicios: [
       {
         nombre: "Calificación de Jurados",
-        scenario: "Registro del puntaje en el criterio de Ritmo y Cadencia",
+        scenario: "Registro del puntaje en el criterio de Ritmo y Sabor",
         bloques: [
           {
             id: "f3e1-given",
@@ -488,14 +488,14 @@ export default function AnalistaSalsaChallenge() {
       <section className="space-y-6">
         <div className="rounded-3xl border-2 border-brand-soft bg-brand-light/30 p-6 text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Analista de Requerimientos · Mundial de Salsa · Ejercicio{" "}
+            Analista de Requerimientos - Mundial de Salsa - Ejercicio{" "}
             {ejercicioIndex + 1} de 2
           </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             {flujo.nombre}
           </h2>
           <p className="mt-2 text-sm text-brand-support/80">
-            Scenario: <strong>{feature.scenario}</strong>
+            Escenario: <strong>{feature.scenario}</strong>
           </p>
         </div>
 
@@ -615,7 +615,7 @@ export default function AnalistaSalsaChallenge() {
           <button
             type="button"
             onClick={handleValidar}
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
           >
             Validar Requerimiento
           </button>
@@ -641,7 +641,7 @@ export default function AnalistaSalsaChallenge() {
                 <button
                   type="button"
                   onClick={handleAvanzarEjercicio}
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
                 >
                   Avanzar al Ejercicio 2 de {flujo.nombre}
                   <svg
@@ -659,7 +659,7 @@ export default function AnalistaSalsaChallenge() {
               ) : (
                 <Link
                   href="/retos"
-                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+                  className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
                 >
                   Completar Módulo de Análisis
                   <svg
@@ -689,7 +689,7 @@ function PantallaIntro({ onComenzar }: { onComenzar: () => void }) {
       <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10">
         <div className="text-center">
           <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Analista de Requerimientos · Mundial de Salsa
+            Analista de Requerimientos - Mundial de Salsa
           </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Estructura una historia de usuario en formato BDD
@@ -730,7 +730,7 @@ function PantallaIntro({ onComenzar }: { onComenzar: () => void }) {
         <button
           type="button"
           onClick={onComenzar}
-          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+          className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
         >
           Comenzar Reto de Análisis
           <svg

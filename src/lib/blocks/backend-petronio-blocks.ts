@@ -459,7 +459,7 @@ export function runBackendPedido(workspace: Workspace, inventory: Inventory): Ba
 
     logs.push({
       tone: 'info',
-      text: `Validando ${ingredient}: hay ${value} · ${result ? 'sí alcanza' : 'no alcanza'}`
+      text: `Validando ${ingredient}: hay ${value} - ${result ? 'sí alcanza' : 'no alcanza'}`
     });
     return result;
   };

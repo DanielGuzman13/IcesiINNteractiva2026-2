@@ -3,14 +3,14 @@ import Carousel from "@/components/home/Carousel";
 
 export default function Home() {
   return (
-    <div className="relative min-h-dvh w-full overflow-hidden">
+    <div data-tema="general" className="relative min-h-dvh w-full overflow-hidden">
       <Carousel />
 
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(30,35,42,0.45) 0%, rgba(30,35,42,0.75) 100%)",
+            "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand-support) 45%, transparent) 0%, color-mix(in srgb, var(--brand-support) 75%, transparent) 100%)",
         }}
       />
 
@@ -50,4 +50,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
+}

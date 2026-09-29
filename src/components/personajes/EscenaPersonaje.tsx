@@ -39,6 +39,7 @@ export default function EscenaPersonaje({
 
   return (
     <div
+      data-tema="general"
       className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-brand-support/75 p-4 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
@@ -98,7 +99,7 @@ export default function EscenaPersonaje({
                   <span
                     key={i}
                     className={`h-2.5 rounded-full transition-all ${
-                      i === paso ? "w-7 bg-brand-primary" : i < paso ? "w-2.5 bg-brand-mid" : "w-2.5 bg-brand-light"
+                      i === paso ? "w-7 bg-brand-primary" : i < paso ? "w-2.5 bg-brand-mid" : "w-2.5 bg-brand-primary/20"
                     }`}
                   />
                 ))}

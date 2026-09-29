@@ -1,5 +1,5 @@
 /**
- * Diccionario caleñol · "Cali nos une"
+ * Diccionario caleñol - "Cali nos une"
  *
  * Expresiones caleñas que usan los personajes. En los textos de
  * src/lib/personajes.ts se marcan entre asteriscos: "¡*Ve*, Valeria!".

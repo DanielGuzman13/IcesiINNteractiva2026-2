@@ -10,6 +10,13 @@ import StagePasswordPrompt from "./StagePasswordPrompt";
 import EscenaPersonaje from "@/components/personajes/EscenaPersonaje";
 import CierrePersonajeHost from "@/components/personajes/CierrePersonajeHost";
 
+const TEMAS: Record<number, string> = {
+  1: "salsa",
+  2: "feria",
+  3: "petronio",
+  4: "carrera",
+};
+
 const FONDO = "min-h-dvh bg-gradient-to-br from-cali-marfil to-cali-farallones";
 
 /**
@@ -69,7 +76,9 @@ export default function StageGate({
 
   return (
     <>
-      {children}
+      <div data-tema={TEMAS[stage]} className="contents">
+        {children}
+      </div>
       <CierrePersonajeHost />
     </>
   );

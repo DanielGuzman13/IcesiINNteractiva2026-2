@@ -13,10 +13,10 @@ import { resetPersonajesVistos } from "./personajes";
  * y reemplaza el valor correspondiente abajo.
  */
 export const STAGE_PASSWORD_HASHES: Record<number, string> = {
-  1: "5f83bb3fe5533cc9bdb5425e92f4ea349154f87b5c230fcac5b9c245c5ca1998", // Analista · Mundial de Salsa
-  2: "f3dd85447d4af661a2a852ea8b5d707ab3115e96d95cf7a6a35f284e44d0b86c", // Arquitecto · Feria de Cali
-  3: "7250c3dc297ec3bee1c9aa038ba3822fff46f8c6d0f28f6abff5f8530428da35", // Fullstack · Petronio Álvarez
-  4: "912ad755a83249961ef4f349cffe4db437a53ea9a9f1ec6143820baa18a75f24", // QA y Ciberseguridad · Carrera del Pacífico
+  1: "5f83bb3fe5533cc9bdb5425e92f4ea349154f87b5c230fcac5b9c245c5ca1998", // Analista - Mundial de Salsa
+  2: "f3dd85447d4af661a2a852ea8b5d707ab3115e96d95cf7a6a35f284e44d0b86c", // Arquitecto - Feria de Cali
+  3: "7250c3dc297ec3bee1c9aa038ba3822fff46f8c6d0f28f6abff5f8530428da35", // Fullstack - Petronio Álvarez
+  4: "912ad755a83249961ef4f349cffe4db437a53ea9a9f1ec6143820baa18a75f24", // QA y Ciberseguridad - Carrera del Pacífico
 };
 
 export const STAGE_UNLOCKS_KEY = "icesi-ruta-desbloqueos";

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
@@ -149,6 +150,13 @@ export default function CyberCarreraChallenge() {
                   abecedario).
                 </p>
               </div>
+              <Image
+                src="/media/alfabeto-referencia.png"
+                alt="Alfabeto de la A a la Z con la posición de cada letra, del 1 al 26"
+                width={1600}
+                height={560}
+                className="mt-4 h-auto w-full rounded-xl border border-brand-soft"
+              />
               <p className="mt-3 text-xs leading-relaxed text-brand-support/80">
                 Paso 1: Resuelve el acertijo numérico en tu hoja para hallar el
                 desplazamiento y descifra el código usando la tabla de Cifrado
@@ -252,7 +260,7 @@ export default function CyberCarreraChallenge() {
           <div className="mt-6 overflow-hidden rounded-3xl border border-white/60 bg-white/70 shadow-2xl shadow-brand-primary/20 backdrop-blur-md">
             <div className="border-b border-brand-soft bg-brand-light/40 px-6 py-4">
               <h3 className="text-lg font-black text-brand-support">
-                Tabla oficial de ganadores · Carrera del Pacífico
+                Tabla oficial de ganadores - Carrera del Pacífico
               </h3>
               <p className="text-xs text-brand-support/70">
                 Resultados Bulevar del Río, Cali — Colombia
@@ -294,7 +302,7 @@ export default function CyberCarreraChallenge() {
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
             <Link
               href="/retos"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
             >
               Continuar
               <svg

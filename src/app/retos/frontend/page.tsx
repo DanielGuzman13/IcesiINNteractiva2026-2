@@ -8,7 +8,7 @@ export default function FrontendRetoPage() {
   const [showIntro, setShowIntro] = useState(true);
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-cali-marfil to-cali-farallones px-4 py-8">
+    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-white to-brand-light px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
@@ -37,7 +37,7 @@ export default function FrontendRetoPage() {
       <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
         <div
           className="flex items-center justify-between gap-4 px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, #C63254 0%, #EC6449 100%)" }}
+          style={{ background: "linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">
@@ -87,10 +87,10 @@ export default function FrontendRetoPage() {
           <div className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div
               className="px-6 py-6 text-white"
-              style={{ background: "linear-gradient(120deg, #C63254 0%, #EC6449 100%)" }}
+              style={{ background: "linear-gradient(120deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
             >
               <div className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                Ruta de Ingeniería de Software · Festival Petronio Álvarez
+                Ruta de Ingeniería de Software - Festival Petronio Álvarez
               </div>
               <h2 id="frontend-intro-title" className="text-2xl font-black sm:text-3xl">
                 Bienvenido, Frontend Engineer
@@ -120,7 +120,7 @@ export default function FrontendRetoPage() {
               <button
                 type="button"
                 onClick={() => setShowIntro(false)}
-                className="rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-mid"
+                className="rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-support"
               >
                 Comenzar a Mejorar la App
               </button>

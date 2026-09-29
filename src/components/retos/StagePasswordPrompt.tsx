@@ -64,6 +64,7 @@ export default function StagePasswordPrompt({
 
   return (
     <div
+      data-tema="general"
       className="flex w-full max-w-5xl flex-col items-center gap-2 md:flex-row md:items-end md:gap-0"
       role="dialog"
       aria-modal="true"
@@ -150,7 +151,7 @@ export default function StagePasswordPrompt({
                 className={`flex-1 rounded-full px-8 py-3 text-lg font-bold shadow-xl transition-all duration-300 ${
                   valor.trim() && !correcta
                     ? "bg-brand-primary text-white shadow-brand-primary/30 hover:bg-brand-mid"
-                    : "cursor-not-allowed bg-brand-light text-brand-support/60 shadow-none"
+                    : "cursor-not-allowed bg-brand-primary/15 text-brand-support/60 shadow-none"
                 }`}
               >
                 Desbloquear

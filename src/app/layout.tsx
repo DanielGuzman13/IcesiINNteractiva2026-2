@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Icesi Interactiva | Cali nos une",
+  title: "Icesi INNteractiva | Cali nos une",
   description:
     "Reto interactivo 'Cali nos une' — experiencias y retos de roles para la comunidad Icesi.",
 };

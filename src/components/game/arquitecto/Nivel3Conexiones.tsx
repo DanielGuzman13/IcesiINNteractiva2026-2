@@ -112,7 +112,7 @@ export default function Nivel3Conexiones({
   return (
     <div className="space-y-6">
       <EncabezadoNivel
-        etiqueta="Nivel 3 de 3 · ¿Cómo se conectan?"
+        etiqueta="Nivel 3 de 3 - ¿Cómo se conectan?"
         titulo="Conecta los moldes con una acción"
         instrucciones={
           <>

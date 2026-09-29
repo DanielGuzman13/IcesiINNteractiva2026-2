@@ -273,7 +273,7 @@ function renderConcertCard(selected: string | null) {
   if (selected === "a") {
     return (
       <div className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-        <p className="text-[10px] font-black text-yellow-400">10:00 PM · Marimba de Chonta</p>
+        <p className="text-[10px] font-black text-yellow-400">10:00 PM - Marimba de Chonta</p>
         <p className="text-[10px] font-medium text-yellow-400/80">Tarima principal</p>
       </div>
     );
@@ -281,14 +281,14 @@ function renderConcertCard(selected: string | null) {
   if (selected === "b") {
     return (
       <div className="w-full rounded-xl bg-[#0F172A] px-4 py-3 shadow-lg">
-        <p className="text-[10px] font-black text-white">10:00 PM · Marimba de Chonta</p>
+        <p className="text-[10px] font-black text-white">10:00 PM - Marimba de Chonta</p>
         <p className="text-[10px] font-medium text-white/80">Tarima principal</p>
       </div>
     );
   }
   return (
     <div className="w-full rounded-xl bg-slate-400 px-4 py-3 shadow-sm">
-      <p className="text-[10px] font-black text-slate-500">10:00 PM · Marimba de Chonta</p>
+      <p className="text-[10px] font-black text-slate-500">10:00 PM - Marimba de Chonta</p>
       <p className="text-[10px] font-medium text-slate-500/80">Tarima principal</p>
     </div>
   );
@@ -551,7 +551,7 @@ function LiveStreamView({ selected }: { selected: string | null }) {
           <MusicIcon className="h-9 w-9" />
         </div>
         <p className="text-sm font-black">Herencia de Timbiquí</p>
-        <p className="text-[11px] font-medium text-white/60">Marimba de chonta · Transmisión oficial</p>
+        <p className="text-[11px] font-medium text-white/60">Marimba de chonta - Transmisión oficial</p>
       </div>
       <div className="border-t border-white/10 bg-slate-900 px-4 py-4">{renderAudioZone(selected)}</div>
     </div>
@@ -562,7 +562,7 @@ function AgendaView({ selected }: { selected: string | null }) {
   return (
     <div className="flex min-h-[460px] flex-col bg-slate-50">
       <div className="flex items-center justify-between bg-brand-primary px-4 py-2.5 text-white">
-        <span className="text-xs font-extrabold">Agenda Nocturna · Tarima Principal</span>
+        <span className="text-xs font-extrabold">Agenda Nocturna - Tarima Principal</span>
         <span className="text-[10px] font-semibold text-white/80">Sábado</span>
       </div>
       <div className="flex-1 space-y-2.5 px-4 py-4">
@@ -606,7 +606,7 @@ function PlayerView({ selected }: { selected: string | null }) {
         </div>
         <div className="w-full max-w-md">
           <p className="text-center text-sm font-black text-slate-800">Marimba de Chonta</p>
-          <p className="text-center text-[10px] text-slate-500">Grupo Bahía · Álbum “Fuga”</p>
+          <p className="text-center text-[10px] text-slate-500">Grupo Bahía - Álbum “Fuga”</p>
           <div className="mt-4 h-1.5 w-full rounded-full bg-slate-300">
             <div className="h-full w-1/3 rounded-full bg-brand-primary" />
           </div>
@@ -640,8 +640,8 @@ function CheckoutView({ selected }: { selected: string | null }) {
       <div className="flex flex-1 flex-col gap-4 px-4 py-5">
         <div className="rounded-2xl border-2 border-dashed border-brand-primary/50 bg-white p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-brand-mid">Gradas Norte</p>
-          <p className="mt-1 text-sm font-black text-slate-800">2 entradas · Sección B</p>
-          <p className="text-[11px] text-slate-500">Noche 1 · Festival Petronio</p>
+          <p className="mt-1 text-sm font-black text-slate-800">2 entradas - Sección B</p>
+          <p className="text-[11px] text-slate-500">Noche 1 - Festival Petronio</p>
           <div className="mt-2 flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
             <span className="text-[10px] font-bold text-slate-500">Total</span>
             <span className="text-sm font-black text-emerald-600">$120.000</span>

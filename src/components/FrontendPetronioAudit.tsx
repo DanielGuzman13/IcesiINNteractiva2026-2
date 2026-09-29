@@ -248,7 +248,7 @@ export default function FrontendPetronioAudit({
                     type="button"
                     onClick={handleNext}
                     disabled={selected === null}
-                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-mid disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-support disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
                   >
                     {isLast ? "Finalizar" : "Siguiente"}
                   </button>
@@ -289,7 +289,7 @@ export default function FrontendPetronioAudit({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-widest text-brand-support/70">
-                          Pregunta {index + 1} · {question.heuristica}
+                          Pregunta {index + 1} - {question.heuristica}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-brand-support">{question.caso}</p>
                       </div>
@@ -338,7 +338,7 @@ export default function FrontendPetronioAudit({
               </button>
               <Link
                 href="/retos"
-                className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-mid"
+                className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-support"
               >
                 Continuar
               </Link>

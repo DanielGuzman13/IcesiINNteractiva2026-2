@@ -255,7 +255,7 @@ export function BarraAcciones({
           disabled={!puedeValidar}
           className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-8 py-3 text-lg font-bold shadow-xl transition-all duration-300 ${
             puedeValidar
-              ? "bg-brand-primary text-white shadow-brand-primary/30 hover:bg-brand-mid"
+              ? "bg-brand-primary text-white shadow-brand-primary/30 hover:bg-brand-support"
               : "cursor-not-allowed bg-brand-light text-brand-support/60 shadow-none"
           }`}
         >
@@ -302,7 +302,7 @@ export function RevelacionConcepto({
         <button
           type="button"
           onClick={onContinuar}
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
         >
           {textoBoton}
           <svg

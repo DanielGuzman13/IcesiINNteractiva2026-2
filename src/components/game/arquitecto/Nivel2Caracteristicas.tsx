@@ -128,7 +128,7 @@ export default function Nivel2Caracteristicas({
   return (
     <div className="space-y-6">
       <EncabezadoNivel
-        etiqueta="Nivel 2 de 3 · ¿Qué lo describe?"
+        etiqueta="Nivel 2 de 3 - ¿Qué lo describe?"
         titulo="Dale características a cada molde"
         instrucciones={
           <>

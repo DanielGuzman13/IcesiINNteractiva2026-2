@@ -121,7 +121,7 @@ export default function Nivel1MoldeOEjemplo({
   return (
     <div className="space-y-6">
       <EncabezadoNivel
-        etiqueta="Nivel 1 de 3 · ¿Molde o ejemplo?"
+        etiqueta="Nivel 1 de 3 - ¿Molde o ejemplo?"
         titulo="Separa los moldes de los ejemplos"
         instrucciones={
           <>

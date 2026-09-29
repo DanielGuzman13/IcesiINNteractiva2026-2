@@ -38,17 +38,17 @@ const GLOSARIO: { palabra: string; significado: string; ejemplo: string }[] = [
 
 const NIVELES = [
   {
-    titulo: "Nivel 1 · ¿Molde o ejemplo?",
+    titulo: "Nivel 1 - ¿Molde o ejemplo?",
     desc: "Separa los tipos de cosa de los ejemplos reales de la Feria.",
     tiempo: "~4 min",
   },
   {
-    titulo: "Nivel 2 · ¿Qué lo describe?",
+    titulo: "Nivel 2 - ¿Qué lo describe?",
     desc: "Dale a cada molde sus características.",
     tiempo: "~5 min",
   },
   {
-    titulo: "Nivel 3 · ¿Cómo se conectan?",
+    titulo: "Nivel 3 - ¿Cómo se conectan?",
     desc: "Une los moldes con la acción correcta.",
     tiempo: "~3 min",
   },
@@ -118,7 +118,7 @@ export default function ArquitectoRetoPage() {
     paso === "intro" ? 0 : paso === "nivel1" ? 1 : paso === "nivel2" ? 2 : paso === "nivel3" ? 3 : 4;
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-cali-marfil to-cali-farallones px-4 py-8">
+    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-white to-brand-light px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
@@ -155,7 +155,7 @@ export default function ArquitectoRetoPage() {
       <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
         <div
           className="px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, #C63254 0%, #EC6449 100%)" }}
+          style={{ background: "linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">
@@ -167,7 +167,7 @@ export default function ArquitectoRetoPage() {
               </div>
               <h1 className="text-3xl font-extrabold">Arquitecto de Software</h1>
               <div className="text-sm font-medium text-white/80">
-                Feria de Cali · Diseño del plano de la app oficial
+                Feria de Cali - Diseño del plano de la app oficial
               </div>
             </div>
             {paso !== "intro" && paso !== "resultado" && (
@@ -185,7 +185,7 @@ export default function ArquitectoRetoPage() {
               <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10">
                 <div className="text-center">
                   <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-                    Misión · Feria de Cali · ~15 min
+                    Misión - Feria de Cali - ~15 min
                   </span>
                   <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
                     Diseña el plano de la app de la Feria
@@ -250,7 +250,7 @@ export default function ArquitectoRetoPage() {
                 <button
                   type="button"
                   onClick={() => setPaso("nivel1")}
-                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+                  className="mt-8 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
                 >
                   ¡Comenzar misión!
                   <svg viewBox="0 0 24 24" className="h-5 w-5" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">

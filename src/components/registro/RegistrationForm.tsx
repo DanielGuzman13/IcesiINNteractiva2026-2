@@ -130,7 +130,7 @@ export default function RegistrationForm() {
       {avatar && name.trim() && (
         <p className="mt-4 text-center text-sm text-brand-support/70">
           Jugando como <strong className="text-brand-primary">{name.trim()}</strong>
-          {" · "}
+          {" - "}
           {AVATARS.find((item) => item.id === avatar)?.label}
         </p>
       )}

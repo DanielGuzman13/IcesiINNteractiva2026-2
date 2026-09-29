@@ -3,7 +3,7 @@ import QACarreraForm from "@/components/game/qa/QACarreraForm";
 
 export default function QaRetoPage() {
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-cali-marfil to-cali-farallones px-4 py-8">
+    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-white to-brand-light px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
@@ -32,7 +32,7 @@ export default function QaRetoPage() {
       <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
         <div
           className="px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, #C63254 0%, #EC6449 100%)" }}
+          style={{ background: "linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
         >
           <div className="flex items-center gap-4">
             <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">
@@ -47,7 +47,7 @@ export default function QaRetoPage() {
               </div>
               <h1 className="text-3xl font-extrabold">QA Engineer</h1>
               <div className="text-sm font-medium text-white/80">
-                Carrera del Pacífico · Detección de Bugs y Auditoría
+                Carrera del Pacífico - Detección de Bugs y Auditoría
               </div>
             </div>
           </div>

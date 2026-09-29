@@ -142,7 +142,7 @@ export default function PlanoFinal({
         <div className="rounded-3xl border border-white/60 bg-brand-light/20 p-4 shadow-2xl shadow-brand-primary/20 sm:p-6">
           <div className="mb-4 text-center">
             <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-              Diagrama de clases · App Feria de Cali
+              Diagrama de clases - App Feria de Cali
             </span>
           </div>
           <div className="grid grid-cols-[1fr_auto_1fr] items-center gap-x-1 sm:gap-x-3">
@@ -254,7 +254,7 @@ export default function PlanoFinal({
         </button>
         <Link
           href="/retos"
-          className="flex items-center justify-center rounded-full bg-brand-primary px-8 py-3 font-bold text-white shadow-md transition-all hover:bg-brand-mid"
+          className="flex items-center justify-center rounded-full bg-brand-primary px-8 py-3 font-bold text-white shadow-md transition-all hover:bg-brand-support"
         >
           Continuar
         </Link>

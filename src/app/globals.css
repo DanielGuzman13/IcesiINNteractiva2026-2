@@ -1,5 +1,67 @@
 @import "tailwindcss";
 
+@theme inline {
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-mid: var(--brand-mid);
+  --color-brand-soft: var(--brand-soft);
+  --color-brand-support: var(--brand-support);
+  --color-brand-light: var(--brand-light);
+}
+
+:root {
+  --brand-primary: #c63254;
+  --brand-mid: #ec6449;
+  --brand-soft: #2aa2a3;
+  --brand-support: #1e232a;
+  --brand-light: #e2ecdf;
+  --brand-fin: #ec6449;
+}
+
+[data-tema="general"] {
+  --brand-primary: #5340e9;
+  --brand-mid: #ea673b;
+  --brand-soft: #4cb978;
+  --brand-support: #1f1b4e;
+  --brand-light: #f3f4fe;
+  --brand-fin: #ea673b;
+}
+
+[data-tema="salsa"] {
+  --brand-primary: #ce1d5e;
+  --brand-mid: #fcc25a;
+  --brand-soft: #643086;
+  --brand-support: #3a0a2f;
+  --brand-light: #fff4e6;
+  --brand-fin: #643086;
+}
+
+[data-tema="feria"] {
+  --brand-primary: #c9420c;
+  --brand-mid: #45b78b;
+  --brand-soft: #077f98;
+  --brand-support: #3a1a0e;
+  --brand-light: #fffbe3;
+  --brand-fin: #077f98;
+}
+
+[data-tema="petronio"] {
+  --brand-primary: #8f1914;
+  --brand-mid: #1a7fa8;
+  --brand-soft: #e7a201;
+  --brand-support: #0a2e27;
+  --brand-light: #f6e7cc;
+  --brand-fin: #1a7fa8;
+}
+
+[data-tema="carrera"] {
+  --brand-primary: #175a5e;
+  --brand-mid: #f2a516;
+  --brand-soft: #c4530f;
+  --brand-support: #0e333b;
+  --brand-light: #f1efec;
+  --brand-fin: #c4530f;
+}
+
 @theme {
   /* Paleta "Cali nos une" */
   --color-cali-rojo: #c63254; /* Primario: CTA, elementos activos, branding */
@@ -8,13 +70,6 @@
   --color-cali-marfil: #f9f9fb; /* Fondo claro: pantallas y tarjetas */
   --color-cali-farallones: #e2ecdf; /* Superficie: banners sutiles, estados vacíos, lectura */
   --color-cali-asfalto: #1e232a; /* Texto principal, títulos y modo oscuro */
-
-  /* Roles que usa toda la app (nombres históricos de los tokens) */
-  --color-brand-primary: #c63254; /* = cali-rojo */
-  --color-brand-mid: #ec6449; /* = cali-atardecer */
-  --color-brand-soft: #2aa2a3; /* = cali-pacifico */
-  --color-brand-support: #1e232a; /* = cali-asfalto */
-  --color-brand-light: #e2ecdf; /* = cali-farallones */
 
   /* Destacados y avisos en tonos de Atardecer caleño */
   --color-amber-50: #fef4f2;
@@ -93,4 +148,4 @@ body {
 .blocklyToolbox::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
-}
+}
