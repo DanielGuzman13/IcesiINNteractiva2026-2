@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { inject, svgResize, Themes, WorkspaceSvg } from 'blockly';
-import Link from 'next/link';
 import { backendToolbox } from '@/lib/toolbox/backend-petronio-toolbox';
 import {
   defineBackendBlocks,
@@ -65,13 +64,11 @@ function nowTime(): string {
 }
 
 function BackendPetronioWorkspace({
-  nextHref = '/retos',
   onHelp,
-  onCompleted
+  onContinue
 }: {
-  nextHref?: string;
   onHelp?: () => void;
-  onCompleted?: () => void;
+  onContinue?: () => void;
 }) {
   const blocklyDivRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<WorkspaceSvg | null>(null);
@@ -259,7 +256,6 @@ function BackendPetronioWorkspace({
         if (!completedRef.current) {
           completedRef.current = true;
           setCompleted(true);
-          onCompleted?.();
         }
         break;
       case 'conflict':
@@ -433,12 +429,13 @@ function BackendPetronioWorkspace({
 
             </div>
             {completed ? (
-              <Link
-                href={nextHref}
-                className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
+              <button
+                type="button"
+                onClick={onContinue}
+                className="animate-fade-in rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-xl shadow-emerald-500/40 ring-4 ring-emerald-500/20 transition-colors hover:bg-emerald-600"
               >
                 Continuar
-              </Link>
+              </button>
             ) : (
               <button
                 type="button"

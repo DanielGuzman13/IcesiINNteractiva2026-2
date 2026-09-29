@@ -27,6 +27,7 @@ export default function Nivel2Caracteristicas({
   onComplete: (score: number) => void;
 }) {
   const [orden] = useState(() => barajar(CARACTERISTICAS.map((c) => c.id)));
+  const [moldes] = useState(() => barajar(MOLDES_NIVEL2));
   const [ubicacion, setUbicacion] = useState<Record<string, MoldeId | null>>({});
   const [seleccionado, setSeleccionado] = useState<string | null>(null);
   const [bloqueados, setBloqueados] = useState<string[]>([]);
@@ -60,6 +61,17 @@ export default function Nivel2Caracteristicas({
 
   function seleccionar(id: string) {
     setSeleccionado((actual) => (actual === id ? null : id));
+  }
+
+  function reiniciarTarjetas() {
+    setUbicacion((actual) => {
+      const siguiente = { ...actual };
+      for (const id of incorrectos) siguiente[id] = null;
+      return siguiente;
+    });
+    setIncorrectos([]);
+    setSeleccionado(null);
+    setError(null);
   }
 
   function validar() {
@@ -157,6 +169,14 @@ export default function Nivel2Caracteristicas({
             >
               {enBanco.map(renderChip)}
             </ZonaSoltar>
+            <button
+              type="button"
+              onClick={reiniciarTarjetas}
+              disabled={intento === 0 || incorrectos.length === 0}
+              className="mt-3 w-full rounded-xl border border-brand-primary/30 bg-white px-4 py-2 text-sm font-bold text-brand-primary transition hover:bg-brand-primary/10 disabled:cursor-not-allowed disabled:opacity-40 disabled:hover:bg-white"
+            >
+              Reiniciar tarjetas
+            </button>
             <p className="mt-3 text-xs text-brand-support/70">
               Prueba decir: “Toda boleta tiene un ___”. Si la frase tiene
               sentido, es una característica de Boleta.
@@ -165,7 +185,7 @@ export default function Nivel2Caracteristicas({
         </div>
 
         <div className="grid flex-1 grid-cols-1 gap-4 sm:grid-cols-2">
-          {MOLDES_NIVEL2.map((moldeId) => {
+          {moldes.map((moldeId) => {
             const ids = enMolde(moldeId);
             return (
               <ZonaSoltar

@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AppSimulator, { renderScene } from "@/components/AppSimulator";
 import { completeStage } from "@/lib/ruta-progress";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 
 type Phase = "quiz" | "results";
 
@@ -124,6 +124,7 @@ export default function FrontendPetronioAudit({
 }: {
   showIntro: boolean;
 }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -153,7 +154,6 @@ export default function FrontendPetronioAudit({
     if (isLast) {
       setPhase("results");
       completeStage(3);
-      anunciarCierrePersonaje("frontend", 1500);
       return;
     }
     const nextIndex = currentIndex + 1;
@@ -336,12 +336,13 @@ export default function FrontendPetronioAudit({
               >
                 Reintentar actividad
               </button>
-              <Link
-                href="/retos"
-                className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-support"
+              <button
+                type="button"
+                onClick={() => continuarConCierre("frontend", router.push)}
+                className="animate-fade-in rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-xl shadow-brand-primary/40 ring-4 ring-brand-primary/20 transition-colors hover:bg-brand-support"
               >
                 Continuar
-              </Link>
+              </button>
             </div>
           </div>
         )}

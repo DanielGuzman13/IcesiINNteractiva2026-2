@@ -131,11 +131,17 @@ export default function StagePasswordPrompt({
           <form onSubmit={handleSubmit} className="mt-5 space-y-3">
             <input
               ref={inputRef}
-              type="password"
+              type="text"
+              name="codigo-actividad"
               value={valor}
               onChange={(event) => setValor(event.target.value)}
               disabled={correcta}
               autoComplete="off"
+              autoCorrect="off"
+              data-lpignore="true"
+              data-1p-ignore
+              data-form-type="other"
+              style={{ WebkitTextSecurity: "disc" } as React.CSSProperties}
               autoCapitalize="characters"
               spellCheck={false}
               placeholder="Contraseña"

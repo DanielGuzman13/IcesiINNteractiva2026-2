@@ -221,3 +221,11 @@ export function anunciarCierrePersonaje(rol: RolActividad, retrasoMs = 1200): vo
     window.dispatchEvent(new CustomEvent<RolActividad>(EVENTO_CIERRE, { detail: rol }));
   }, retrasoMs);
 }
+
+export function continuarConCierre(rol: RolActividad, navegar: (href: string) => void): void {
+  if (escenaVista(rol, "cierre")) {
+    navegar(PERSONAJES[rol].destinoCierre);
+    return;
+  }
+  anunciarCierrePersonaje(rol, 0);
+}

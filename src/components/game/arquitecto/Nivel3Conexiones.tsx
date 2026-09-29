@@ -26,6 +26,7 @@ export default function Nivel3Conexiones({
   onComplete: (score: number) => void;
 }) {
   const [orden] = useState(() => barajar(VERBOS.map((v) => v.id)));
+  const [frases] = useState(() => barajar(CONEXIONES));
   // conexionId -> verboId
   const [asignacion, setAsignacion] = useState<Record<string, string | null>>({});
   const [seleccionado, setSeleccionado] = useState<string | null>(null);
@@ -150,7 +151,7 @@ export default function Nivel3Conexiones({
       </div>
 
       <div className="space-y-3">
-        {CONEXIONES.map((conexion) => {
+        {frases.map((conexion) => {
           const verboId = asignacion[conexion.id] ?? null;
           const bloqueada = bloqueadas.includes(conexion.id);
           const incorrecta = incorrectas.includes(conexion.id);

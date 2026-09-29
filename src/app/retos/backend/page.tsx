@@ -2,10 +2,12 @@
 
 import Link from 'next/link';
 import { useState } from 'react';
+import { useRouter } from 'next/navigation';
 import BackendPetronioWorkspace from '@/components/BackendPetronioWorkspace';
-import { anunciarCierrePersonaje } from '@/lib/personajes';
+import { continuarConCierre } from '@/lib/personajes';
 
 export default function BackendRetoPage() {
+  const router = useRouter();
   const [showIntro, setShowIntro] = useState(true);
 
   return (
@@ -35,8 +37,9 @@ export default function BackendRetoPage() {
         }
         aria-hidden={showIntro}
       >
-        <BackendPetronioWorkspace nextHref="/retos/frontend" onHelp={() => setShowIntro(true)}
-          onCompleted={() => anunciarCierrePersonaje("backend", 3000)}
+        <BackendPetronioWorkspace
+          onHelp={() => setShowIntro(true)}
+          onContinue={() => continuarConCierre('backend', router.push)}
         />
       </div>
 

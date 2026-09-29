@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 import { motion } from "framer-motion";
 
 type Categoria = "infantil" | "juvenil" | "adulto";
@@ -78,7 +78,6 @@ export default function QACarreraForm() {
     // BUG-1 a BUG-6 están presentes en este formulario; el total esperado es 6.
     if (respuestaAuditoria.trim() === "6") {
       setEstadoAuditoria("correcto");
-      anunciarCierrePersonaje("qa", 1500);
     } else {
       setEstadoAuditoria("incorrecto");
     }
@@ -355,7 +354,7 @@ export default function QACarreraForm() {
           {estadoAuditoria === "correcto" && (
             <button
               type="button"
-              onClick={() => router.push("/retos/ciberseguridad")}
+              onClick={() => continuarConCierre("qa", router.push)}
               className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
             >
               Continuar

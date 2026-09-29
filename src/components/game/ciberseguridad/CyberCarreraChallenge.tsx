@@ -1,11 +1,11 @@
 "use client";
 
 import Image from "next/image";
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 
 const EXPRESIONES: string[] = [
   "CHOLADOHELADO",
@@ -77,6 +77,7 @@ const COLORES_CONFETI = [
 ];
 
 export default function CyberCarreraChallenge() {
+  const router = useRouter();
   const [estado, setEstado] = useState<"bloqueado" | "restaurado">("bloqueado");
   const [clave, setClave] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -96,7 +97,6 @@ export default function CyberCarreraChallenge() {
       setError(null);
       setEstado("restaurado");
       completeStage(4);
-      anunciarCierrePersonaje("ciberseguridad", 1800);
       return;
     }
     setError(
@@ -300,9 +300,10 @@ export default function CyberCarreraChallenge() {
           </div>
 
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/retos"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
+            <button
+              type="button"
+              onClick={() => continuarConCierre("ciberseguridad", router.push)}
+              className="animate-fade-in inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
             >
               Continuar
               <svg
@@ -316,7 +317,7 @@ export default function CyberCarreraChallenge() {
               >
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           </div>
         </div>
       )}

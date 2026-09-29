@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import Nivel1MoldeOEjemplo from "@/components/game/arquitecto/Nivel1MoldeOEjemplo";
 import Nivel2Caracteristicas from "@/components/game/arquitecto/Nivel2Caracteristicas";
 import Nivel3Conexiones from "@/components/game/arquitecto/Nivel3Conexiones";
@@ -9,7 +10,7 @@ import PlanoFinal, { PUNTAJE_MAXIMO_TOTAL } from "@/components/game/arquitecto/P
 import { PENALIDAD_FALLO, PENALIDAD_PISTA } from "@/components/game/arquitecto/ArquitectoUI";
 import { saveActivityScore } from "@/lib/game-storage";
 import { completeStage } from "@/lib/ruta-progress";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 
 type Paso = "intro" | "nivel1" | "nivel2" | "nivel3" | "resultado";
 
@@ -38,16 +39,19 @@ const GLOSARIO: { palabra: string; significado: string; ejemplo: string }[] = [
 
 const NIVELES = [
   {
+    icono: "🧩",
     titulo: "Nivel 1 - ¿Molde o ejemplo?",
     desc: "Separa los tipos de cosa de los ejemplos reales de la Feria.",
     tiempo: "~4 min",
   },
   {
+    icono: "🏷️",
     titulo: "Nivel 2 - ¿Qué lo describe?",
     desc: "Dale a cada molde sus características.",
     tiempo: "~5 min",
   },
   {
+    icono: "🔗",
     titulo: "Nivel 3 - ¿Cómo se conectan?",
     desc: "Une los moldes con la acción correcta.",
     tiempo: "~3 min",
@@ -80,6 +84,7 @@ function BlueprintIcon({ className }: { className: string }) {
 }
 
 export default function ArquitectoRetoPage() {
+  const router = useRouter();
   const [paso, setPaso] = useState<Paso>("intro");
   const [puntajes, setPuntajes] = useState<[number, number, number]>([0, 0, 0]);
   const [mensajeEmergente, setMensajeEmergente] = useState<string | null>(null);
@@ -98,7 +103,6 @@ export default function ArquitectoRetoPage() {
     if (siguientePaso === "resultado") {
       saveActivityScore("arquitecto", "score", siguientes[0] + siguientes[1] + siguientes[2]);
       completeStage(2);
-      anunciarCierrePersonaje("arquitecto", 1500);
     }
     setPaso(siguientePaso);
     window.scrollTo({ top: 0, behavior: "smooth" });
@@ -229,7 +233,7 @@ export default function ArquitectoRetoPage() {
                   {NIVELES.map((n) => (
                     <div key={n.titulo} className="rounded-xl border border-brand-soft bg-brand-light/40 p-4 text-left">
                       <div className="mb-2 flex items-center justify-between">
-                        <BlueprintIcon className="h-6 w-6 text-brand-primary" />
+                        <span className="text-2xl leading-none" aria-hidden="true">{n.icono}</span>
                         <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs font-semibold text-brand-support">
                           {n.tiempo}
                         </span>
@@ -264,7 +268,7 @@ export default function ArquitectoRetoPage() {
           {paso === "nivel1" && <Nivel1MoldeOEjemplo onComplete={(s) => avanzar(0, s)} />}
           {paso === "nivel2" && <Nivel2Caracteristicas onComplete={(s) => avanzar(1, s)} />}
           {paso === "nivel3" && <Nivel3Conexiones onComplete={(s) => avanzar(2, s)} />}
-          {paso === "resultado" && <PlanoFinal puntajes={puntajes} onReintentar={reiniciar} />}
+          {paso === "resultado" && <PlanoFinal puntajes={puntajes} onReintentar={reiniciar} onContinuar={() => continuarConCierre("arquitecto", router.push)} />}
         </div>
       </div>
     </main>

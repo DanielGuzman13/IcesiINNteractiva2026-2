@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState, type DragEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 
 type TipoBloque = "given" | "when" | "then" | "distractor";
 
@@ -375,6 +375,7 @@ function barajar<T>(items: T[]): T[] {
 }
 
 export default function AnalistaSalsaChallenge() {
+  const router = useRouter();
   const [pantalla, setPantalla] = useState<"intro" | "desafio">("intro");
   const [flujoIndex, setFlujoIndex] = useState(0);
   const [ejercicioIndex, setEjercicioIndex] = useState(0);
@@ -463,7 +464,6 @@ export default function AnalistaSalsaChallenge() {
       setZonasInvalidas([]);
       if (ejercicioIndex === 1) {
         completeStage(1);
-        anunciarCierrePersonaje("analista", 1800);
       }
       return;
     }
@@ -657,8 +657,9 @@ export default function AnalistaSalsaChallenge() {
                   </svg>
                 </button>
               ) : (
-                <Link
-                  href="/retos"
+                <button
+                  type="button"
+                  onClick={() => continuarConCierre("analista", router.push)}
                   className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
                 >
                   Completar Módulo de Análisis
@@ -673,7 +674,7 @@ export default function AnalistaSalsaChallenge() {
                   >
                     <path d="M5 12h14M12 5l7 7-7 7" />
                   </svg>
-                </Link>
+                </button>
               )}
             </div>
           </div>

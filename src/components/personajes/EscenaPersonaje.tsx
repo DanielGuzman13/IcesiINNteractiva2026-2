@@ -37,6 +37,10 @@ export default function EscenaPersonaje({
     else setPaso((p) => p + 1);
   }
 
+  function retroceder() {
+    setPaso((p) => Math.max(p - 1, 0));
+  }
+
   return (
     <div
       data-tema="general"
@@ -104,26 +108,49 @@ export default function EscenaPersonaje({
                   />
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={avanzar}
-                autoFocus
-                className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-7 py-3 text-base font-bold text-white shadow-lg shadow-brand-primary/30 transition-all hover:bg-brand-mid active:scale-95"
-              >
-                {textoBoton}
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+              <div className="flex items-center gap-3">
+                {paso > 0 && (
+                  <button
+                    type="button"
+                    onClick={retroceder}
+                    aria-label="Mensaje anterior"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-full border-2 border-brand-primary/30 bg-white text-brand-primary transition-all hover:bg-brand-primary/10 active:scale-95"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={avanzar}
+                  autoFocus
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-7 py-3 text-base font-bold text-white shadow-lg shadow-brand-primary/30 transition-all hover:bg-brand-mid active:scale-95"
                 >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+                  {textoBoton}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>
