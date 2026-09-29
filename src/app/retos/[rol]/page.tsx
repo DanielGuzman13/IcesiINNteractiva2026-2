@@ -50,7 +50,7 @@ export default async function RolActivityPage(
           </div>
         </div>
 
-        <span className="mt-8 rounded-full border border-white/60 bg-white/60 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support backdrop-blur">
+        <span className="etiqueta mt-8">
           Reto - {role.title}
         </span>
         <h1 className="mt-4 text-3xl font-black tracking-tight text-brand-support drop-shadow sm:text-5xl">
@@ -70,4 +70,4 @@ export default async function RolActivityPage(
       </main>
     </div>
   );
-}
+}

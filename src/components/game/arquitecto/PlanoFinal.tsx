@@ -142,7 +142,7 @@ export default function PlanoFinal({
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-[1.4fr_1fr]">
         <div className="rounded-3xl border border-white/60 bg-brand-light/20 p-4 shadow-2xl shadow-brand-primary/20 sm:p-6">
           <div className="mb-4 text-center">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
+            <span className="etiqueta">
               Diagrama de clases - App Feria de Cali
             </span>
           </div>

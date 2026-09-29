@@ -93,9 +93,6 @@ export default function QACarreraForm() {
         className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8"
       >
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Registro y Tiempos - Carrera del Pacífico
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Inscripción de corredor
           </h2>
@@ -283,9 +280,6 @@ export default function QACarreraForm() {
 
       <section className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Auditoría QA
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Eres el ingeniero de QA
           </h2>

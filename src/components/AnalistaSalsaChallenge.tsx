@@ -487,8 +487,8 @@ export default function AnalistaSalsaChallenge() {
     <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
       <section className="space-y-6">
         <div className="rounded-3xl border-2 border-brand-soft bg-brand-light/30 p-6 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Analista de Requerimientos - Mundial de Salsa - Ejercicio{" "}
+          <span className="etiqueta">
+            Ejercicio{" "}
             {ejercicioIndex + 1} de 2
           </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
@@ -532,9 +532,6 @@ export default function AnalistaSalsaChallenge() {
 
       <section className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
         <div className="mb-6 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Estructura BDD
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Organiza el requerimiento
           </h2>
@@ -571,12 +568,12 @@ export default function AnalistaSalsaChallenge() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span
-                    className={`rounded-full px-3 py-1 text-xs font-black uppercase tracking-widest ${
+                    className={`rounded-sm px-3 py-1 font-mono text-xs font-black uppercase tracking-widest ${
                       zona.tipo === "given"
-                        ? "bg-amber-500 text-white"
+                        ? "bg-brand-soft text-white"
                         : zona.tipo === "when"
-                          ? "bg-pink-500 text-white"
-                          : "bg-emerald-600 text-white"
+                          ? "bg-brand-primary text-white"
+                          : "bg-brand-mid text-brand-support"
                     }`}
                   >
                     {zona.etiqueta}
@@ -689,9 +686,6 @@ function PantallaIntro({ onComenzar }: { onComenzar: () => void }) {
     <div className="mx-auto w-full max-w-3xl">
       <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10">
         <div className="text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Analista de Requerimientos - Mundial de Salsa
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Estructura una historia de usuario en formato BDD
           </h2>

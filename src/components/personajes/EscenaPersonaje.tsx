@@ -78,7 +78,7 @@ export default function EscenaPersonaje({
             className="absolute -top-3 left-1/2 h-6 w-6 -translate-x-1/2 rotate-45 border-l-2 border-t-2 border-brand-mid bg-white md:-left-3 md:top-12 md:translate-x-0 md:-rotate-45"
           />
           <div className="relative rounded-3xl border-2 border-brand-mid bg-white p-6 shadow-2xl sm:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-white">
+            <span className="etiqueta etiqueta-solida">
               {personaje.titulo}
             </span>
 

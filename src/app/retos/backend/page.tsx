@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import EncabezadoEditor from '@/components/retos/EncabezadoEditor';
 import BackendPetronioWorkspace from '@/components/BackendPetronioWorkspace';
 import { continuarConCierre } from '@/lib/personajes';
 
@@ -12,15 +13,12 @@ export default function BackendRetoPage() {
 
   return (
     <main
-      className="flex min-h-screen flex-col items-center px-4 py-8"
-      style={{
-        background: 'linear-gradient(160deg, #FFFFFF 0%, var(--brand-light) 100%)'
-      }}
+      className="fondo-editor flex min-h-screen flex-col items-center px-4 py-8"
     >
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
-          className="flex items-center gap-1 text-sm font-semibold text-brand-support/80 transition-colors hover:text-brand-primary"
+          className="flex items-center gap-1 text-sm font-semibold text-white/80 transition-colors hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -37,10 +35,21 @@ export default function BackendRetoPage() {
         }
         aria-hidden={showIntro}
       >
-        <BackendPetronioWorkspace
-          onHelp={() => setShowIntro(true)}
-          onContinue={() => continuarConCierre('backend', router.push)}
-        />
+        <div className="overflow-hidden rounded-md border-2 border-brand-support bg-white shadow-[8px_8px_0_var(--brand-support)]">
+          <EncabezadoEditor
+            archivo="petronio-alvarez / backend / caseta.py"
+            titulo="Backend Engineer"
+            descripcion="Programa con bloques la lógica de la caseta de gastronomía pacífica."
+            imagen="/personajes/backend.webp"
+            anchoImagen={415}
+          />
+          <div className="p-4 md:p-6 lg:p-8">
+            <BackendPetronioWorkspace
+              onHelp={() => setShowIntro(true)}
+              onContinue={() => continuarConCierre('backend', router.push)}
+            />
+          </div>
+        </div>
       </div>
 
       {showIntro && (

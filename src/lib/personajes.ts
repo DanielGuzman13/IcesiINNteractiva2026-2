@@ -48,7 +48,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡*Vea pues*, {nombre}! Encontraste la condición, la acción y el resultado, y dejaste por fuera lo que no tenía nada que ver.",
       "Eso evita que el equipo construya algo que nadie pidió. Un requerimiento clarito ahorra semanas de trabajo y muchos dolores de cabeza, ¿*oís*?",
-      "Yo soy la primera pieza del ciclo de vida del software: si no entendemos bien el problema, *pailas* con la solución. ¡Me *encarreta* hacer preguntas y conectar a la gente con la tecnología! Volvamos al mapa, *pues*.",
+      "Yo soy la primera pieza del ciclo de vida del software: si no entendemos bien el problema, *pailas* con la solución. ¡Estoy *encarretada* haciendo preguntas y conectando a la gente con la tecnología! Volvamos al mapa, *pues*.",
     ],
     botonIntro: "¡A analizar!",
     destinoCierre: "/retos",
@@ -66,7 +66,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡*Eso, ve*, {nombre}! Separaste los moldes de los ejemplos, les diste características y los conectaste entre sí.",
       "Con ese plano, el equipo sabe qué construir y cómo encajan las piezas. Un buen diseño evita que el sistema termine hecho un *sancocho* difícil de arreglar.",
-      "Soy importante en el ciclo de vida del software porque pienso en el sistema completo antes de construirlo. ¡Me *encarreta* ordenar ideas, encontrar patrones y tomar decisiones que duran años!",
+      "Soy importante en el ciclo de vida del software porque pienso en el sistema completo antes de construirlo. ¡Estoy *encarretado* ordenando ideas, encontrando patrones y tomando decisiones que duran años!",
     ],
     botonIntro: "¡A diseñar!",
     destinoCierre: "/retos",
@@ -84,7 +84,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡Pedido servido, {nombre}! Tu lógica revisó los ingredientes, descontó lo usado y le respondió al visitante. ¡Quedó *sabroso*!",
       "Eso es el backend: reglas claras que cuidan los datos. Imaginate prometer una cazuela de mariscos y entregar la *chuspa* vacía: ¡*qué oso*!",
-      "Soy clave en el ciclo de vida del software porque convierto el diseño en código que funciona de verdad. ¡Me *encarreta* resolver problemas paso a paso! *Vamos pues* donde mi compañera de Frontend, que te está esperando.",
+      "Soy clave en el ciclo de vida del software porque convierto el diseño en código que funciona de verdad. ¡Estoy *encarretada* resolviendo problemas paso a paso! *Vamos pues* donde mi compañera de Frontend, que te está esperando.",
     ],
     botonIntro: "¡A programar!",
     destinoCierre: "/retos/frontend",
@@ -97,12 +97,12 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     intro: [
       "¡*Quiubo*, {nombre}! Soy la Desarrolladora Frontend.",
       "Yo construyo lo que ves y tocás en una app: pantallas, botones, colores y textos. Mi misión es que usarla sea facilito y *bacano* para cualquier persona.",
-      "La app “Sonoridades del Pacífico” del Petronio Álvarez tiene problemas: botones confusos y letras que no se leen con este *solazo* de Cali. ¿Me ayudás a tomar las mejores decisiones de diseño?",
+      "La app “Ritmos del Pacífico” del Petronio Álvarez tiene problemas: botones confusos y letras que no se leen con este *solazo* de Cali. ¿Me ayudás a tomar las mejores decisiones de diseño?",
     ],
     cierre: [
-      "¡Quedó una *mera app*, {nombre}! Tus decisiones la hicieron más clara, legible y fácil de usar.",
+      "¡La app quedó *re mela*, {nombre}! Tus decisiones la hicieron más clara, legible y fácil de usar.",
       "Una app puede funcionar perfecto por dentro, pero si es confusa y aburrida es un *desparche*: la gente la cierra y no vuelve. Por eso el diseño de la interfaz importa tanto como el código.",
-      "Soy el puente entre el código y las personas dentro del ciclo de vida del software. ¡Me *encarreta* mezclar la creatividad del arte con la lógica de la programación! Volvamos al mapa, *pues*.",
+      "Soy el puente entre el código y las personas dentro del ciclo de vida del software. ¡Estoy *encarretada* mezclando la creatividad del arte con la lógica de la programación! Volvamos al mapa, *pues*.",
     ],
     botonIntro: "¡A diseñar la interfaz!",
     destinoCierre: "/retos",
@@ -138,7 +138,7 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡Servidor restaurado, {nombre}! Descifraste la clave y recuperaste los resultados oficiales. ¡*Eso, ve*!",
       "La seguridad protege los datos y la confianza de la gente que usa la tecnología. Sin ella, cualquiera podría cambiar los resultados de una carrera.",
-      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Me *encarretan* los acertijos y ver lo que otros no ven! Con esto completaste toda la ruta: ahora sí, date un *borondo* por el mapa y celebrá. ¡Cali nos une!",
+      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Estoy *encarretado* con los acertijos y con ver lo que otros no ven! Con esto completaste toda la ruta: ahora sí, date un *borondo* por el mapa y celebrá. ¡Cali nos une!",
     ],
     botonIntro: "¡A defender el servidor!",
     destinoCierre: "/retos",

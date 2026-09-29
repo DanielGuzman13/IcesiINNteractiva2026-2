@@ -115,14 +115,11 @@ export default function CyberCarreraChallenge() {
           className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
         >
           <div className="space-y-6">
-            <div className="rounded-3xl border-2 border-red-400 bg-red-50 p-6 text-center shadow-xl shadow-red-500/10">
-              <span className="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
-                Estado del servidor
-              </span>
-              <p className="mt-3 animate-pulse text-2xl font-black tracking-tight text-red-600 sm:text-3xl">
+            <div className="rounded-3xl border-2 border-brand-alerta bg-brand-alerta/10 p-6 text-center shadow-xl shadow-brand-alerta/15">
+              <p className="mt-3 animate-pulse font-display text-2xl font-black tracking-tight text-brand-alerta sm:text-3xl">
                 ⚠️ SERVIDOR BLOQUEADO / ATAQUE DETECTADO
               </p>
-              <p className="mt-2 text-sm text-red-500/90">
+              <p className="mt-2 text-sm text-brand-alerta/90">
                 Un atacante bloqueó la puerta de enlace del servidor de
                 resultados del Bulevar del Río con un algoritmo de Cifrado
                 César dinámico.
@@ -130,20 +127,20 @@ export default function CyberCarreraChallenge() {
             </div>
 
             <div className="rounded-3xl border border-brand-soft bg-brand-light/30 p-6">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-brand-support">
+              <h3 className="text-center text-sm font-bold uppercase tracking-wide text-brand-support">
                 Código Encriptado
               </h3>
               <p
                 suppressHydrationWarning
-                className="mt-2 rounded-xl bg-white/70 p-4 font-mono text-xl tracking-widest text-brand-primary"
+                className="mt-2 rounded-xl bg-white/70 p-4 text-center font-mono text-xl tracking-widest text-brand-primary"
               >
                 {encriptado}
               </p>
-              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
-                <p className="text-xs font-bold uppercase tracking-wide text-amber-700">
+              <div className="mt-4 rounded-xl border border-brand-mid/50 bg-brand-mid/15 p-4 text-left">
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-support">
                   Pista: clave de desplazamiento
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-amber-800/90">
+                <p className="mt-1 text-xs leading-relaxed text-brand-support/85">
                   &ldquo;La clave de desplazamiento es igual al número de kilómetros
                   oficiales de la Media Maratón de Cali (21K) dividida entre 7&rdquo;
                   (21 ÷ 7 = 3, Desplazamiento = 3 posiciones hacia atrás en el
@@ -198,20 +195,20 @@ export default function CyberCarreraChallenge() {
                   autoComplete="off"
                   aria-invalid={Boolean(error)}
                   className={`w-full rounded-2xl border-2 bg-white/80 px-5 py-3.5 font-mono text-base text-brand-support shadow-sm outline-none transition placeholder:font-sans placeholder:text-brand-support/50 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20 ${
-                    error ? "border-red-400" : "border-brand-soft"
+                    error ? "border-brand-soft" : "border-brand-primary/30"
                   }`}
                 />
               </label>
 
               <button
                 type="submit"
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-red-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-red-500/30 transition-all duration-300 hover:bg-red-600"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-soft px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-soft/30 transition-all duration-300 hover:bg-brand-support"
               >
                 Restaurar Servidor
               </button>
 
               {error && (
-                <p className="mt-4 animate-fade-in rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-600">
+                <p className="mt-4 animate-fade-in rounded-xl border border-brand-soft/40 bg-brand-soft/10 p-3 text-sm font-semibold text-brand-soft">
                   {error}
                 </p>
               )}
@@ -233,10 +230,7 @@ export default function CyberCarreraChallenge() {
           <Confetti />
 
           <div className="rounded-3xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center shadow-xl shadow-emerald-500/10 sm:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Estado del servidor
-            </span>
-            <p className="mt-3 text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
+            <p className="mt-3 font-display text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
               ✅ SISTEMA RESTAURADO
             </p>
             <div className="mx-auto mt-4 max-w-lg rounded-xl border border-emerald-300 bg-[#0d1117] p-4 text-left font-mono text-xs text-emerald-400 sm:text-sm">

@@ -353,12 +353,6 @@ function BackendPetronioWorkspace({
               Ayuda
             </button>
           )}
-          
-          {completed && (
-            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
-              Reto Completado
-            </span>
-          )}
         </div>
       </header>
 

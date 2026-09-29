@@ -6,6 +6,7 @@
   --color-brand-soft: var(--brand-soft);
   --color-brand-support: var(--brand-support);
   --color-brand-light: var(--brand-light);
+  --color-brand-alerta: var(--brand-alerta);
 }
 
 :root {
@@ -15,6 +16,7 @@
   --brand-support: #1e232a;
   --brand-light: #e2ecdf;
   --brand-fin: #ec6449;
+  --brand-alerta: #b8322a;
 }
 
 [data-tema="general"] {
@@ -96,8 +98,9 @@
   --color-emerald-800: #245d62;
   --color-emerald-900: #22494e;
   --color-emerald-950: #203a40;
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --font-sans: Arial, Helvetica, sans-serif;
+  --font-display: var(--font-jakarta), Arial, Helvetica, sans-serif;
+  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
   --animate-fade-in: fade-in 0.4s ease-out both;
 
@@ -116,7 +119,142 @@
 body {
   background-color: var(--color-cali-marfil);
   color: var(--color-cali-asfalto);
-  font-family: var(--font-sans), Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans);
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-display);
+}
+
+.fondo-papel-rayado {
+  background-color: var(--brand-light);
+  background-image:
+    linear-gradient(to right, transparent 0 47px, color-mix(in srgb, var(--brand-primary) 35%, transparent) 47px 48px, transparent 48px),
+    repeating-linear-gradient(to bottom, transparent 0 31px, color-mix(in srgb, var(--brand-support) 9%, transparent) 31px 32px);
+}
+
+.fondo-plano {
+  background-color: color-mix(in srgb, var(--brand-soft) 48%, #04202a);
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.13) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.05) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.05) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+}
+
+.hoja-plano {
+  background-color: #f6faf8;
+  background-image:
+    linear-gradient(color-mix(in srgb, var(--brand-soft) 10%, transparent) 1px, transparent 1px),
+    linear-gradient(90deg, color-mix(in srgb, var(--brand-soft) 10%, transparent) 1px, transparent 1px);
+  background-size: 24px 24px;
+}
+
+.fondo-editor {
+  background-color: var(--brand-primary);
+  background-image: radial-gradient(rgba(255, 255, 255, 0.11) 1px, transparent 1px);
+  background-size: 22px 22px;
+}
+
+.fondo-consola {
+  background-color: var(--brand-support);
+  background-image:
+    repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.045) 0 1px, transparent 1px 4px),
+    radial-gradient(ellipse at top, color-mix(in srgb, var(--brand-primary) 45%, transparent), transparent 70%);
+}
+
+.cinta-precaucion {
+  background-image: repeating-linear-gradient(-45deg, var(--brand-mid) 0 14px, var(--brand-support) 14px 28px);
+}
+
+.etiqueta {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.2rem 0.7rem;
+  border: 1.5px solid var(--brand-support);
+  border-radius: 0.25rem;
+  color: var(--brand-support);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+[data-tema="salsa"] .etiqueta {
+  padding: 0.25rem 0.8rem;
+  border: 3px double var(--brand-primary);
+  border-radius: 0;
+  color: var(--brand-primary);
+  letter-spacing: 0.14em;
+  transform: rotate(-2deg);
+}
+
+[data-tema="feria"] .etiqueta {
+  gap: 0.6rem;
+  padding: 0.2rem 0;
+  border: none;
+  border-radius: 0;
+  color: color-mix(in srgb, var(--brand-support) 75%, transparent);
+  font-family: var(--font-mono);
+}
+
+[data-tema="feria"] .etiqueta::before,
+[data-tema="feria"] .etiqueta::after {
+  content: "";
+  width: 1.75rem;
+  height: 1px;
+  background: currentColor;
+}
+
+[data-tema="petronio"] .etiqueta {
+  border-color: var(--brand-support);
+  border-radius: 0.375rem 0.375rem 0 0;
+  background: var(--brand-support);
+  color: #fff;
+  font-family: var(--font-mono);
+  letter-spacing: 0.02em;
+  text-transform: none;
+}
+
+[data-tema="carrera"] .etiqueta {
+  gap: 0.4rem;
+  border: none;
+  border-radius: 0;
+  background: color-mix(in srgb, var(--brand-support) 8%, transparent);
+  color: var(--brand-primary);
+  font-family: var(--font-mono);
+}
+
+[data-tema="carrera"] .etiqueta::before {
+  content: "[";
+}
+
+[data-tema="carrera"] .etiqueta::after {
+  content: "]";
+}
+
+.etiqueta.etiqueta-solida {
+  padding: 0.25rem 0.75rem;
+  border: 1.5px solid var(--brand-primary);
+  border-radius: 0.25rem;
+  background: var(--brand-primary);
+  color: #fff;
+  font-family: inherit;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: none;
+}
+
+.etiqueta.etiqueta-solida::before,
+.etiqueta.etiqueta-solida::after {
+  content: none;
 }
 
 .blocklyTreeLabel {
@@ -148,4 +286,4 @@ body {
 .blocklyToolbox::-webkit-scrollbar {
   width: 0 !important;
   height: 0 !important;
-}
+}

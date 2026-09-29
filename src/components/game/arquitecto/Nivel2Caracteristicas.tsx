@@ -196,10 +196,10 @@ export default function Nivel2Caracteristicas({
                 className="overflow-hidden !border-solid"
               >
                 <div className="flex items-center justify-between bg-brand-primary px-4 py-3 text-white">
-                  <span className="text-lg font-black">
+                  <span className="font-display text-lg font-black">
                     {ICONOS[moldeId]} {MOLDES[moldeId].nombre}
                   </span>
-                  <span className="rounded-full bg-white/20 px-2.5 py-0.5 text-xs font-bold">
+                  <span className="border border-white/50 px-2 py-0.5 font-mono text-xs font-bold">
                     {ids.length}/{POR_MOLDE}
                   </span>
                 </div>

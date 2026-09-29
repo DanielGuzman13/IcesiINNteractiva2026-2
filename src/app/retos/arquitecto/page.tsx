@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import Nivel1MoldeOEjemplo from "@/components/game/arquitecto/Nivel1MoldeOEjemplo";
@@ -42,19 +43,16 @@ const NIVELES = [
     icono: "🧩",
     titulo: "Nivel 1 - ¿Molde o ejemplo?",
     desc: "Separa los tipos de cosa de los ejemplos reales de la Feria.",
-    tiempo: "~4 min",
   },
   {
     icono: "🏷️",
     titulo: "Nivel 2 - ¿Qué lo describe?",
     desc: "Dale a cada molde sus características.",
-    tiempo: "~5 min",
   },
   {
     icono: "🔗",
     titulo: "Nivel 3 - ¿Cómo se conectan?",
     desc: "Une los moldes con la acción correcta.",
-    tiempo: "~3 min",
   },
 ];
 
@@ -72,16 +70,6 @@ const MENSAJES: Record<"nivel1" | "nivel2" | "nivel3", string[]> = {
     "¡Arquitectura lista! Así se diseña un sistema de verdad.",
   ],
 };
-
-function BlueprintIcon({ className }: { className: string }) {
-  return (
-    <svg viewBox="0 0 24 24" className={className} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-      <rect x="3" y="3" width="18" height="18" rx="2" />
-      <path d="M3 9h18M9 9v12M3 15h18" />
-      <path d="M13 13h4v4h-4z" fill="currentColor" />
-    </svg>
-  );
-}
 
 export default function ArquitectoRetoPage() {
   const router = useRouter();
@@ -122,11 +110,11 @@ export default function ArquitectoRetoPage() {
     paso === "intro" ? 0 : paso === "nivel1" ? 1 : paso === "nivel2" ? 2 : paso === "nivel3" ? 3 : 4;
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-white to-brand-light px-4 py-8">
+    <main className="fondo-plano flex min-h-screen flex-col items-center px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
-          className="flex items-center gap-1 text-sm font-semibold text-brand-support/80 transition-colors hover:text-brand-primary"
+          className="flex items-center gap-1 text-sm font-semibold text-white/80 transition-colors hover:text-white"
         >
           <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
             <path d="M19 12H5M12 19l-7-7 7-7" />
@@ -138,13 +126,13 @@ export default function ArquitectoRetoPage() {
             {[1, 2, 3].map((i) => (
               <div
                 key={i}
-                className={`h-3 w-3 rounded-full border-2 border-brand-primary transition-all ${
-                  progreso > i || paso === "resultado" ? "bg-brand-primary" : progreso === i ? "bg-brand-mid" : "bg-transparent"
+                className={`h-3 w-3 rounded-full border-2 border-white transition-all ${
+                  progreso > i || paso === "resultado" ? "bg-white" : progreso === i ? "bg-brand-mid" : "bg-transparent"
                 }`}
               />
             ))}
           </div>
-          <span className="text-xs text-brand-support/70">
+          <span className="text-xs text-white/70">
             {Math.min(Math.max(progreso - 1, 0), 3)}/3 niveles
           </span>
         </div>
@@ -156,40 +144,53 @@ export default function ArquitectoRetoPage() {
         </div>
       )}
 
-      <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
-        <div
-          className="px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
-        >
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 flex-shrink-0 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">
-              <BlueprintIcon className="h-8 w-8" />
+      <div className="hoja-plano w-full max-w-7xl border-2 border-white/90 shadow-[0_0_0_6px_rgba(255,255,255,0.12)] 2xl:max-w-[1400px]">
+        <header className="border-b-2 border-brand-support/80 text-brand-support">
+          <div className="relative flex items-end justify-between gap-4 border-b border-brand-support/60 px-6 pt-5 sm:px-8">
+            <div className="pb-5">
+              <div className="font-mono text-[11px] tracking-wider text-brand-support/60">
+                PLANO N.º 02 / DISEÑO DE CLASES
+              </div>
+              <h1 className="mt-1 text-3xl font-black leading-tight sm:text-4xl">
+                Arquitecto de Software
+              </h1>
             </div>
-            <div>
-              <div className="mb-0.5 text-xs font-semibold uppercase tracking-widest text-white/80">
-                Rol del equipo
-              </div>
-              <h1 className="text-3xl font-extrabold">Arquitecto de Software</h1>
-              <div className="text-sm font-medium text-white/80">
-                Feria de Cali - Diseño del plano de la app oficial
-              </div>
-            </div>
-            {paso !== "intro" && paso !== "resultado" && (
-              <div className="ml-auto text-right">
-                <div className="text-xs text-white/80">Puntaje</div>
-                <div className="text-2xl font-black">{total} pts</div>
-              </div>
-            )}
+            <Image
+              src="/personajes/arquitecto.webp"
+              alt="Arquitecto de Software"
+              width={601}
+              height={560}
+              priority
+              className="pointer-events-none -mb-px hidden h-32 w-auto sm:block"
+            />
           </div>
-        </div>
+          <dl className="grid grid-cols-2 divide-brand-support/60 font-mono text-xs sm:grid-cols-4 sm:divide-x">
+            <div className="border-b border-brand-support/60 px-6 py-2.5 sm:border-b-0 sm:px-8">
+              <dt className="text-[10px] text-brand-support/60">PROYECTO</dt>
+              <dd className="font-bold">App Feria de Cali</dd>
+            </div>
+            <div className="border-b border-brand-support/60 px-6 py-2.5 sm:border-b-0">
+              <dt className="text-[10px] text-brand-support/60">ESCALA</dt>
+              <dd className="font-bold">3 niveles</dd>
+            </div>
+            <div className="px-6 py-2.5 sm:px-6">
+              <dt className="text-[10px] text-brand-support/60">ESTADO</dt>
+              <dd className="font-bold">{paso === "resultado" ? "Entregado" : paso === "intro" ? "Por iniciar" : "En dibujo"}</dd>
+            </div>
+            <div className="px-6 py-2.5">
+              <dt className="text-[10px] text-brand-support/60">PUNTAJE</dt>
+              <dd className="font-bold">{paso === "intro" ? "-" : `${total} pts`}</dd>
+            </div>
+          </dl>
+        </header>
 
         <div className="p-4 md:p-6 lg:p-8">
           {paso === "intro" && (
             <div className="mx-auto w-full max-w-4xl">
               <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10">
                 <div className="text-center">
-                  <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-                    Misión - Feria de Cali - ~15 min
+                  <span className="etiqueta">
+                    Misión
                   </span>
                   <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
                     Diseña el plano de la app de la Feria
@@ -232,11 +233,8 @@ export default function ArquitectoRetoPage() {
                 <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-3">
                   {NIVELES.map((n) => (
                     <div key={n.titulo} className="rounded-xl border border-brand-soft bg-brand-light/40 p-4 text-left">
-                      <div className="mb-2 flex items-center justify-between">
+                      <div className="mb-2">
                         <span className="text-2xl leading-none" aria-hidden="true">{n.icono}</span>
-                        <span className="rounded-full bg-white/70 px-2 py-0.5 text-xs font-semibold text-brand-support">
-                          {n.tiempo}
-                        </span>
                       </div>
                       <div className="text-sm font-bold text-brand-support">{n.titulo}</div>
                       <div className="mt-1 text-xs text-brand-support/80">{n.desc}</div>

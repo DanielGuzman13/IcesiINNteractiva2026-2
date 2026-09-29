@@ -173,7 +173,7 @@ export default function FrontendPetronioAudit({
       >
         <div className="mb-5">
           <div className="text-xs font-semibold uppercase tracking-widest text-brand-support/70">
-            App oficial &quot;Sonoridades del Pacífico&quot;
+            App oficial &quot;Ritmos del Pacífico&quot;
           </div>
           <h2 className="text-xl font-black text-brand-support">
             Mejora la interfaz y la usabilidad
@@ -185,7 +185,7 @@ export default function FrontendPetronioAudit({
             <div className="mb-6">
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-brand-support">
                 <span>Pregunta {currentIndex + 1} de {QUESTIONS.length}</span>
-                <span className="rounded-full bg-brand-soft/40 px-3 py-1 text-xs uppercase tracking-widest text-brand-support">
+                <span className="etiqueta">
                   {current.heuristica}
                 </span>
               </div>
@@ -261,9 +261,6 @@ export default function FrontendPetronioAudit({
         {phase === "results" && (
           <div className="space-y-6">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full bg-amber-200/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
-                Actividad completada
-              </span>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-brand-support">
                 {score}/6 aciertos
               </h2>

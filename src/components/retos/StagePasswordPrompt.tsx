@@ -104,10 +104,10 @@ export default function StagePasswordPrompt({
           }`}
         >
           <div className="flex flex-wrap items-center gap-2">
-            <span className="inline-flex items-center rounded-full bg-brand-primary px-3 py-1 text-[11px] font-bold uppercase tracking-[0.14em] text-white">
+            <span className="etiqueta etiqueta-solida">
               {personaje.titulo}
             </span>
-            <span className="inline-flex items-center gap-1 rounded-full bg-brand-soft/30 px-3 py-1 text-[11px] font-semibold uppercase tracking-[0.14em] text-brand-support">
+            <span className="etiqueta">
               {correcta ? "🔓" : "🔒"} {stage.title}
             </span>
           </div>
