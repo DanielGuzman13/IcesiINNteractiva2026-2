@@ -126,3 +126,19 @@ Al validar correctamente el Ejercicio 1 de cualquier flujo, la interfaz habilita
   When el estudiante hace clic en "Avanzar al Ejercicio 2"
   Then la interfaz carga las 7 tarjetas correspondientes al Ejercicio 2 manteniendo la continuidad contextual del flujo
   And al completar el Ejercicio 2 habilita el botón "Completar Módulo de Análisis".
+
+### Scenario: Retroalimentación por zona
+
+  Given que el estudiante coloca tarjetas en las zonas GIVEN, WHEN y THEN
+  When hace clic en "Validar Requerimiento"
+  Then cada zona muestra una explicación: correcta (en verde, queda fija), vacía, con un distractor o con una tarjeta que va en otra zona (indicando a cuál)
+  And un aviso resume cuántas zonas de 3 están correctas
+  And al mover una tarjeta solo se borra la revisión de las zonas que cambiaron.
+
+### Scenario: Pista y confirmación
+
+  Given que el estudiante está resolviendo un ejercicio
+  When toca "Pedir pista"
+  Then aparece una pista sin costo para distinguir condición, acción, resultado y distractores
+  When valida el requerimiento correcto
+  Then se muestra la historia de usuario completa como frase ("Dado que…, cuando…, entonces…") y para qué le sirve al equipo.
