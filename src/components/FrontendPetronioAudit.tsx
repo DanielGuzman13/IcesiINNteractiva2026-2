@@ -265,7 +265,8 @@ export default function FrontendPetronioAudit({
                 {score}/6 aciertos
               </h2>
               <p className="mt-2 text-sm text-brand-support/80">
-                Revisa cada decisión de interfaz y su justificación técnica.
+                Revisa cada decisión de interfaz. En las que fallaste, la opción
+                correcta aparece resaltada con su explicación.
               </p>
             </div>
 
@@ -298,23 +299,52 @@ export default function FrontendPetronioAudit({
                       </span>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-1 gap-2 text-xs font-semibold text-brand-support sm:grid-cols-2">
-                      <div className="rounded-xl bg-white/80 px-3 py-2">
-                        <span className="text-brand-support/60">Elegida: </span>
+                    <div
+                      className={`mt-3 flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${
+                        isCorrect
+                          ? "border-emerald-300 bg-white text-emerald-800"
+                          : "border-rose-200 bg-white/80 text-rose-700"
+                      }`}
+                    >
+                      <span aria-hidden="true" className="font-black">
+                        {isCorrect ? "✓" : "✗"}
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wide opacity-70">
+                        Tu respuesta:
+                      </span>
+                      <span className="font-semibold">
                         {chosen ? chosen.title : "Sin responder"}
-                      </div>
-                      {!isCorrect && correctOption && (
-                        <div className="rounded-xl bg-white/80 px-3 py-2">
-                          <span className="text-brand-support/60">Correcta: </span>
-                          <span className="text-emerald-700">{correctOption.title}</span>
-                        </div>
-                      )}
+                      </span>
                     </div>
 
-                    <div className="mt-3 flex gap-2 rounded-xl bg-white/80 px-3 py-2 text-xs leading-relaxed text-brand-support/90">
-                      <span aria-hidden="true">💡</span>
-                      <span>{question.justification}</span>
-                    </div>
+                    {!isCorrect && correctOption && (
+                      <div className="mt-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 p-4 shadow-md shadow-emerald-500/20">
+                        <div className="flex items-center gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                            <CheckIcon />
+                          </span>
+                          <div>
+                            <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                              La respuesta correcta era
+                            </div>
+                            <div className="text-base font-black text-emerald-900 sm:text-lg">
+                              {correctOption.title}
+                            </div>
+                          </div>
+                        </div>
+                        <p className="mt-3 border-t border-emerald-200 pt-3 text-sm leading-relaxed text-brand-support">
+                          <strong className="text-emerald-800">¿Por qué? </strong>
+                          {question.justification}
+                        </p>
+                      </div>
+                    )}
+
+                    {isCorrect && (
+                      <div className="mt-3 flex gap-2 rounded-xl bg-white/80 px-3 py-2 text-sm leading-relaxed text-brand-support/90">
+                        <span aria-hidden="true">💡</span>
+                        <span>{question.justification}</span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
