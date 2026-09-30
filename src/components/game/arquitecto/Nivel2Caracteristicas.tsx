@@ -8,7 +8,6 @@ import {
   RevelacionConcepto,
   ZonaSoltar,
   barajar,
-  calcularPuntaje,
 } from "./ArquitectoUI";
 import { CARACTERISTICAS, MOLDES, MOLDES_NIVEL2, type MoldeId } from "./feria-data";
 
@@ -24,7 +23,7 @@ const ICONOS: Partial<Record<MoldeId, string>> = {
 export default function Nivel2Caracteristicas({
   onComplete,
 }: {
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }) {
   const [orden] = useState(() => barajar(CARACTERISTICAS.map((c) => c.id)));
   const [moldes] = useState(() => barajar(MOLDES_NIVEL2));
@@ -33,8 +32,7 @@ export default function Nivel2Caracteristicas({
   const [bloqueados, setBloqueados] = useState<string[]>([]);
   const [incorrectos, setIncorrectos] = useState<string[]>([]);
   const [intento, setIntento] = useState(0);
-  const [fallos, setFallos] = useState(0);
-  const [pistas, setPistas] = useState(0);
+  const [pistaVisible, setPistaVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [completado, setCompletado] = useState(false);
 
@@ -88,7 +86,6 @@ export default function Nivel2Caracteristicas({
       return;
     }
     setIncorrectos(malos);
-    setFallos((f) => f + 1);
     setIntento((i) => i + 1);
     setError(
       `⚠️ ${malos.length} característica${malos.length === 1 ? " no corresponde" : "s no corresponden"}. Lee la explicación en rojo y devuélvela${malos.length === 1 ? "" : "s"} al banco.`,
@@ -96,13 +93,11 @@ export default function Nivel2Caracteristicas({
   }
 
   if (completado) {
-    const puntaje = calcularPuntaje(fallos, pistas);
     return (
       <RevelacionConcepto
         titulo="¡Definiste los atributos!"
-        puntaje={puntaje}
         textoBoton="Ir al Nivel 3"
-        onContinuar={() => onComplete(puntaje)}
+        onContinuar={onComplete}
       >
         <p>
           Las características de un molde se llaman <strong>atributos</strong>.
@@ -223,8 +218,8 @@ export default function Nivel2Caracteristicas({
         textoPendiente={`Completa los 4 moldes (${colocadas}/12)`}
         textoValidar="Validar características"
         pistaTexto="Una característica es un dato que puedes llenar para CUALQUIER ejemplo del molde. Los nombres propios (como Grupo Niche) o valores sueltos (como Salsa) no son características."
-        pistaVisible={pistas > 0}
-        onPista={() => setPistas(1)}
+        pistaVisible={pistaVisible}
+        onPista={() => setPistaVisible(true)}
         onValidar={validar}
         error={error}
       />

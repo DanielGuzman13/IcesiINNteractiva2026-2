@@ -8,7 +8,6 @@ import {
   RevelacionConcepto,
   ZonaSoltar,
   barajar,
-  calcularPuntaje,
 } from "./ArquitectoUI";
 import { TARJETAS_NIVEL1, type TipoTarjeta } from "./feria-data";
 
@@ -28,7 +27,7 @@ const ZONAS: { tipo: TipoTarjeta; titulo: string; descripcion: string }[] = [
 export default function Nivel1MoldeOEjemplo({
   onComplete,
 }: {
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }) {
   const [orden] = useState(() => barajar(TARJETAS_NIVEL1.map((t) => t.id)));
   const [ubicacion, setUbicacion] = useState<Record<string, TipoTarjeta | null>>({});
@@ -36,8 +35,7 @@ export default function Nivel1MoldeOEjemplo({
   const [bloqueados, setBloqueados] = useState<string[]>([]);
   const [incorrectos, setIncorrectos] = useState<string[]>([]);
   const [intento, setIntento] = useState(0);
-  const [fallos, setFallos] = useState(0);
-  const [pistas, setPistas] = useState(0);
+  const [pistaVisible, setPistaVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [completado, setCompletado] = useState(false);
 
@@ -70,7 +68,6 @@ export default function Nivel1MoldeOEjemplo({
       return;
     }
     setIncorrectos(malos);
-    setFallos((f) => f + 1);
     setIntento((i) => i + 1);
     setError(
       `⚠️ ${malos.length} tarjeta${malos.length === 1 ? "" : "s"} en el lugar equivocado. Lee la explicación en rojo y muévelas.`,
@@ -78,13 +75,11 @@ export default function Nivel1MoldeOEjemplo({
   }
 
   if (completado) {
-    const puntaje = calcularPuntaje(fallos, pistas);
     return (
       <RevelacionConcepto
         titulo="¡Acabas de hacer abstracción!"
-        puntaje={puntaje}
         textoBoton="Ir al Nivel 2"
-        onContinuar={() => onComplete(puntaje)}
+        onContinuar={onComplete}
       >
         <p>
           Los ingenieros de sistemas llaman <strong>clase</strong> al molde y{" "}
@@ -190,8 +185,8 @@ export default function Nivel1MoldeOEjemplo({
         textoPendiente={`Coloca todas las tarjetas (${colocadas}/12)`}
         textoValidar="Validar clasificación"
         pistaTexto="Pregúntate: ¿hay uno solo o hay muchos? Si puedes decir “en la Feria hay muchas/muchos ___”, es un molde. Si tiene nombre propio o un número único, es un ejemplo."
-        pistaVisible={pistas > 0}
-        onPista={() => setPistas(1)}
+        pistaVisible={pistaVisible}
+        onPista={() => setPistaVisible(true)}
         onValidar={validar}
         error={error}
       />

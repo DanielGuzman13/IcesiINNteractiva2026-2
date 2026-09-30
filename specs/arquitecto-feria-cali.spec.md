@@ -19,20 +19,17 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 
 ## Flujo de Pantallas (`/retos/arquitecto`)
 
-1. **Intro (misión):** la Alcaldía contrata al equipo para crear la app de la Feria. Tabla con las 4 ideas, tarjetas de los 3 niveles con tiempo estimado y reglas de puntaje.
+1. **Intro (misión):** la Alcaldía contrata al equipo para crear la app de la Feria. Tabla con las 4 ideas, tarjetas de los 3 niveles con tiempo estimado.
 2. **Nivel 1 · ¿Molde o ejemplo?:** 12 tarjetas (6 moldes: Orquesta, Bailarín, Boleta, Desfile, Escuela de salsa, Asistente; 6 ejemplos: Grupo Niche, El Salsódromo, Swing Latino, Valentina, Boleta #0457, Carlos). Se clasifican en dos columnas. Revelación: clase, objeto y abstracción.
 3. **Nivel 2 · ¿Qué lo describe?:** 4 moldes (Orquesta, Bailarín, Boleta, Desfile) reciben 3 características cada uno desde un banco de 15 (3 distractores: "Grupo Niche", "Salsa", "Muchos aplausos"). Revelación: atributo y valor.
 4. **Nivel 3 · ¿Cómo se conectan?:** 5 frases "Molde ___ Molde" que se completan con una acción de un banco de 7 (2 distractores). Revelación: relación.
-5. **Plano final:** diagrama de clases con los 6 moldes, sus atributos y relaciones; glosario; ubicación del rol en el ciclo de vida (Requisitos → **Diseño** → Desarrollo → Pruebas → Seguridad y entrega); puntaje e insignia.
+5. **Plano final:** diagrama de clases con los 6 moldes, sus atributos y relaciones; glosario; ubicación del rol en el ciclo de vida (Requisitos → **Diseño** → Desarrollo → Pruebas → Seguridad y entrega).
 
 El contenido vive en `src/components/game/arquitecto/feria-data.ts`.
 
-## Reglas de Puntaje
+## Sin puntuación
 
-- Cada nivel vale hasta **100 pts** (total 300).
-- Cada validación con errores resta **15 pts**; la pista resta **10 pts** (una por nivel). Mínimo 40 pts por nivel.
-- Insignias: ≥260 "Arquitecto Maestro del Salsódromo" · ≥180 "Arquitecto de la Feria" · menos "Aprendiz de Arquitecto".
-- Se guarda con `saveActivityScore("arquitecto", ...)`: `nivel1`, `nivel2`, `nivel3` y `score` (total).
+La actividad no lleva puntaje. Si el estudiante se equivoca, corrige y vuelve a validar; la pista de cada nivel es libre.
 
 ## Criterios de Aceptación (Gherkin)
 
@@ -48,7 +45,6 @@ El contenido vive en `src/components/game/arquitecto/feria-data.ts`.
   When hace clic en el botón de validar
   Then las respuestas correctas quedan fijas en verde con su explicación
   And las incorrectas se marcan en rojo, se sacuden y muestran por qué están mal
-  And se descuentan 15 pts del nivel
 
 ### Scenario: Nivel completado
 

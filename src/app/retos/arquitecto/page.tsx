@@ -7,9 +7,7 @@ import { useRouter } from "next/navigation";
 import Nivel1MoldeOEjemplo from "@/components/game/arquitecto/Nivel1MoldeOEjemplo";
 import Nivel2Caracteristicas from "@/components/game/arquitecto/Nivel2Caracteristicas";
 import Nivel3Conexiones from "@/components/game/arquitecto/Nivel3Conexiones";
-import PlanoFinal, { PUNTAJE_MAXIMO_TOTAL } from "@/components/game/arquitecto/PlanoFinal";
-import { PENALIDAD_FALLO, PENALIDAD_PISTA } from "@/components/game/arquitecto/ArquitectoUI";
-import { saveActivityScore } from "@/lib/game-storage";
+import PlanoFinal from "@/components/game/arquitecto/PlanoFinal";
 import { completeStage } from "@/lib/ruta-progress";
 import { continuarConCierre } from "@/lib/personajes";
 import FotoPolaroid from "@/components/retos/FotoPolaroid";
@@ -75,22 +73,13 @@ const MENSAJES: Record<"nivel1" | "nivel2" | "nivel3", string[]> = {
 export default function ArquitectoRetoPage() {
   const router = useRouter();
   const [paso, setPaso] = useState<Paso>("intro");
-  const [puntajes, setPuntajes] = useState<[number, number, number]>([0, 0, 0]);
   const [mensajeEmergente, setMensajeEmergente] = useState<string | null>(null);
 
-  const total = puntajes[0] + puntajes[1] + puntajes[2];
-
-  function avanzar(nivel: 0 | 1 | 2, score: number) {
-    const siguientes: [number, number, number] = [...puntajes];
-    siguientes[nivel] = score;
-    setPuntajes(siguientes);
-
+  function avanzar(nivel: 0 | 1 | 2) {
     const claveNivel = (["nivel1", "nivel2", "nivel3"] as const)[nivel];
-    saveActivityScore("arquitecto", claveNivel, score);
 
     const siguientePaso: Paso = nivel === 0 ? "nivel2" : nivel === 1 ? "nivel3" : "resultado";
     if (siguientePaso === "resultado") {
-      saveActivityScore("arquitecto", "score", siguientes[0] + siguientes[1] + siguientes[2]);
       completeStage(2);
     }
     setPaso(siguientePaso);
@@ -102,7 +91,6 @@ export default function ArquitectoRetoPage() {
   }
 
   function reiniciar() {
-    setPuntajes([0, 0, 0]);
     setPaso("intro");
     window.scrollTo({ top: 0, behavior: "smooth" });
   }
@@ -185,7 +173,7 @@ export default function ArquitectoRetoPage() {
               className="absolute right-[17rem] top-1/2 hidden -translate-y-1/2 lg:block"
             />
           </div>
-          <dl className="grid grid-cols-2 divide-brand-support/60 font-mono text-xs sm:grid-cols-4 sm:divide-x">
+          <dl className="grid grid-cols-2 divide-brand-support/60 font-mono text-xs sm:grid-cols-3 sm:divide-x">
             <div className="border-b border-brand-support/60 px-6 py-2.5 sm:border-b-0 sm:px-8">
               <dt className="text-[10px] text-brand-support/60">PROYECTO</dt>
               <dd className="font-bold">App Feria de Cali</dd>
@@ -197,10 +185,6 @@ export default function ArquitectoRetoPage() {
             <div className="px-6 py-2.5 sm:px-6">
               <dt className="text-[10px] text-brand-support/60">ESTADO</dt>
               <dd className="font-bold">{paso === "resultado" ? "Entregado" : paso === "intro" ? "Por iniciar" : "En dibujo"}</dd>
-            </div>
-            <div className="px-6 py-2.5">
-              <dt className="text-[10px] text-brand-support/60">PUNTAJE</dt>
-              <dd className="font-bold">{paso === "intro" ? "-" : `${total} pts`}</dd>
             </div>
           </dl>
         </header>
@@ -264,10 +248,9 @@ export default function ArquitectoRetoPage() {
                 </div>
 
                 <div className="mt-6 rounded-xl border border-brand-mid/50 bg-brand-soft/30 p-4 text-left text-sm text-brand-support">
-                  <strong>Puntuación máxima: {PUNTAJE_MAXIMO_TOTAL} pts.</strong> Cada
-                  nivel vale hasta <strong>100 pts</strong>. Cada intento fallido
-                  resta {PENALIDAD_FALLO} pts y cada pista {PENALIDAD_PISTA} pts.
-                  Al final verás tu trabajo convertido en un plano real.
+                  Si te equivocas, puedes corregir y volver a validar, y si te
+                  atascas puedes pedir una pista. Al final verás tu trabajo
+                  convertido en un plano real.
                 </div>
 
                 <button
@@ -284,10 +267,10 @@ export default function ArquitectoRetoPage() {
             </div>
           )}
 
-          {paso === "nivel1" && <Nivel1MoldeOEjemplo onComplete={(s) => avanzar(0, s)} />}
-          {paso === "nivel2" && <Nivel2Caracteristicas onComplete={(s) => avanzar(1, s)} />}
-          {paso === "nivel3" && <Nivel3Conexiones onComplete={(s) => avanzar(2, s)} />}
-          {paso === "resultado" && <PlanoFinal puntajes={puntajes} onReintentar={reiniciar} onContinuar={() => continuarConCierre("arquitecto", router.push)} />}
+          {paso === "nivel1" && <Nivel1MoldeOEjemplo onComplete={() => avanzar(0)} />}
+          {paso === "nivel2" && <Nivel2Caracteristicas onComplete={() => avanzar(1)} />}
+          {paso === "nivel3" && <Nivel3Conexiones onComplete={() => avanzar(2)} />}
+          {paso === "resultado" && <PlanoFinal onReintentar={reiniciar} onContinuar={() => continuarConCierre("arquitecto", router.push)} />}
         </div>
       </div>
     </main>
