@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import AnalistaSalsaChallenge from "@/components/AnalistaSalsaChallenge";
+import FotoPolaroid from "@/components/retos/FotoPolaroid";
 
 export default function AnalistaRetoPage() {
   return (
@@ -36,7 +37,7 @@ export default function AnalistaRetoPage() {
           <span className="hidden sm:inline">ESTADO: EN ANÁLISIS</span>
         </div>
 
-        <div className="relative flex flex-col justify-center border-b-2 border-brand-support bg-brand-light/50 px-6 py-7 sm:px-8 md:min-h-[14rem] md:pr-72">
+        <div className="relative flex flex-col justify-center border-b-2 border-brand-support bg-brand-light/50 px-6 py-7 sm:px-8 md:min-h-[14rem] md:pr-72 lg:pr-[32rem]">
           <h1 className="text-3xl font-black leading-tight text-brand-support sm:text-4xl">
             Analista de Requerimientos
           </h1>
@@ -45,9 +46,18 @@ export default function AnalistaRetoPage() {
             Mundial de Salsa de Cali: votación en vivo y requerimientos BDD.
           </div>
 
-          <span className="absolute right-6 top-5 hidden rotate-[7deg] border-2 border-double border-brand-primary/70 px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest text-brand-primary/70 md:right-64 md:block">
+          <span className="absolute right-6 top-5 hidden rotate-[7deg] border-2 border-double border-brand-primary/70 px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest text-brand-primary/70 md:right-64 md:block lg:right-[9.5rem] lg:top-4 lg:px-2 lg:text-[10px] lg:tracking-wider">
             Prioridad alta
           </span>
+
+          <FotoPolaroid
+            src="/media/eventos/mundial-salsa-pareja.jpg"
+            alt="Pareja de bailarines con trajes rojos en el Festival Mundial de Salsa de Cali"
+            pie="Mundial de Salsa"
+            ancho={812}
+            alto={531}
+            className="absolute right-[17rem] top-1/2 hidden -translate-y-1/2 lg:block"
+          />
 
           <Image
             src="/personajes/analista.webp"

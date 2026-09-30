@@ -20,7 +20,7 @@ export default function Home() {
             Cali nos une
           </span> */}
           <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-            Bienvenido al reto
+            Vamos a darnos un borondo
           </h1>
 {/*           <p className="mt-4 max-w-xl text-base text-white/90 drop-shadow sm:text-lg">
             Una experiencia interactiva donde tus ideas construyen el futuro de

@@ -42,6 +42,39 @@ export default function FrontendRetoPage() {
           descripcion="Mejora la app “Ritmos del Pacífico”."
           imagen="/personajes/frontend.webp"
           anchoImagen={571}
+          foto={{
+            src: "/media/eventos/petronio-tarima.jpg",
+            alt: "Agrupación del Pacífico con trajes blancos y fucsia bailando en la tarima del Festival Petronio Álvarez",
+            pie: "Petronio Álvarez",
+            ancho: 1280,
+            alto: 720,
+            giro: 2,
+            cinta: "esquina",
+          }}
+          fotoDerecha={16}
+          distintivo={
+            <div
+              className="pointer-events-none absolute right-[10.2rem] top-6 hidden -rotate-[4deg] lg:block"
+              aria-hidden="true"
+            >
+              <span className="flex items-center gap-1 rounded-full bg-brand-primary px-3 py-1 text-[11px] font-bold text-white shadow-[2px_3px_0_rgba(0,0,0,0.2)]">
+                <svg viewBox="0 0 24 24" className="h-3 w-3" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                Escuchar
+              </span>
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute -bottom-3 right-1 h-5 w-5 drop-shadow"
+                fill="white"
+                stroke="#111"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              >
+                <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1a1.5 1.5 0 0 1 3 0v1.5m0-.5a1.5 1.5 0 0 1 3 0V12m0-.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.9-2.6L4.4 15a1.5 1.5 0 0 1 2.4-1.8L9 15.5V11" />
+              </svg>
+            </div>
+          }
           accion={
             <button
               type="button"
@@ -117,4 +150,4 @@ export default function FrontendRetoPage() {
       )}
     </main>
   );
-}
+}

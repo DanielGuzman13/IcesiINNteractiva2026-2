@@ -1,4 +1,6 @@
 import Image from "next/image";
+import type { CSSProperties, ReactNode } from "react";
+import FotoPolaroid, { type FotoPolaroidProps } from "./FotoPolaroid";
 
 export default function EncabezadoConsola({
   ruta,
@@ -8,6 +10,9 @@ export default function EncabezadoConsola({
   descripcion,
   imagen,
   anchoImagen,
+  foto,
+  fotoDerecha = 15,
+  distintivo,
 }: {
   ruta: string;
   estado: string;
@@ -16,6 +21,9 @@ export default function EncabezadoConsola({
   descripcion: string;
   imagen: string;
   anchoImagen: number;
+  foto?: Omit<FotoPolaroidProps, "className">;
+  fotoDerecha?: number;
+  distintivo?: ReactNode;
 }) {
   return (
     <>
@@ -27,11 +35,22 @@ export default function EncabezadoConsola({
         </span>
       </div>
 
-      <div className="relative flex flex-col justify-center bg-brand-support px-6 py-7 text-white sm:px-8 md:min-h-[14rem] md:pr-72">
+      <div
+        className={`relative flex flex-col justify-center bg-brand-support px-6 py-7 text-white sm:px-8 md:min-h-[14rem] md:pr-72 ${foto ? "lg:pr-[calc(var(--foto-derecha)+15rem)]" : ""}`}
+        style={{ "--foto-derecha": `${fotoDerecha}rem` } as CSSProperties}
+      >
         <h1 className="text-3xl font-black leading-tight sm:text-4xl">{titulo}</h1>
         <p className="mt-3 max-w-xl font-mono text-sm leading-snug text-white/75">
           <span className="text-brand-mid">&gt;</span> {descripcion}
         </p>
+
+        {foto && (
+          <FotoPolaroid
+            {...foto}
+            className="absolute right-[var(--foto-derecha)] top-1/2 hidden -translate-y-1/2 lg:block"
+          />
+        )}
+        {distintivo}
 
         <Image
           src={imagen}

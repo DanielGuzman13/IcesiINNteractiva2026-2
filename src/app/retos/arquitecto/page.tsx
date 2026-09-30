@@ -12,6 +12,7 @@ import { PENALIDAD_FALLO, PENALIDAD_PISTA } from "@/components/game/arquitecto/A
 import { saveActivityScore } from "@/lib/game-storage";
 import { completeStage } from "@/lib/ruta-progress";
 import { continuarConCierre } from "@/lib/personajes";
+import FotoPolaroid from "@/components/retos/FotoPolaroid";
 
 type Paso = "intro" | "nivel1" | "nivel2" | "nivel3" | "resultado";
 
@@ -146,8 +147,8 @@ export default function ArquitectoRetoPage() {
 
       <div className="hoja-plano w-full max-w-7xl border-2 border-white/90 shadow-[0_0_0_6px_rgba(255,255,255,0.12)] 2xl:max-w-[1400px]">
         <header className="border-b-2 border-brand-support/80 text-brand-support">
-          <div className="relative flex items-end justify-between gap-4 border-b border-brand-support/60 px-6 pt-5 sm:px-8">
-            <div className="pb-5">
+          <div className="relative flex items-end justify-between gap-4 border-b border-brand-support/60 px-6 pt-5 sm:px-8 lg:min-h-[14rem]">
+            <div className="pb-5 lg:self-center">
               <div className="font-mono text-[11px] tracking-wider text-brand-support/60">
                 PLANO N.º 02 / DISEÑO DE CLASES
               </div>
@@ -161,7 +162,27 @@ export default function ArquitectoRetoPage() {
               width={601}
               height={560}
               priority
-              className="pointer-events-none -mb-px hidden h-32 w-auto sm:block"
+              className="pointer-events-none -mb-px hidden h-32 w-auto sm:block lg:h-52"
+            />
+            <div
+              className="pointer-events-none absolute right-[11rem] top-9 hidden -rotate-[4deg] border-2 border-brand-soft/80 bg-white/85 font-mono text-[10px] leading-tight text-brand-soft lg:block"
+              aria-hidden="true"
+            >
+              <div className="border-b-2 border-brand-soft/80 px-2 py-0.5 text-center font-bold">Feria</div>
+              <div className="px-2 py-0.5">
+                <div>+ fecha</div>
+                <div>+ lugar</div>
+              </div>
+            </div>
+            <FotoPolaroid
+              src="/media/eventos/feria-cali-salsodromo.jpg"
+              alt="Desfile nocturno del Salsódromo por la Autopista Suroriental en la Feria de Cali, con bailarines y tribunas llenas de público"
+              pie="Feria de Cali"
+              ancho={1280}
+              alto={990}
+              giro={2.5}
+              anchoMarco="w-52"
+              className="absolute right-[17rem] top-1/2 hidden -translate-y-1/2 lg:block"
             />
           </div>
           <dl className="grid grid-cols-2 divide-brand-support/60 font-mono text-xs sm:grid-cols-4 sm:divide-x">

@@ -1,5 +1,6 @@
 import Image from "next/image";
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
+import FotoPolaroid, { type FotoPolaroidProps } from "./FotoPolaroid";
 
 export default function EncabezadoEditor({
   archivo,
@@ -8,6 +9,9 @@ export default function EncabezadoEditor({
   imagen,
   anchoImagen,
   accion,
+  foto,
+  fotoDerecha = 14,
+  distintivo,
 }: {
   archivo: string;
   titulo: string;
@@ -15,6 +19,9 @@ export default function EncabezadoEditor({
   imagen: string;
   anchoImagen: number;
   accion?: ReactNode;
+  foto?: Omit<FotoPolaroidProps, "className">;
+  fotoDerecha?: number;
+  distintivo?: ReactNode;
 }) {
   return (
     <>
@@ -29,12 +36,22 @@ export default function EncabezadoEditor({
         </span>
       </div>
 
-      <div className="relative flex flex-col justify-center border-b-2 border-brand-support bg-brand-light/60 px-6 py-7 sm:px-8 md:min-h-[14rem] md:pr-72">
+      <div className={`relative flex flex-col justify-center border-b-2 border-brand-support bg-brand-light/60 px-6 py-7 sm:px-8 md:min-h-[14rem] md:pr-72 ${foto ? "lg:pr-[calc(var(--foto-derecha)+15rem)]" : ""}`}
+        style={{ "--foto-derecha": `${fotoDerecha}rem` } as CSSProperties}
+      >
         <h1 className="text-3xl font-black leading-tight text-brand-support sm:text-4xl">{titulo}</h1>
         <p className="mt-3 max-w-xl border-l-4 border-brand-soft pl-3 text-sm font-medium leading-snug text-brand-support/85">
           {descripcion}
         </p>
         {accion && <div className="mt-5">{accion}</div>}
+
+        {foto && (
+          <FotoPolaroid
+            {...foto}
+            className="absolute right-[var(--foto-derecha)] top-1/2 hidden -translate-y-1/2 lg:block"
+          />
+        )}
+        {distintivo}
 
         <Image
           src={imagen}

@@ -42,6 +42,27 @@ export default function BackendRetoPage() {
             descripcion="Programa con bloques la lógica de la caseta de gastronomía pacífica."
             imagen="/personajes/backend.webp"
             anchoImagen={415}
+            foto={{
+              src: "/media/eventos/petronio-cocina.jpg",
+              alt: "Cocineras sirviendo arroz y platos típicos del Pacífico en una caseta del Festival Petronio Álvarez",
+              pie: "Petronio Álvarez",
+              ancho: 1280,
+              alto: 720,
+              giro: -1.5,
+              cinta: "esquinas",
+            }}
+            distintivo={
+              <div
+                className="pointer-events-none absolute right-[6.5rem] top-6 hidden rotate-[3deg] rounded-md bg-brand-support px-2 py-1 font-mono text-[10px] leading-tight text-white shadow-[2px_3px_0_rgba(0,0,0,0.18)] lg:block"
+                aria-hidden="true"
+              >
+                <div className="text-white/70">POST /pedido</div>
+                <div className="flex items-center gap-1 font-bold text-emerald-300">
+                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />
+                  201 Created
+                </div>
+              </div>
+            }
           />
           <div className="p-4 md:p-6 lg:p-8">
             <BackendPetronioWorkspace
@@ -80,7 +101,7 @@ export default function BackendRetoPage() {
               </p>
               <p className="text-sm leading-relaxed text-brand-support">
                 Cuando un comensal pide un plato típico (como la <strong>Cazuela de Mariscos</strong>{" "}
-                o el <strong>Arroz Guacho</strong>), tú debes decidir si se puede preparar o no,
+                o el <strong>Arroz de Coco</strong>), tú debes decidir si se puede preparar o no,
                 dependiendo de los ingredientes que queden en la despensa, y responderle al visitante.
               </p>
               <p className="text-sm leading-relaxed text-brand-support">
