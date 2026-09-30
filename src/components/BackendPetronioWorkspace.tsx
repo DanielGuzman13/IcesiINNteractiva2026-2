@@ -2,7 +2,6 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { inject, svgResize, Themes, WorkspaceSvg } from 'blockly';
-import Link from 'next/link';
 import { backendToolbox } from '@/lib/toolbox/backend-petronio-toolbox';
 import {
   defineBackendBlocks,
@@ -65,13 +64,11 @@ function nowTime(): string {
 }
 
 function BackendPetronioWorkspace({
-  nextHref = '/retos',
   onHelp,
-  onCompleted
+  onContinue
 }: {
-  nextHref?: string;
   onHelp?: () => void;
-  onCompleted?: () => void;
+  onContinue?: () => void;
 }) {
   const blocklyDivRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<WorkspaceSvg | null>(null);
@@ -259,7 +256,6 @@ function BackendPetronioWorkspace({
         if (!completedRef.current) {
           completedRef.current = true;
           setCompleted(true);
-          onCompleted?.();
         }
         break;
       case 'conflict':
@@ -319,14 +315,14 @@ function BackendPetronioWorkspace({
     <section className="w-full overflow-hidden rounded-3xl bg-white shadow-2xl">
       <header
         className="flex flex-wrap items-center justify-between gap-4 px-6 py-5 text-white"
-        style={{ background: 'linear-gradient(90deg, #C63254 0%, #EC6449 100%)' }}
+        style={{ background: 'linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)' }}
       >
         <div>
           <div className="text-xs font-semibold uppercase tracking-widest text-white/70">
-            Ruta de Ingeniería de Software · Festival Petronio Álvarez
+            Ruta de Ingeniería de Software - Festival Petronio Álvarez
           </div>
           <h2 className="mt-1 text-2xl font-extrabold">
-            Backend Engineer · Caseta Gastronómica
+            Backend Engineer - Caseta Gastronómica
           </h2>
           <p className="text-sm font-medium text-white/85">
             Construye la lógica de la caseta con bloques y observa la cocina en tiempo real.
@@ -357,12 +353,6 @@ function BackendPetronioWorkspace({
               Ayuda
             </button>
           )}
-          
-          {completed && (
-            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
-              Reto Completado
-            </span>
-          )}
         </div>
       </header>
 
@@ -373,7 +363,7 @@ function BackendPetronioWorkspace({
               type="button"
               onClick={runRequest}
               disabled={readOnly}
-              className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-mid disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-support disabled:cursor-not-allowed disabled:opacity-50"
             >
               {serverState === 'inactive' ? 'Abrir la caseta' : 'Recibir un pedido'}
             </button>
@@ -433,12 +423,13 @@ function BackendPetronioWorkspace({
 
             </div>
             {completed ? (
-              <Link
-                href={nextHref}
-                className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
+              <button
+                type="button"
+                onClick={onContinue}
+                className="animate-fade-in rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-xl shadow-emerald-500/40 ring-4 ring-emerald-500/20 transition-colors hover:bg-emerald-600"
               >
                 Continuar
-              </Link>
+              </button>
             ) : (
               <button
                 type="button"
@@ -453,12 +444,12 @@ function BackendPetronioWorkspace({
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
               <span className="text-xs font-bold uppercase tracking-wider text-white/70">
-                Simulador · Caseta de la Abuela Paz
+                Simulador - Caseta de la Abuela Paz
               </span>
               <span className="text-xs font-semibold text-white/50">
                 {scene === 'idle' && targetIngredient === null
                   ? `Inventario: ${formatInventory(inventory)}`
-                  : `Ingrediente: ${targetIngredient ?? '—'} · ${formatInventory(inventory)}`}
+                  : `Ingrediente: ${targetIngredient ?? '—'} - ${formatInventory(inventory)}`}
               </span>
             </div>
             <CasetaCanvas scene={scene} banner={banner} targetIngredient={targetIngredient} />
@@ -570,7 +561,7 @@ function BackendPetronioWorkspace({
 function formatInventory(inventory: Inventory): string {
   return Object.entries(inventory)
     .map(([name, count]) => `${name} ${count}`)
-    .join(' · ');
+    .join(' - ');
 }
 
 // ---------------------------------------------------------------------------

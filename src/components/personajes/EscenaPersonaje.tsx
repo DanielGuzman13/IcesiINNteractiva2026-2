@@ -37,8 +37,13 @@ export default function EscenaPersonaje({
     else setPaso((p) => p + 1);
   }
 
+  function retroceder() {
+    setPaso((p) => Math.max(p - 1, 0));
+  }
+
   return (
     <div
+      data-tema="general"
       className="fixed inset-0 z-[70] flex items-center justify-center overflow-y-auto bg-brand-support/75 p-4 backdrop-blur-md"
       role="dialog"
       aria-modal="true"
@@ -73,7 +78,7 @@ export default function EscenaPersonaje({
             className="absolute -top-3 left-1/2 h-6 w-6 -translate-x-1/2 rotate-45 border-l-2 border-t-2 border-brand-mid bg-white md:-left-3 md:top-12 md:translate-x-0 md:-rotate-45"
           />
           <div className="relative rounded-3xl border-2 border-brand-mid bg-white p-6 shadow-2xl sm:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-4 py-1.5 text-xs font-bold uppercase tracking-[0.16em] text-white">
+            <span className="etiqueta etiqueta-solida">
               {personaje.titulo}
             </span>
 
@@ -98,31 +103,54 @@ export default function EscenaPersonaje({
                   <span
                     key={i}
                     className={`h-2.5 rounded-full transition-all ${
-                      i === paso ? "w-7 bg-brand-primary" : i < paso ? "w-2.5 bg-brand-mid" : "w-2.5 bg-brand-light"
+                      i === paso ? "w-7 bg-brand-primary" : i < paso ? "w-2.5 bg-brand-mid" : "w-2.5 bg-brand-primary/20"
                     }`}
                   />
                 ))}
               </div>
-              <button
-                type="button"
-                onClick={avanzar}
-                autoFocus
-                className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-7 py-3 text-base font-bold text-white shadow-lg shadow-brand-primary/30 transition-all hover:bg-brand-mid active:scale-95"
-              >
-                {textoBoton}
-                <svg
-                  viewBox="0 0 24 24"
-                  className="h-5 w-5"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="2.5"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  aria-hidden="true"
+              <div className="flex items-center gap-3">
+                {paso > 0 && (
+                  <button
+                    type="button"
+                    onClick={retroceder}
+                    aria-label="Mensaje anterior"
+                    className="inline-flex h-12 w-12 items-center justify-center rounded-full border-2 border-brand-primary/30 bg-white text-brand-primary transition-all hover:bg-brand-primary/10 active:scale-95"
+                  >
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-5 w-5"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={avanzar}
+                  autoFocus
+                  className="inline-flex items-center gap-2 rounded-full bg-brand-primary px-7 py-3 text-base font-bold text-white shadow-lg shadow-brand-primary/30 transition-all hover:bg-brand-mid active:scale-95"
                 >
-                  <path d="M5 12h14M12 5l7 7-7 7" />
-                </svg>
-              </button>
+                  {textoBoton}
+                  <svg
+                    viewBox="0 0 24 24"
+                    className="h-5 w-5"
+                    fill="none"
+                    stroke="currentColor"
+                    strokeWidth="2.5"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    aria-hidden="true"
+                  >
+                    <path d="M5 12h14M12 5l7 7-7 7" />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

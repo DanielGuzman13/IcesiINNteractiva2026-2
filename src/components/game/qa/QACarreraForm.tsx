@@ -2,7 +2,7 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 import { motion } from "framer-motion";
 
 type Categoria = "infantil" | "juvenil" | "adulto";
@@ -78,7 +78,6 @@ export default function QACarreraForm() {
     // BUG-1 a BUG-6 están presentes en este formulario; el total esperado es 6.
     if (respuestaAuditoria.trim() === "6") {
       setEstadoAuditoria("correcto");
-      anunciarCierrePersonaje("qa", 1500);
     } else {
       setEstadoAuditoria("incorrecto");
     }
@@ -94,9 +93,6 @@ export default function QACarreraForm() {
         className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8"
       >
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Registro y Tiempos · Carrera del Pacífico
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Inscripción de corredor
           </h2>
@@ -221,7 +217,7 @@ export default function QACarreraForm() {
                 htmlFor={`qa-distancia-${item.id}`}
                 className={`flex cursor-pointer items-center gap-2 rounded-full border-2 px-4 py-2 text-sm font-semibold transition ${
                   distancia === item.id
-                    ? "border-brand-mid bg-brand-mid text-white"
+                    ? "border-brand-soft bg-brand-soft text-white"
                     : "border-brand-soft bg-white/70 text-brand-support hover:border-brand-mid"
                 }`}
               >
@@ -259,7 +255,7 @@ export default function QACarreraForm() {
 
         <button
           type="submit"
-          className="group mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-200 hover:translate-x-2 hover:bg-brand-mid focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-mid"
+          className="group mt-8 inline-flex w-full items-center justify-center gap-3 rounded-full bg-brand-primary px-10 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-200 hover:translate-x-2 hover:bg-brand-support focus:outline-none focus-visible:ring-4 focus-visible:ring-brand-mid"
         >
           {/* BUG-5: Al pasar el cursor sobre el botón "Registrar Corredor",
               este se desplaza o desalinea en el formulario. */}
@@ -284,9 +280,6 @@ export default function QACarreraForm() {
 
       <section className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
         <div className="mb-8 text-center">
-          <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-            Auditoría QA
-          </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Eres el ingeniero de QA
           </h2>
@@ -326,7 +319,7 @@ export default function QACarreraForm() {
           <button
             type="button"
             onClick={handleValidarReporte}
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-mid px-8 py-3.5 text-lg font-bold text-white shadow-lg shadow-brand-mid/30 transition-all duration-300 hover:bg-brand-primary"
+            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-soft px-8 py-3.5 text-lg font-bold text-white shadow-lg shadow-brand-soft/30 transition-all duration-300 hover:bg-brand-primary"
           >
             Validar Reporte
           </button>
@@ -355,8 +348,8 @@ export default function QACarreraForm() {
           {estadoAuditoria === "correcto" && (
             <button
               type="button"
-              onClick={() => router.push("/retos/ciberseguridad")}
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+              onClick={() => continuarConCierre("qa", router.push)}
+              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
             >
               Continuar
               <svg

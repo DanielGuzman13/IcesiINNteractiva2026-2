@@ -49,7 +49,7 @@ export function EncabezadoNivel({
 }) {
   return (
     <div className="rounded-3xl border-2 border-brand-soft bg-brand-light/30 p-6 text-center">
-      <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/30 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
+      <span className="etiqueta">
         {etiqueta}
       </span>
       <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
@@ -255,7 +255,7 @@ export function BarraAcciones({
           disabled={!puedeValidar}
           className={`inline-flex flex-1 items-center justify-center gap-2 rounded-full px-8 py-3 text-lg font-bold shadow-xl transition-all duration-300 ${
             puedeValidar
-              ? "bg-brand-primary text-white shadow-brand-primary/30 hover:bg-brand-mid"
+              ? "bg-brand-primary text-white shadow-brand-primary/30 hover:bg-brand-support"
               : "cursor-not-allowed bg-brand-light text-brand-support/60 shadow-none"
           }`}
         >
@@ -290,7 +290,7 @@ export function RevelacionConcepto({
       <Confetti />
       <div className="animate-fade-in rounded-3xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center sm:p-10">
         <p className="text-4xl">🎺🎉</p>
-        <span className="mt-4 inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
+        <span className="etiqueta">
           +{puntaje} pts
         </span>
         <h2 className="mt-4 text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
@@ -302,7 +302,7 @@ export function RevelacionConcepto({
         <button
           type="button"
           onClick={onContinuar}
-          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+          className="mt-8 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
         >
           {textoBoton}
           <svg

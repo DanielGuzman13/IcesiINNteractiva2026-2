@@ -1,10 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AppSimulator, { renderScene } from "@/components/AppSimulator";
 import { completeStage } from "@/lib/ruta-progress";
-import { anunciarCierrePersonaje } from "@/lib/personajes";
+import { continuarConCierre } from "@/lib/personajes";
 
 type Phase = "quiz" | "results";
 
@@ -124,6 +124,7 @@ export default function FrontendPetronioAudit({
 }: {
   showIntro: boolean;
 }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -153,7 +154,6 @@ export default function FrontendPetronioAudit({
     if (isLast) {
       setPhase("results");
       completeStage(3);
-      anunciarCierrePersonaje("frontend", 1500);
       return;
     }
     const nextIndex = currentIndex + 1;
@@ -173,7 +173,7 @@ export default function FrontendPetronioAudit({
       >
         <div className="mb-5">
           <div className="text-xs font-semibold uppercase tracking-widest text-brand-support/70">
-            App oficial &quot;Sonoridades del Pacífico&quot;
+            App oficial &quot;Ritmos del Pacífico&quot;
           </div>
           <h2 className="text-xl font-black text-brand-support">
             Mejora la interfaz y la usabilidad
@@ -185,7 +185,7 @@ export default function FrontendPetronioAudit({
             <div className="mb-6">
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-brand-support">
                 <span>Pregunta {currentIndex + 1} de {QUESTIONS.length}</span>
-                <span className="rounded-full bg-brand-soft/40 px-3 py-1 text-xs uppercase tracking-widest text-brand-support">
+                <span className="etiqueta">
                   {current.heuristica}
                 </span>
               </div>
@@ -248,7 +248,7 @@ export default function FrontendPetronioAudit({
                     type="button"
                     onClick={handleNext}
                     disabled={selected === null}
-                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-mid disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-support disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
                   >
                     {isLast ? "Finalizar" : "Siguiente"}
                   </button>
@@ -261,9 +261,6 @@ export default function FrontendPetronioAudit({
         {phase === "results" && (
           <div className="space-y-6">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full bg-amber-200/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
-                Actividad completada
-              </span>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-brand-support">
                 {score}/6 aciertos
               </h2>
@@ -289,7 +286,7 @@ export default function FrontendPetronioAudit({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-widest text-brand-support/70">
-                          Pregunta {index + 1} · {question.heuristica}
+                          Pregunta {index + 1} - {question.heuristica}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-brand-support">{question.caso}</p>
                       </div>
@@ -336,12 +333,13 @@ export default function FrontendPetronioAudit({
               >
                 Reintentar actividad
               </button>
-              <Link
-                href="/retos"
-                className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-mid"
+              <button
+                type="button"
+                onClick={() => continuarConCierre("frontend", router.push)}
+                className="animate-fade-in rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-xl shadow-brand-primary/40 ring-4 ring-brand-primary/20 transition-colors hover:bg-brand-support"
               >
                 Continuar
-              </Link>
+              </button>
             </div>
           </div>
         )}

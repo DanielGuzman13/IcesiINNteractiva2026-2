@@ -3,14 +3,14 @@ import Carousel from "@/components/home/Carousel";
 
 export default function Home() {
   return (
-    <div className="relative min-h-dvh w-full overflow-hidden">
+    <div data-tema="general" className="relative min-h-dvh w-full overflow-hidden">
       <Carousel />
 
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(30,35,42,0.45) 0%, rgba(30,35,42,0.75) 100%)",
+            "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand-support) 45%, transparent) 0%, color-mix(in srgb, var(--brand-support) 75%, transparent) 100%)",
         }}
       />
 
@@ -20,7 +20,7 @@ export default function Home() {
             Cali nos une
           </span> */}
           <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-            Bienvenido al reto
+            Vamos a darnos un borondo
           </h1>
 {/*           <p className="mt-4 max-w-xl text-base text-white/90 drop-shadow sm:text-lg">
             Una experiencia interactiva donde tus ideas construyen el futuro de
@@ -50,4 +50,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
+}

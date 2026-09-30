@@ -1,5 +1,5 @@
 /**
- * Diccionario caleñol · "Cali nos une"
+ * Diccionario caleñol - "Cali nos une"
  *
  * Expresiones caleñas que usan los personajes. En los textos de
  * src/lib/personajes.ts se marcan entre asteriscos: "¡*Ve*, Valeria!".
@@ -32,14 +32,14 @@ export const DICCIONARIO_CALENOL: Record<string, string> = {
   "bien bacano": "Muy bueno, muy chévere.",
   "uy, qué nota": "¡Qué bien! Expresión de alegría o admiración.",
   sancocho: "Plato típico del Valle del Cauca. También se dice de algo revuelto o desordenado.",
-  encarreta: "De «encarretar»: gustar mucho, engancharse con algo. «Me encarreta la salsa».",
-  encarretan: "De «encarretar»: gustar mucho, engancharse con algo. «Me encarretan los acertijos».",
+  encarretado: "Estar encarretado es estar muy entusiasmado, apasionado o concentrado en algo. «Estoy encarretado con la salsa».",
+  encarretada: "Estar encarretada es estar muy entusiasmada, apasionada o concentrada en algo. «Estoy encarretada con este proyecto».",
   totea: "De «totear»: reventarse o dañarse de golpe. «Se toteó el globo».",
   pilas: "¡Atento! Ponerse alerta.",
   "qué oso": "¡Qué vergüenza!",
   sabroso: "En Cali, algo que quedó muy bien o se disfruta mucho, no solo la comida.",
   solazo: "Un sol muy fuerte, como el de Cali al mediodía.",
-  "mera app": "En Cali, «mero» o «mera» es «tremendo» o «muy grande». «¡Mera app!» es una app tremenda.",
+  "re mela": "«Melo» o «mela» es algo excelente, chévere o de muy buena calidad, y «re» lo refuerza. «Esa canción está re mela».",
   "ojo pues": "¡Cuidado! ¡Presta atención!",
   "vamos pues": "«Pues» al final de la frase es una muletilla muy caleña: «vamos pues», «hágale pues».",
   pues: "Muletilla muy caleña al final de la frase: «volvamos al mapa, pues».",

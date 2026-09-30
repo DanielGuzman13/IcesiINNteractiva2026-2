@@ -4,11 +4,8 @@ import RegistrationForm from "@/components/registro/RegistrationForm";
 export default function RegistroPage() {
   return (
     <div
-      className="relative flex min-h-dvh flex-col items-center justify-center px-4 py-12 sm:px-6"
-      style={{
-        background:
-          "linear-gradient(160deg, #F9F9FB 0%, #E2ECDF 100%)",
-      }}
+      data-tema="general"
+      className="relative flex min-h-dvh flex-col items-center justify-center bg-gradient-to-br from-white to-brand-light px-4 py-12 sm:px-6"
     >
       <Link
         href="/"
@@ -33,4 +30,4 @@ export default function RegistroPage() {
       </div>
     </div>
   );
-}
+}

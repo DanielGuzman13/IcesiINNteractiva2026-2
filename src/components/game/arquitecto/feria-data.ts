@@ -1,4 +1,4 @@
-// Contenido de la actividad del Arquitecto de Software · Feria de Cali.
+// Contenido de la actividad del Arquitecto de Software - Feria de Cali.
 // Está pensado para estudiantes de grado 10° y 11° sin conocimientos previos:
 // primero se usa lenguaje cotidiano (molde, ejemplo, característica, conexión)
 // y al terminar cada nivel se revela el término técnico (clase, objeto,
@@ -61,7 +61,7 @@ export const MOLDES: Record<MoldeId, Molde> = {
 };
 
 /* ------------------------------------------------------------------ */
-/* Nivel 1 · ¿Molde o ejemplo?                                          */
+/* Nivel 1 - ¿Molde o ejemplo?                                          */
 /* ------------------------------------------------------------------ */
 
 export type TipoTarjeta = "molde" | "ejemplo";
@@ -149,7 +149,7 @@ export const TARJETAS_NIVEL1: TarjetaNivel1[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Nivel 2 · ¿Qué lo describe?                                          */
+/* Nivel 2 - ¿Qué lo describe?                                          */
 /* ------------------------------------------------------------------ */
 
 export const MOLDES_NIVEL2: MoldeId[] = ["orquesta", "bailarin", "boleta", "desfile"];
@@ -256,7 +256,7 @@ export const CARACTERISTICAS: Caracteristica[] = [
 ];
 
 /* ------------------------------------------------------------------ */
-/* Nivel 3 · ¿Cómo se conectan?                                         */
+/* Nivel 3 - ¿Cómo se conectan?                                         */
 /* ------------------------------------------------------------------ */
 
 export interface Verbo {
