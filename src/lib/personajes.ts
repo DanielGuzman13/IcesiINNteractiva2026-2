@@ -138,11 +138,11 @@ export const PERSONAJES: Record<RolActividad, Personaje> = {
     cierre: [
       "¡Servidor restaurado, {nombre}! Descifraste la clave y recuperaste los resultados oficiales. ¡*Eso, ve*!",
       "La seguridad protege los datos y la confianza de la gente que usa la tecnología. Sin ella, cualquiera podría cambiar los resultados de una carrera.",
-      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Estoy *encarretado* con los acertijos y con ver lo que otros no ven! Con esto completaste toda la ruta: ahora sí, date un *borondo* por el mapa y celebrá. ¡Cali nos une!",
+      "Soy importante en el ciclo de vida del software porque cuido la calidad y la seguridad hasta el final. ¡Estoy *encarretado* con los acertijos y con ver lo que otros no ven! Con esto completaste toda la ruta. *Vení*, que te quiero presentar a todo el equipo. ¡Cali nos une!",
     ],
     botonIntro: "¡A defender el servidor!",
-    destinoCierre: "/retos",
-    botonCierre: "Volver al mapa",
+    destinoCierre: "/equipo",
+    botonCierre: "Conocer al equipo",
   },
 };
 
