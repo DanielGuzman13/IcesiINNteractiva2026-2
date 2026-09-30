@@ -91,7 +91,7 @@ export function verifyStagePassword(stage: number, intento: string): boolean {
 /*
  * SHA-256 en JavaScript puro. No se usa crypto.subtle porque el navegador
  * solo lo habilita en HTTPS o localhost, y en el taller la app puede abrirse
- * desde tabletas por la IP de la red local (http://192.168.x.x:3000).
+ * desde tabletas por la IP de la red local (http://192.168.x.x:64521).
  */
 const K = new Uint32Array([
   0x428a2f98, 0x71374491, 0xb5c0fbcf, 0xe9b5dba5, 0x3956c25b, 0x59f111f1, 0x923f82a4, 0xab1c5ed5,
