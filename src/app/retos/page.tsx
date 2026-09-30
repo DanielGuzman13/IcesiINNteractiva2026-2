@@ -60,6 +60,15 @@ export default function RetosPage() {
       )}
 
       <InteractiveMap />
+
+      {completada && (
+        <Link
+          href="/equipo"
+          className="fixed bottom-6 left-1/2 z-50 -translate-x-1/2 rounded-full bg-brand-primary px-7 py-3 text-base font-bold text-white shadow-xl shadow-black/25 transition hover:-translate-y-0.5 hover:bg-brand-support"
+        >
+          🎉 Conocer al equipo
+        </Link>
+      )}
     </main>
   );
 }

@@ -3,18 +3,6 @@
 import { type DragEvent, type KeyboardEvent, type ReactNode } from "react";
 import { motion } from "framer-motion";
 
-export const PUNTAJE_MAXIMO_NIVEL = 100;
-export const PUNTAJE_MINIMO_NIVEL = 40;
-export const PENALIDAD_FALLO = 15;
-export const PENALIDAD_PISTA = 10;
-
-export function calcularPuntaje(fallos: number, pistas: number): number {
-  return Math.max(
-    PUNTAJE_MINIMO_NIVEL,
-    PUNTAJE_MAXIMO_NIVEL - fallos * PENALIDAD_FALLO - pistas * PENALIDAD_PISTA,
-  );
-}
-
 export function barajar<T>(items: T[]): T[] {
   const copia = [...items];
   for (let i = copia.length - 1; i > 0; i--) {
@@ -246,7 +234,7 @@ export function BarraAcciones({
             onClick={onPista}
             className="rounded-full border-2 border-brand-soft px-6 py-3 text-sm font-bold text-brand-support transition-all hover:border-brand-support"
           >
-            💡 Pedir pista (−{PENALIDAD_PISTA} pts)
+            💡 Pedir pista
           </button>
         )}
         <button
@@ -275,13 +263,11 @@ export function BarraAcciones({
 export function RevelacionConcepto({
   titulo,
   children,
-  puntaje,
   textoBoton,
   onContinuar,
 }: {
   titulo: string;
   children: ReactNode;
-  puntaje: number;
   textoBoton: string;
   onContinuar: () => void;
 }) {
@@ -291,7 +277,7 @@ export function RevelacionConcepto({
       <div className="animate-fade-in rounded-3xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center sm:p-10">
         <p className="text-4xl">🎺🎉</p>
         <span className="etiqueta">
-          +{puntaje} pts
+          Nivel completado
         </span>
         <h2 className="mt-4 text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
           {titulo}

@@ -10,6 +10,11 @@ export const AVATARS = [
     src: "/media/avatars/arepa.png",
   },
   {
+    id: "bunuelo",
+    label: "Buñuelo",
+    src: "/media/avatars/bunuelo.png",
+  },
+  {
     id: "cholado",
     label: "Cholado",
     src: "/media/avatars/cholado.png",
@@ -28,11 +33,6 @@ export const AVATARS = [
     id: "lulada",
     label: "Lulada",
     src: "/media/avatars/lulada.png",
-  },
-  {
-    id: "pandebono",
-    label: "Pandebono",
-    src: "/media/avatars/padebono.png",
   },
   {
     id: "raspado",

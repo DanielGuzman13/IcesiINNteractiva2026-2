@@ -8,7 +8,6 @@ import {
   RevelacionConcepto,
   ZonaSoltar,
   barajar,
-  calcularPuntaje,
 } from "./ArquitectoUI";
 import { CONEXIONES, MOLDES, VERBOS, verboPorId, type MoldeId } from "./feria-data";
 
@@ -23,7 +22,7 @@ function PildoraMolde({ id }: { id: MoldeId }) {
 export default function Nivel3Conexiones({
   onComplete,
 }: {
-  onComplete: (score: number) => void;
+  onComplete: () => void;
 }) {
   const [orden] = useState(() => barajar(VERBOS.map((v) => v.id)));
   const [frases] = useState(() => barajar(CONEXIONES));
@@ -33,8 +32,7 @@ export default function Nivel3Conexiones({
   const [bloqueadas, setBloqueadas] = useState<string[]>([]);
   const [incorrectas, setIncorrectas] = useState<string[]>([]);
   const [intento, setIntento] = useState(0);
-  const [fallos, setFallos] = useState(0);
-  const [pistas, setPistas] = useState(0);
+  const [pistaVisible, setPistaVisible] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [completado, setCompletado] = useState(false);
 
@@ -81,7 +79,6 @@ export default function Nivel3Conexiones({
       return;
     }
     setIncorrectas(malas);
-    setFallos((f) => f + 1);
     setIntento((i) => i + 1);
     setError(
       `⚠️ ${malas.length} conexi${malas.length === 1 ? "ón no tiene" : "ones no tienen"} sentido. Lee la frase completa en voz alta y usa la pregunta guía.`,
@@ -89,13 +86,11 @@ export default function Nivel3Conexiones({
   }
 
   if (completado) {
-    const puntaje = calcularPuntaje(fallos, pistas);
     return (
       <RevelacionConcepto
         titulo="¡Conectaste el sistema!"
-        puntaje={puntaje}
         textoBoton="Ver mi plano final"
-        onContinuar={() => onComplete(puntaje)}
+        onContinuar={onComplete}
       >
         <p>
           Estas conexiones se llaman <strong>relaciones</strong>. Le dicen al
@@ -211,8 +206,8 @@ export default function Nivel3Conexiones({
         textoPendiente={`Completa las 5 frases (${llenas}/5)`}
         textoValidar="Validar conexiones"
         pistaTexto="Lee cada frase completa en voz alta, por ejemplo “Un Asistente ___ una Boleta”. Si suena lógico en la Feria de Cali, vas bien. Las acciones absurdas son las que sobran."
-        pistaVisible={pistas > 0}
-        onPista={() => setPistas(1)}
+        pistaVisible={pistaVisible}
+        onPista={() => setPistaVisible(true)}
         onValidar={validar}
         error={error}
       />

@@ -374,6 +374,68 @@ function barajar<T>(items: T[]): T[] {
   return copia;
 }
 
+/* ------------------------------------------------------------------ */
+/* Retroalimentación                                                   */
+/* ------------------------------------------------------------------ */
+
+type TipoZona = Exclude<TipoBloque, "distractor">;
+
+/** Cómo se llama cada parte del requerimiento, en palabras sencillas. */
+const NOMBRE_PARTE: Record<TipoZona, string> = {
+  given: "la condición inicial (Dado que…)",
+  when: "la acción de la persona (Cuando…)",
+  then: "la respuesta del sistema (Entonces…)",
+};
+
+/** Qué describe una tarjeta de cada tipo. */
+const QUE_DESCRIBE: Record<TipoZona, string> = {
+  given: "describe cómo están las cosas antes de empezar",
+  when: "es lo que hace la persona en la app",
+  then: "es lo que el sistema responde o hace después",
+};
+
+const PISTA =
+  "Lee cada tarjeta y pregúntate: ¿describe cómo están las cosas antes de empezar (Dado que), lo que hace la persona (Cuando) o lo que responde el sistema (Entonces)? Si cuenta algo que pasa en el evento pero no tiene que ver con usar la app, es un distractor y se queda en el banco.";
+
+interface ResultadoZona {
+  ok: boolean;
+  mensaje: string;
+}
+
+function revisarZona(indice: number, bloque: Bloque | null): ResultadoZona {
+  const esperado = ZONAS[indice].tipo as TipoZona;
+
+  if (!bloque) {
+    return {
+      ok: false,
+      mensaje: `Falta una tarjeta: aquí va ${NOMBRE_PARTE[esperado]}.`,
+    };
+  }
+  if (bloque.tipo === esperado) {
+    return {
+      ok: true,
+      mensaje: `¡Bien! Esta tarjeta ${QUE_DESCRIBE[esperado]}.`,
+    };
+  }
+  if (bloque.tipo === "distractor") {
+    return {
+      ok: false,
+      mensaje:
+        "Esta tarjeta es un distractor: cuenta algo que pasa en el evento, pero no es algo que la persona haga en la app ni algo que el sistema responda. Devuélvela al banco.",
+    };
+  }
+  const destino = ZONAS.findIndex((z) => z.tipo === bloque.tipo) + 1;
+  return {
+    ok: false,
+    mensaje: `Casi: esta tarjeta sí hace parte del requerimiento, pero ${QUE_DESCRIBE[bloque.tipo]}. Muévela a la zona ${destino}: ${NOMBRE_PARTE[bloque.tipo]}.`,
+  };
+}
+
+/** "El usuario está…" -> "el usuario está…" para armar la frase completa. */
+function enMinuscula(texto: string): string {
+  return texto.charAt(0).toLowerCase() + texto.slice(1);
+}
+
 export default function AnalistaSalsaChallenge() {
   const router = useRouter();
   const [pantalla, setPantalla] = useState<"intro" | "desafio">("intro");
@@ -384,22 +446,28 @@ export default function AnalistaSalsaChallenge() {
   const [estado, setEstado] = useState<"idle" | "correcto" | "incorrecto">(
     "idle",
   );
-  const [zonasInvalidas, setZonasInvalidas] = useState<number[]>([]);
+  const [revision, setRevision] = useState<(ResultadoZona | null)[]>([null, null, null]);
   const [intento, setIntento] = useState(0);
+  const [pistaVisible, setPistaVisible] = useState(false);
+
+  function prepararEjercicio(indiceFlujo: number, indiceEjercicio: number) {
+    setBanco(
+      barajar(
+        FLUJOS[indiceFlujo].ejercicios[indiceEjercicio].bloques.map((bloque) => bloque.id),
+      ),
+    );
+    setZonas([null, null, null]);
+    setEstado("idle");
+    setRevision([null, null, null]);
+    setIntento(0);
+    setPistaVisible(false);
+  }
 
   function handleComenzar() {
     const indiceFlujo = Math.floor(Math.random() * FLUJOS.length);
     setFlujoIndex(indiceFlujo);
     setEjercicioIndex(0);
-    setBanco(
-      barajar(
-        FLUJOS[indiceFlujo].ejercicios[0].bloques.map((bloque) => bloque.id),
-      ),
-    );
-    setZonas([null, null, null]);
-    setEstado("idle");
-    setZonasInvalidas([]);
-    setIntento(0);
+    prepararEjercicio(indiceFlujo, 0);
     setPantalla("desafio");
   }
 
@@ -410,30 +478,40 @@ export default function AnalistaSalsaChallenge() {
   const flujo = FLUJOS[flujoIndex];
   const feature = flujo.ejercicios[ejercicioIndex];
   const bloquesEnBanco = banco.filter((id) => !zonas.includes(id));
+  const zonaBloqueada = (indice: number) => revision[indice]?.ok === true;
+  const correctas = revision.filter((r) => r?.ok).length;
 
   function encontrarBloque(id: string) {
     return feature.bloques.find((bloque) => bloque.id === id) ?? null;
   }
 
+  /** Borra la revisión solo de las zonas que cambiaron. */
+  function limpiarRevision(indices: number[]) {
+    setRevision((actual) => actual.map((r, i) => (indices.includes(i) ? null : r)));
+    setEstado("idle");
+  }
+
   function soltarEnZona(indice: number, id: string) {
-    if (!id) return;
+    if (!id || estado === "correcto" || zonaBloqueada(indice)) return;
+    const otraZona = zonas.indexOf(id);
+    if (otraZona !== -1 && zonaBloqueada(otraZona)) return;
+
     setZonas((actual) => {
       const siguiente = [...actual];
-      const otraZona = siguiente.indexOf(id);
       if (otraZona !== -1 && otraZona !== indice) {
         siguiente[otraZona] = null;
       }
       siguiente[indice] = id;
       return siguiente;
     });
-    setEstado("idle");
-    setZonasInvalidas([]);
+    limpiarRevision(otraZona === -1 ? [indice] : [indice, otraZona]);
   }
 
   function devolverAlBanco(id: string) {
+    const indice = zonas.indexOf(id);
+    if (indice === -1 || zonaBloqueada(indice)) return;
     setZonas((actual) => actual.map((zona) => (zona === id ? null : zona)));
-    setEstado("idle");
-    setZonasInvalidas([]);
+    limpiarRevision([indice]);
   }
 
   function handleDropZona(indice: number, event: DragEvent<HTMLDivElement>) {
@@ -451,37 +529,32 @@ export default function AnalistaSalsaChallenge() {
   }
 
   function handleValidar() {
-    const invalidas: number[] = [];
-    zonas.forEach((id, indice) => {
-      const bloque = encontrarBloque(id ?? "");
-      if (!bloque || bloque.tipo !== ZONAS[indice].tipo) {
-        invalidas.push(indice);
-      }
-    });
+    const resultados = zonas.map((id, indice) =>
+      revisarZona(indice, id ? encontrarBloque(id) : null),
+    );
+    setRevision(resultados);
 
-    if (invalidas.length === 0) {
+    if (resultados.every((r) => r.ok)) {
       setEstado("correcto");
-      setZonasInvalidas([]);
       if (ejercicioIndex === 1) {
         completeStage(1);
       }
       return;
     }
     setEstado("incorrecto");
-    setZonasInvalidas(invalidas);
     setIntento((actual) => actual + 1);
   }
 
   function handleAvanzarEjercicio() {
     setEjercicioIndex(1);
-    setBanco(
-      barajar(flujo.ejercicios[1].bloques.map((bloque) => bloque.id)),
-    );
-    setZonas([null, null, null]);
-    setEstado("idle");
-    setZonasInvalidas([]);
-    setIntento(0);
+    prepararEjercicio(flujoIndex, 1);
   }
+
+  const bloquesFinales = zonas.map((id) => (id ? encontrarBloque(id) : null));
+  const historia =
+    estado === "correcto" && bloquesFinales.every(Boolean)
+      ? `Dado que ${enMinuscula(bloquesFinales[0]!.texto)}, cuando ${enMinuscula(bloquesFinales[1]!.texto)}, entonces ${enMinuscula(bloquesFinales[2]!.texto)}.`
+      : null;
 
   return (
     <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
@@ -527,6 +600,10 @@ export default function AnalistaSalsaChallenge() {
               />
             ))}
           </div>
+          <p className="mt-3 text-xs text-brand-support/70">
+            Hay 4 tarjetas que no hacen parte del requerimiento: son distractores
+            y deben quedarse en el banco.
+          </p>
         </div>
       </section>
 
@@ -545,11 +622,13 @@ export default function AnalistaSalsaChallenge() {
           {ZONAS.map((zona, indice) => {
             const id = zonas[indice];
             const bloque = id ? encontrarBloque(id) : null;
-            const invalida = estado === "incorrecto" && zonasInvalidas.includes(indice);
+            const resultado = revision[indice];
+            const invalida = resultado?.ok === false;
+            const bien = resultado?.ok === true;
 
             return (
               <motion.div
-                key={`${intento}-${indice}-${bloque?.id ?? "vacia"}`}
+                key={`${indice}-${invalida ? intento : "estable"}`}
                 animate={
                   invalida
                     ? { x: [0, -12, 12, -12, 12, -8, 8, 0] }
@@ -558,12 +637,14 @@ export default function AnalistaSalsaChallenge() {
                 transition={{ duration: 0.55 }}
                 onDragOver={(event) => event.preventDefault()}
                 onDrop={(event) => handleDropZona(indice, event)}
-                className={`rounded-2xl border-2 border-dashed p-5 text-left transition-colors ${
+                className={`rounded-2xl border-2 p-5 text-left transition-colors ${
                   invalida
-                    ? "border-red-400 bg-red-50"
-                    : bloque
-                      ? "border-brand-mid bg-brand-soft/10"
-                      : "border-brand-soft bg-white/60"
+                    ? "border-dashed border-red-400 bg-red-50"
+                    : bien
+                      ? "border-solid border-emerald-400 bg-emerald-50"
+                      : bloque
+                        ? "border-dashed border-brand-mid bg-brand-soft/10"
+                        : "border-dashed border-brand-soft bg-white/60"
                 }`}
               >
                 <div className="flex items-center justify-between gap-2">
@@ -578,15 +659,21 @@ export default function AnalistaSalsaChallenge() {
                   >
                     {zona.etiqueta}
                   </span>
-                  {bloque && (
-                    <button
-                      type="button"
-                      onClick={() => devolverAlBanco(bloque.id)}
-                      aria-label={`Devolver "${bloque.texto}" al banco`}
-                      className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-brand-soft text-brand-support transition hover:border-red-400 hover:text-red-500"
-                    >
-                      ✕
-                    </button>
+                  {bien ? (
+                    <span className="inline-flex h-7 w-7 items-center justify-center rounded-full bg-emerald-500 text-sm font-black text-white" aria-label="Zona correcta">
+                      ✓
+                    </span>
+                  ) : (
+                    bloque && (
+                      <button
+                        type="button"
+                        onClick={() => devolverAlBanco(bloque.id)}
+                        aria-label={`Devolver "${bloque.texto}" al banco`}
+                        className="inline-flex h-7 w-7 items-center justify-center rounded-full border border-brand-soft text-brand-support transition hover:border-red-400 hover:text-red-500"
+                      >
+                        ✕
+                      </button>
+                    )
                   )}
                 </div>
 
@@ -596,6 +683,7 @@ export default function AnalistaSalsaChallenge() {
                       id={bloque.id}
                       texto={bloque.texto}
                       invalida={invalida}
+                      correcta={bien}
                     />
                   ) : (
                     <p className="rounded-xl border-2 border-dashed border-brand-soft/60 bg-white/40 px-4 py-3 text-center text-sm text-brand-support/40">
@@ -603,26 +691,57 @@ export default function AnalistaSalsaChallenge() {
                     </p>
                   )}
                 </div>
+
+                {resultado && (
+                  <p
+                    className={`mt-3 flex gap-2 text-sm leading-snug ${
+                      resultado.ok ? "text-emerald-700" : "font-medium text-red-600"
+                    }`}
+                  >
+                    <span aria-hidden="true">{resultado.ok ? "✓" : "✗"}</span>
+                    <span>{resultado.mensaje}</span>
+                  </p>
+                )}
               </motion.div>
             );
           })}
         </div>
 
         {estado !== "correcto" && (
-          <button
-            type="button"
-            onClick={handleValidar}
-            className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
-          >
-            Validar Requerimiento
-          </button>
-        )}
+          <div className="mt-6 space-y-4">
+            {pistaVisible && (
+              <div className="animate-fade-in rounded-xl border border-brand-mid/50 bg-brand-soft/10 p-3 text-sm leading-relaxed text-brand-support">
+                <strong>💡 Pista:</strong> {PISTA}
+              </div>
+            )}
 
-        {estado === "incorrecto" && (
-          <p className="mt-5 animate-fade-in rounded-xl border border-amber-300 bg-amber-50 p-3 text-center text-sm font-semibold text-amber-800">
-            ⚠️ Requerimiento no válido. Asegúrate de identificar el contexto
-            inicial, la acción y el resultado del sistema entre las opciones.
-          </p>
+            {estado === "incorrecto" && (
+              <p className="animate-fade-in rounded-xl border border-amber-300 bg-amber-50 p-3 text-center text-sm font-semibold text-amber-800">
+                {correctas > 0
+                  ? `⚠️ Vas bien: ${correctas} de 3 zonas están correctas. Lee la explicación en rojo de cada zona y corrígela.`
+                  : "⚠️ Todavía no hay zonas correctas. Lee la explicación en rojo de cada zona y vuelve a intentarlo."}
+              </p>
+            )}
+
+            <div className="flex flex-col gap-3 sm:flex-row">
+              {!pistaVisible && (
+                <button
+                  type="button"
+                  onClick={() => setPistaVisible(true)}
+                  className="rounded-full border-2 border-brand-soft px-6 py-3 text-sm font-bold text-brand-support transition-all hover:border-brand-support"
+                >
+                  💡 Pedir pista
+                </button>
+              )}
+              <button
+                type="button"
+                onClick={handleValidar}
+                className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
+              >
+                Validar Requerimiento
+              </button>
+            </div>
+          </div>
         )}
 
         {estado === "correcto" && (
@@ -631,9 +750,27 @@ export default function AnalistaSalsaChallenge() {
             <div className="animate-fade-in rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center">
               <p className="text-3xl">🎺🎉</p>
               <p className="mt-3 text-lg font-bold text-emerald-700">
-                ¡Excelente trabajo de Análisis! Has filtrado los distractores y
-                estructurado el requerimiento correctamente.
+                ¡Requerimiento listo! Separaste los distractores y pusiste cada
+                parte en su lugar.
               </p>
+
+              {historia && (
+                <div className="mt-4 rounded-xl border border-emerald-200 bg-white p-4 text-left">
+                  <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">
+                    Así queda la historia de usuario completa
+                  </p>
+                  <p className="mt-2 text-sm leading-relaxed text-brand-support">
+                    {historia}
+                  </p>
+                </div>
+              )}
+
+              <p className="mt-4 text-sm leading-relaxed text-brand-support/90">
+                {ejercicioIndex === 0
+                  ? "Con esta frase, el equipo de desarrollo sabe en qué situación ocurre, qué hace la persona y qué debe responder la app. ¡Vamos con el segundo caso!"
+                  : "¡Completaste los 2 ejercicios! Así trabaja un analista: convierte lo que la gente necesita en requerimientos claros que todo el equipo entiende igual."}
+              </p>
+
               {ejercicioIndex === 0 ? (
                 <button
                   type="button"
@@ -749,10 +886,13 @@ function TarjetaArrastrable({
   id,
   texto,
   invalida = false,
+  correcta = false,
 }: {
   id: string;
   texto: string;
   invalida?: boolean;
+  /** Tarjeta ya validada: queda fija en su zona. */
+  correcta?: boolean;
 }) {
   function handleDragStart(event: DragEvent<HTMLDivElement>) {
     event.dataTransfer.setData("text/plain", id);
@@ -761,10 +901,14 @@ function TarjetaArrastrable({
 
   return (
     <div
-      draggable
+      draggable={!correcta}
       onDragStart={handleDragStart}
-      className={`flex cursor-grab items-start gap-3 rounded-xl border-2 border-brand-soft bg-white p-3 text-left shadow-sm transition active:cursor-grabbing hover:-translate-y-0.5 ${
-        invalida ? "border-red-400 ring-2 ring-red-300" : ""
+      className={`flex items-start gap-3 rounded-xl border-2 bg-white p-3 text-left shadow-sm transition ${
+        correcta
+          ? "cursor-default border-emerald-400"
+          : invalida
+            ? "cursor-grab border-red-400 ring-2 ring-red-300 active:cursor-grabbing hover:-translate-y-0.5"
+            : "cursor-grab border-brand-soft active:cursor-grabbing hover:-translate-y-0.5"
       }`}
     >
       <p className="text-sm font-medium leading-snug text-brand-support">

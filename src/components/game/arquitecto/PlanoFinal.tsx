@@ -1,10 +1,8 @@
 "use client";
 
-import { MedalIcon, TrophyIcon } from "@/components/game/icons";
+import { TrophyIcon } from "@/components/game/icons";
 import { Confetti } from "./ArquitectoUI";
 import { CONEXIONES, MOLDES, verboPorId, type MoldeId } from "./feria-data";
-
-export const PUNTAJE_MAXIMO_TOTAL = 300;
 
 const ETAPAS = [
   { etapa: "Requisitos", rol: "Analista", actual: false },
@@ -76,61 +74,23 @@ function ConectorVertical({ texto, haciaArriba = false }: { texto: string; hacia
   );
 }
 
-export function obtenerNivel(total: number) {
-  if (total >= 260) {
-    return {
-      label: "Arquitecto Maestro del Salsódromo",
-      color: "text-amber-600",
-      bg: "border-amber-300 bg-amber-50",
-      icono: (
-        <span className="text-amber-500">
-          <TrophyIcon className="h-16 w-16" />
-        </span>
-      ),
-    };
-  }
-  if (total >= 180) {
-    return {
-      label: "Arquitecto de la Feria",
-      color: "text-brand-primary",
-      bg: "border-brand-mid bg-brand-soft/30",
-      icono: (
-        <span className="text-brand-support">
-          <MedalIcon medalla={2} className="h-16 w-16" />
-        </span>
-      ),
-    };
-  }
-  return {
-    label: "Aprendiz de Arquitecto",
-    color: "text-orange-600",
-    bg: "border-orange-200 bg-orange-50",
-    icono: (
-      <span className="text-orange-500">
-        <MedalIcon medalla={3} className="h-16 w-16" />
-      </span>
-    ),
-  };
-}
-
 export default function PlanoFinal({
-  puntajes,
   onReintentar,
   onContinuar,
 }: {
-  puntajes: [number, number, number];
   onReintentar: () => void;
   onContinuar: () => void;
 }) {
-  const total = puntajes[0] + puntajes[1] + puntajes[2];
-  const nivel = obtenerNivel(total);
-
   return (
     <div className="relative space-y-8">
       <Confetti />
 
       <div className="text-center">
-        <div className="mb-4 flex justify-center">{nivel.icono}</div>
+        <div className="mb-4 flex justify-center">
+          <span className="text-amber-500">
+            <TrophyIcon className="h-16 w-16" />
+          </span>
+        </div>
         <h2 className="text-3xl font-extrabold text-brand-support">¡Plano terminado!</h2>
         <p className="mx-auto mt-2 max-w-2xl text-brand-support/80">
           Esto que ves es un <strong>diagrama de clases</strong>: el plano que
@@ -215,33 +175,6 @@ export default function PlanoFinal({
               plano, el equipo de desarrollo ya puede empezar a programar.
             </p>
           </div>
-        </div>
-      </div>
-
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        {[
-          { label: "Moldes y ejemplos", score: puntajes[0], bold: false },
-          { label: "Características", score: puntajes[1], bold: false },
-          { label: "Conexiones", score: puntajes[2], bold: false },
-          { label: `Total (máx. ${PUNTAJE_MAXIMO_TOTAL})`, score: total, bold: true },
-        ].map((item) => (
-          <div
-            key={item.label}
-            className={`rounded-xl border p-4 text-center ${
-              item.bold ? "border-brand-primary bg-brand-soft/30" : "border-brand-soft bg-brand-light/40"
-            }`}
-          >
-            <div className={`text-2xl font-black ${item.bold ? "text-brand-primary" : "text-brand-support"}`}>
-              {item.score} pts
-            </div>
-            <div className="text-xs text-brand-support/80">{item.label}</div>
-          </div>
-        ))}
-      </div>
-
-      <div className="text-center">
-        <div className={`inline-block rounded-xl border-2 px-6 py-3 ${nivel.bg}`}>
-          <span className={`text-lg font-extrabold ${nivel.color}`}>🏅 {nivel.label}</span>
         </div>
       </div>
 
