@@ -145,10 +145,10 @@ export default function ArquitectoRetoPage() {
               </h1>
             </div>
             <Image
-              src="/personajes/arquitecto.webp"
+              src="/personajes/arqui-nuevo.webp"
               alt="Arquitecto de Software"
-              width={601}
-              height={560}
+              width={1680}
+              height={1446}
               priority
               className="pointer-events-none -mb-px hidden h-32 w-auto sm:block lg:h-52"
             />

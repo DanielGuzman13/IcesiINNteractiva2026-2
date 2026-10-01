@@ -93,7 +93,6 @@ export default function EquipoRoles() {
           transition={{ repeat: Infinity, duration: 1.8, ease: "easeInOut" }}
           className="mx-auto mt-6 inline-flex items-center gap-2 rounded-full bg-brand-primary px-5 py-2.5 text-sm font-bold text-white shadow-lg shadow-brand-primary/30 sm:text-base"
         >
-          <span aria-hidden="true">👆</span>
           Toca un rol para ver qué hace dentro de un proyecto de software
         </motion.p>
       </header>

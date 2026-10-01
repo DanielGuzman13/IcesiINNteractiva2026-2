@@ -40,8 +40,9 @@ export default function BackendRetoPage() {
             archivo="petronio-alvarez / backend / caseta.py"
             titulo="Backend Engineer"
             descripcion="Programa con bloques la lógica de la caseta de gastronomía pacífica."
-            imagen="/personajes/backend.webp"
-            anchoImagen={415}
+            imagen="/personajes/front-nuevo.webp"
+            anchoImagen={1218}
+            altoImagen={1488}
             foto={{
               src: "/media/eventos/petronio-cocina.jpg",
               alt: "Cocineras sirviendo arroz y platos típicos del Pacífico en una caseta del Festival Petronio Álvarez",

@@ -8,6 +8,7 @@ export default function EncabezadoEditor({
   descripcion,
   imagen,
   anchoImagen,
+  altoImagen = 1488,
   accion,
   foto,
   fotoDerecha = 14,
@@ -18,6 +19,7 @@ export default function EncabezadoEditor({
   descripcion: string;
   imagen: string;
   anchoImagen: number;
+  altoImagen?: number;
   accion?: ReactNode;
   foto?: Omit<FotoPolaroidProps, "className">;
   fotoDerecha?: number;
@@ -57,7 +59,7 @@ export default function EncabezadoEditor({
           src={imagen}
           alt={titulo}
           width={anchoImagen}
-          height={560}
+          height={altoImagen}
           priority
           className="pointer-events-none absolute bottom-0 right-4 hidden h-52 w-auto drop-shadow-[4px_6px_0_rgba(0,0,0,0.12)] md:block"
         />

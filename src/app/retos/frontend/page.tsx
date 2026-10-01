@@ -40,8 +40,9 @@ export default function FrontendRetoPage() {
           archivo="petronio-alvarez / frontend / ritmos.tsx"
           titulo="Frontend / UX"
           descripcion="Mejora la app “Ritmos del Pacífico”."
-          imagen="/personajes/frontend.webp"
-          anchoImagen={571}
+          imagen="/personajes/back-nuevo.webp"
+          anchoImagen={1200}
+          altoImagen={1486}
           foto={{
             src: "/media/eventos/petronio-tarima.jpg",
             alt: "Agrupación del Pacífico con trajes blancos y fucsia bailando en la tarima del Festival Petronio Álvarez",

@@ -37,8 +37,9 @@ export default function QaRetoPage() {
           ledClase="bg-brand-mid animate-pulse"
           titulo="QA Engineer"
           descripcion="Carrera del Pacífico: detección de bugs y auditoría."
-          imagen="/personajes/qa.webp"
-          anchoImagen={532}
+          imagen="/personajes/qa-nuevo.webp"
+          anchoImagen={1405}
+          altoImagen={1458}
           foto={{
             src: "/media/eventos/carrera-pacifico.jpg",
             alt: "Corredora de la Carrera del Pacífico pasando junto a una chirimía que toca en la calle",
@@ -70,4 +71,4 @@ export default function QaRetoPage() {
       </div>
     </main>
   );
-}
+}

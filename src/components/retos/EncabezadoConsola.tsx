@@ -10,6 +10,7 @@ export default function EncabezadoConsola({
   descripcion,
   imagen,
   anchoImagen,
+  altoImagen = 1488,
   foto,
   fotoDerecha = 15,
   distintivo,
@@ -21,6 +22,7 @@ export default function EncabezadoConsola({
   descripcion: string;
   imagen: string;
   anchoImagen: number;
+  altoImagen?: number;
   foto?: Omit<FotoPolaroidProps, "className">;
   fotoDerecha?: number;
   distintivo?: ReactNode;
@@ -56,7 +58,7 @@ export default function EncabezadoConsola({
           src={imagen}
           alt={titulo}
           width={anchoImagen}
-          height={560}
+          height={altoImagen}
           priority
           className="pointer-events-none absolute bottom-0 right-4 hidden h-52 w-auto drop-shadow-[0_0_18px_rgba(255,255,255,0.18)] md:block"
         />

@@ -37,8 +37,9 @@ export default function CiberseguridadRetoPage() {
           ledClase="bg-brand-alerta animate-pulse"
           titulo="Ciberseguridad"
           descripcion="Incident Response: restauración del servidor de la Carrera del Pacífico."
-          imagen="/personajes/qa.webp"
-          anchoImagen={532}
+          imagen="/personajes/qa-nuevo.webp"
+          anchoImagen={1405}
+          altoImagen={1458}
           foto={{
             src: "/media/eventos/carrera-pacifico.jpg",
             alt: "Corredora de la Carrera del Pacífico pasando junto a una chirimía que toca en la calle",
@@ -71,4 +72,4 @@ export default function CiberseguridadRetoPage() {
       </div>
     </main>
   );
-}
+}

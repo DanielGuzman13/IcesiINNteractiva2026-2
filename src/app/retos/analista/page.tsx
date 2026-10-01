@@ -60,10 +60,10 @@ export default function AnalistaRetoPage() {
           />
 
           <Image
-            src="/personajes/analista.webp"
+            src="/personajes/analista-nuevo.webp"
             alt="Analista de Requerimientos"
-            width={527}
-            height={560}
+            width={1365}
+            height={1489}
             priority
             className="pointer-events-none absolute bottom-0 right-4 hidden h-52 w-auto drop-shadow-[4px_6px_0_rgba(0,0,0,0.12)] md:block"
           />
