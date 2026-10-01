@@ -3,6 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { continuarConCierre } from "@/lib/personajes";
+import { barajar } from "@/lib/random";
 import { motion } from "framer-motion";
 
 type Categoria = "infantil" | "juvenil" | "adulto";
@@ -33,6 +34,68 @@ const DISTANCIAS_POR_CATEGORIA: Record<Categoria, Distancia[]> = {
   adulto: ["5k", "10k", "21k", "42k"],
 };
 
+type Dominio = "texto" | "numeros" | "rango" | "lista" | "si-no";
+
+const DOMINIOS: { id: Dominio; label: string }[] = [
+  { id: "texto", label: "Texto (solo letras)" },
+  { id: "numeros", label: "Solo números" },
+  { id: "rango", label: "Número con rango" },
+  { id: "lista", label: "Lista cerrada (opciones)" },
+  { id: "si-no", label: "Casilla (Sí/No)" },
+];
+
+interface CampoEvaluado {
+  id: string;
+  campo: string;
+  esperado: Dominio;
+  pista: string;
+}
+
+const CAMPOS_EVALUADOS: CampoEvaluado[] = [
+  {
+    id: "nombre",
+    campo: "Nombre Completo",
+    esperado: "texto",
+    pista:
+      "Un nombre no debería aceptar números ni símbolos: ¿qué pasaría si alguien escribe “Jhon3”?",
+  },
+  {
+    id: "documento",
+    campo: "Número de Documento",
+    esperado: "numeros",
+    pista:
+      "El documento identifica con números: si el dominio fuera texto, ¿el 1144012345 sería un dato válido?",
+  },
+  {
+    id: "edad",
+    campo: "Edad",
+    esperado: "rango",
+    pista:
+      "Si el dominio fuera “solo números”, ¿el -5 o el 200 serían un error? Falta algo más que un tipo de dato.",
+  },
+  {
+    id: "telefono",
+    campo: "Teléfono",
+    esperado: "numeros",
+    pista:
+      "El teléfono se marca con dígitos: ¿debería poder contener letras?",
+  },
+  {
+    id: "distancia",
+    campo: "Distancia",
+    esperado: "lista",
+    pista:
+      "Solo hay cuatro distancias y además no todas valen para cada categoría. ¿Cómo se llama ese tipo de dominio?",
+  },
+  {
+    id: "terminos",
+    campo: "Términos y Condiciones",
+    esperado: "si-no",
+    pista:
+      "Este control no es un texto que se escribe ni un número: solo tiene dos estados.",
+  },
+];
+
 const COLORES_CONFETI = [
   "#F53E3E",
   "#FB8F3C",
@@ -54,8 +117,10 @@ export default function QACarreraForm() {
   const [aceptaTerminos, setAceptaTerminos] = useState(false);
   const [registrado, setRegistrado] = useState<Registrado | null>(null);
 
-  const [respuestaAuditoria, setRespuestaAuditoria] = useState("");
-  const [estadoAuditoria, setEstadoAuditoria] = useState<
+  const [campos] = useState(() => barajar(CAMPOS_EVALUADOS));
+  const [dominios, setDominios] = useState<Record<string, Dominio>>({});
+  const [revision, setRevision] = useState<Record<string, boolean>>({});
+  const [estadoDominios, setEstadoDominios] = useState<
     "idle" | "correcto" | "incorrecto"
   >("idle");
 
@@ -74,13 +139,26 @@ export default function QACarreraForm() {
     setRegistrado({ nombre: nombre.trim(), categoria, distancia });
   }
 
-  function handleValidarReporte() {
-    // BUG-1 a BUG-6 están presentes en este formulario; el total esperado es 6.
-    if (respuestaAuditoria.trim() === "6") {
-      setEstadoAuditoria("correcto");
-    } else {
-      setEstadoAuditoria("incorrecto");
+  function handleDominioChange(id: string, valor: Dominio) {
+    setDominios((actual) => ({ ...actual, [id]: valor }));
+    setRevision((actual) => {
+      if (!(id in actual)) return actual;
+      const siguiente = { ...actual };
+      delete siguiente[id];
+      return siguiente;
+    });
+    if (estadoDominios !== "idle") setEstadoDominios("idle");
+  }
+
+  function handleValidarDominios() {
+    const resultados: Record<string, boolean> = {};
+    for (const campo of campos) {
+      resultados[campo.id] = dominios[campo.id] === campo.esperado;
     }
+    setRevision(resultados);
+    setEstadoDominios(
+      campos.every((campo) => resultados[campo.id]) ? "correcto" : "incorrecto",
+    );
   }
 
   const distanciasDisponibles = DISTANCIAS_POR_CATEGORIA[categoria];
@@ -172,6 +250,8 @@ export default function QACarreraForm() {
           <span className="mt-2 block text-xs text-brand-support/70">
             Ingresa un número de teléfono válido.
           </span>
+          {/* BUG-7: El campo "Teléfono" no restringe la entrada a dígitos, por
+              lo que acepta letras. */}
         </label>
 
         <fieldset className="mt-6 text-left">
@@ -278,92 +358,137 @@ export default function QACarreraForm() {
         )}
       </form>
 
-      <section className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
+      <section className="relative w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
         <div className="mb-8 text-center">
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
             Eres el ingeniero de QA
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-brand-support/80">
-            Explora el formulario de inscripción de la Carrera del Pacífico.
-            Detecta las fallas de validación, lógica y UX. Ingresa el total
-            exacto de errores encontrados para completar el módulo.
+            Declara el dominio de cada campo: qué tipo de dato debería aceptar.
+            Sin el dominio esperado no hay forma de saber si un valor es un
+            error o un dato válido.
           </p>
         </div>
 
-        {estadoAuditoria === "correcto" && <Confetti />}
+        {estadoDominios === "correcto" && <Confetti />}
 
         <div className="rounded-2xl border-2 border-brand-soft bg-white/70 p-5 text-left">
-          <label className="block" htmlFor="qa-auditoria">
-            <span className="mb-2 block text-sm font-bold uppercase tracking-wide text-brand-support">
-              ¿Cuántos errores encontraste?
-            </span>
-            <input
-              id="qa-auditoria"
-              type="number"
-              inputMode="numeric"
-              value={respuestaAuditoria}
-              onChange={(event) => {
-                setRespuestaAuditoria(event.target.value);
-                setEstadoAuditoria("idle");
-              }}
-              placeholder="Ej. 5"
-              aria-invalid={estadoAuditoria === "incorrecto"}
-              className={`w-full rounded-2xl border-2 bg-white/80 px-5 py-3.5 text-base text-brand-support shadow-sm outline-none transition placeholder:text-brand-support/50 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20 ${
-                estadoAuditoria === "incorrecto"
-                  ? "border-red-400"
-                  : "border-brand-soft"
-              }`}
-            />
-          </label>
+          <ol className="space-y-3">
+            {campos.map((campo, indice) => {
+              const revisada = campo.id in revision;
+              const correcta = revisada && revision[campo.id];
+              return (
+                <li
+                  key={campo.id}
+                  className={`rounded-2xl border-2 bg-white/80 p-4 transition ${
+                    correcta
+                      ? "border-emerald-400"
+                      : revisada
+                        ? "border-amber-400"
+                        : "border-brand-soft"
+                  }`}
+                >
+                  <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
+                    <label
+                      className="text-sm font-bold uppercase tracking-wide text-brand-support"
+                      htmlFor={`qa-dominio-${campo.id}`}
+                    >
+                      <span className="text-brand-primary">
+                        {indice + 1}.
+                      </span>{" "}
+                      {campo.campo}
+                    </label>
+                    <select
+                      id={`qa-dominio-${campo.id}`}
+                      value={dominios[campo.id] ?? ""}
+                      onChange={(event) =>
+                        handleDominioChange(
+                          campo.id,
+                          event.target.value as Dominio,
+                        )
+                      }
+                      aria-invalid={revisada && !correcta}
+                      className={`w-full rounded-2xl border-2 bg-white px-4 py-2.5 text-sm font-semibold text-brand-support shadow-sm outline-none transition focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20 sm:w-56 ${
+                        correcta
+                          ? "border-emerald-400"
+                          : revisada
+                            ? "border-amber-400"
+                            : "border-brand-soft"
+                      }`}
+                    >
+                      <option value="">Selecciona el dominio…</option>
+                      {DOMINIOS.map((dominio) => (
+                        <option key={dominio.id} value={dominio.id}>
+                          {dominio.label}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
 
-          <button
-            type="button"
-            onClick={handleValidarReporte}
-            className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-soft px-8 py-3.5 text-lg font-bold text-white shadow-lg shadow-brand-soft/30 transition-all duration-300 hover:bg-brand-primary"
-          >
-            Validar Reporte
-          </button>
+                  {correcta && (
+                    <p className="mt-2 text-xs font-semibold text-emerald-700">
+                      ✓ Dominio correcto
+                    </p>
+                  )}
 
-          {estadoAuditoria === "correcto" && (
-            <div className="mt-5 animate-fade-in rounded-xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center">
-              <p className="text-base font-bold text-emerald-700">
-                ¡Excelente trabajo de QA! Has detectado todos los errores del
-                formulario de la Carrera del Pacífico.
-              </p>
-              <p className="mt-1 text-xs text-emerald-700/80">
-                Has identificado los 6 bugs: validación (edad, documento,
-                nombre), lógica (categoría), flujo (términos y condiciones) y
-                UX (botón).
-              </p>
-            </div>
+                  {revisada && !correcta && (
+                    <p className="mt-2 text-xs leading-relaxed text-amber-800">
+                      ✗ {campo.pista}
+                    </p>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+
+          {estadoDominios !== "correcto" && (
+            <button
+              type="button"
+              onClick={handleValidarDominios}
+              className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-soft px-8 py-3.5 text-lg font-bold text-white shadow-lg shadow-brand-soft/30 transition-all duration-300 hover:bg-brand-primary"
+            >
+              Validar Clasificación
+            </button>
           )}
 
-          {estadoAuditoria === "incorrecto" && (
+          {estadoDominios === "incorrecto" && (
             <p className="mt-5 animate-fade-in rounded-xl border border-amber-300 bg-amber-50 p-3 text-center text-sm font-semibold text-amber-800">
-              Estás cerca. Revisa bien los campos numéricos, las opciones de
-              categoría y el comportamiento de los botones.
+              Aún hay dominios mal declarados. Revisa las filas en ámbar: el
+              error está en el tipo de dato que esperas, no en contar
+              equivocado.
             </p>
           )}
 
-          {estadoAuditoria === "correcto" && (
-            <button
-              type="button"
-              onClick={() => continuarConCierre("qa", router.push)}
-              className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
-            >
-              Continuar
-              <svg
-                viewBox="0 0 24 24"
-                className="h-5 w-5"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
+          {estadoDominios === "correcto" && (
+            <div className="mt-6 animate-fade-in rounded-xl border-2 border-emerald-300 bg-emerald-50 p-4 text-center">
+              <p className="text-base font-bold text-emerald-700">
+                ¡Excelente trabajo de QA! Has declarado el dominio correcto de
+                los 6 campos de la Carrera del Pacífico.
+              </p>
+              <p className="mt-1 text-xs text-emerald-700/80">
+                Nombre y documento: texto y solo números. Edad: número con
+                rango. Teléfono: solo números. Distancia: lista cerrada.
+                Términos: casilla de Sí/No.
+              </p>
+              <button
+                type="button"
+                onClick={() => continuarConCierre("qa", router.push)}
+                className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
               >
-                <path d="M5 12h14M12 5l7 7-7 7" />
-              </svg>
-            </button>
+                Continuar
+                <svg
+                  viewBox="0 0 24 24"
+                  className="h-5 w-5"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                >
+                  <path d="M5 12h14M12 5l7 7-7 7" />
+                </svg>
+              </button>
+            </div>
           )}
         </div>
       </section>
