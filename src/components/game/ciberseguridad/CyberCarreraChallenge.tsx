@@ -45,6 +45,34 @@ const EXPRESIONES: string[] = [
   "CALENOAMOR",
 ];
 
+interface PistaDesplazamiento {
+  id: string;
+  acertijo: string;
+}
+
+const PISTAS_DESPLAZAMIENTO: PistaDesplazamiento[] = [
+  {
+    id: "maraton",
+    acertijo:
+      "La clave de desplazamiento es igual al número de kilómetros oficiales de la Media Maratón de Cali dividida entre 7",
+  },
+  {
+    id: "futbol",
+    acertijo:
+      "La clave de desplazamiento es igual al número total de jugadores que inician un partido de fútbol en un equipo menos 8",
+  },
+  {
+    id: "colombia",
+    acertijo:
+      "La clave de desplazamiento es igual al número total de departamentos que tiene Colombia dividido entre 8, y al resultado réstale 1",
+  },
+  {
+    id: "heptagono",
+    acertijo:
+      "La clave de desplazamiento es igual al número de lados que tiene un heptágono menos 4",
+  },
+];
+
 function cifrarCesar(texto: string, posiciones: number) {
   const abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   return texto
@@ -87,9 +115,15 @@ export default function CyberCarreraChallenge() {
       ? 0
       : Math.floor(Math.random() * EXPRESIONES.length),
   );
+  const [pistaIndex] = useState(() =>
+    typeof window === "undefined"
+      ? 0
+      : Math.floor(Math.random() * PISTAS_DESPLAZAMIENTO.length),
+  );
 
   const expresion = EXPRESIONES[expresionIndex];
   const encriptado = cifrarCesar(expresion, 3);
+  const pista = PISTAS_DESPLAZAMIENTO[pistaIndex];
 
   function handleRestaurar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -100,7 +134,7 @@ export default function CyberCarreraChallenge() {
       return;
     }
     setError(
-      "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo (21K ÷ 7 = 3) y retroceder 3 posiciones en el abecedario para cada letra.",
+      "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo de la pista de desplazamiento y retroceder 3 posiciones en el abecedario para cada letra.",
     );
     setIntentoFallido((current) => current + 1);
   }
@@ -140,11 +174,11 @@ export default function CyberCarreraChallenge() {
                 <p className="text-xs font-bold uppercase tracking-wide text-brand-support">
                   Pista: clave de desplazamiento
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-brand-support/85">
-                  &ldquo;La clave de desplazamiento es igual al número de kilómetros
-                  oficiales de la Media Maratón de Cali (21K) dividida entre 7&rdquo;
-                  (21 ÷ 7 = 3, Desplazamiento = 3 posiciones hacia atrás en el
-                  abecedario).
+                <p
+                  suppressHydrationWarning
+                  className="mt-1 text-xs leading-relaxed text-brand-support/85"
+                >
+                  &ldquo;{pista.acertijo}&rdquo;.
                 </p>
               </div>
               <Image
