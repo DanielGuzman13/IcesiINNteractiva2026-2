@@ -43,7 +43,8 @@ export default function AnalistaRetoPage() {
           </h1>
 
           <div className="mt-5 max-w-md -rotate-1 bg-brand-mid px-4 py-3 text-sm font-medium leading-snug text-brand-support shadow-[3px_4px_0_rgba(0,0,0,0.18)]">
-            Mundial de Salsa de Cali: votación en vivo y requerimientos BDD.
+            Mundial de Salsa de Cali: votación en vivo, historias de usuario y
+            criterios de aceptación.
           </div>
 
           <span className="absolute right-6 top-5 hidden rotate-[7deg] border-2 border-double border-brand-primary/70 px-3 py-1 font-mono text-xs font-bold uppercase tracking-widest text-brand-primary/70 md:right-64 md:block lg:right-[9.5rem] lg:top-4 lg:px-2 lg:text-[10px] lg:tracking-wider">

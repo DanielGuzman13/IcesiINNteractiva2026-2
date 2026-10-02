@@ -6,7 +6,10 @@ import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
 import { continuarConCierre } from "@/lib/personajes";
 
-type TipoBloque = "given" | "when" | "then" | "distractor";
+type TipoParteHU = "como" | "quiero" | "para";
+type TipoParteBDD = "dado" | "cuando" | "entonces";
+type TipoParte = TipoParteHU | TipoParteBDD;
+type TipoBloque = TipoParte | "distractor";
 
 interface Bloque {
   id: string;
@@ -14,138 +17,224 @@ interface Bloque {
   texto: string;
 }
 
-interface Feature {
-  nombre: string;
-  scenario: string;
+/** Una de las tres partes en las que se descompone un paso del reto. */
+interface Parte {
+  tipo: TipoParte;
+  etiqueta: string;
+  /** Nombre corto de la parte, para textos breves. */
+  corto: string;
+  /** Cómo se llama esa parte, para los mensajes de retroalimentación. */
+  resumen: string;
+  /** Qué información guarda esa parte. */
+  describe: string;
+  /** Clases del badge de la zona. */
+  color: string;
+}
+
+interface Historia {
+  rotulo: string;
+  titulo: string;
+  modo: "hu" | "bdd";
+  partes: Parte[];
   bloques: Bloque[];
 }
 
 interface Flujo {
   nombre: string;
-  ejercicios: Feature[];
+  pasos: Historia[];
 }
 
-const ZONAS: { tipo: TipoBloque; etiqueta: string }[] = [
-  { tipo: "given", etiqueta: "1. Condición Inicial (GIVEN)" },
-  { tipo: "when", etiqueta: "2. Acción del Usuario (WHEN)" },
-  { tipo: "then", etiqueta: "3. Resultado del Sistema (THEN)" },
+const PARTES_HU: Parte[] = [
+  {
+    tipo: "como",
+    etiqueta: "1. COMO — ¿Quién es la persona?",
+    corto: "Como",
+    resumen: "quién es la persona que vive el problema",
+    describe: "dice quién es la persona que usa la app",
+    color: "bg-brand-soft text-white",
+  },
+  {
+    tipo: "quiero",
+    etiqueta: "2. QUIERO — ¿Qué quiere hacer?",
+    corto: "Quiero",
+    resumen: "la acción que la persona quiere poder hacer",
+    describe: "dice qué quiere hacer la persona",
+    color: "bg-brand-primary text-white",
+  },
+  {
+    tipo: "para",
+    etiqueta: "3. PARA — ¿Para qué le sirve?",
+    corto: "Para",
+    resumen: "el beneficio que la persona busca",
+    describe: "dice para qué le sirve a la persona",
+    color: "bg-brand-mid text-brand-support",
+  },
 ];
 
-const TABLA_GHERKIN: { palabra: string; significado: string; ejemplo: string }[] = [
+const PARTES_BDD: Parte[] = [
   {
-    palabra: "GIVEN (Dado que...)",
-    significado: "Contexto o condición inicial necesaria",
-    ejemplo: "Dado que el usuario está registrado",
+    tipo: "dado",
+    etiqueta: "1. DADO QUE — ¿En qué situación?",
+    corto: "Dado que",
+    resumen: "la condición inicial (Dado que…)",
+    describe: "describe cómo están las cosas antes de empezar",
+    color: "bg-brand-soft text-white",
   },
   {
-    palabra: "WHEN (Cuando...)",
-    significado: "Acción o evento realizado por el usuario",
-    ejemplo: "Cuando presiona el botón de comprar",
+    tipo: "cuando",
+    etiqueta: "2. CUANDO — ¿Qué hace la persona?",
+    corto: "Cuando",
+    resumen: "la acción de la persona (Cuando…)",
+    describe: "describe lo que hace la persona en la app",
+    color: "bg-brand-primary text-white",
   },
   {
-    palabra: "THEN (Entonces...)",
-    significado: "Resultado esperado del sistema",
-    ejemplo: "Entonces se genera su comprobante",
+    tipo: "entonces",
+    etiqueta: "3. ENTONCES — ¿Qué responde el sistema?",
+    corto: "Entonces",
+    resumen: "la respuesta del sistema (Entonces…)",
+    describe: "describe lo que responde el sistema",
+    color: "bg-brand-mid text-brand-support",
+  },
+];
+
+const TABLA_HU: { palabra: string; pregunta: string; ejemplo: string }[] = [
+  {
+    palabra: "COMO",
+    pregunta: "¿Quién es la persona que necesita la solución?",
+    ejemplo: "Como espectador del Mundial de Salsa",
+  },
+  {
+    palabra: "QUIERO",
+    pregunta: "¿Qué quiere hacer?",
+    ejemplo: "Quiero emitir mi voto desde la app oficial",
+  },
+  {
+    palabra: "PARA",
+    pregunta: "¿Para qué le sirve?",
+    ejemplo: "Para apoyar a mis artistas favoritos",
+  },
+];
+
+const TABLA_BDD: { palabra: string; pregunta: string; ejemplo: string }[] = [
+  {
+    palabra: "DADO QUE",
+    pregunta: "¿En qué situación está el mundo?",
+    ejemplo: "Dado que el espectador tiene la app abierta",
+  },
+  {
+    palabra: "CUANDO",
+    pregunta: "¿Qué hace la persona?",
+    ejemplo: "Cuando presiona “Votar por esta Pareja”",
+  },
+  {
+    palabra: "ENTONCES",
+    pregunta: "¿Qué debe responder el sistema?",
+    ejemplo: "Entonces el sistema suma el voto y confirma",
   },
 ];
 
 const FLUJOS: Flujo[] = [
   {
     nombre: "Votación del Público",
-    ejercicios: [
+    pasos: [
       {
-        nombre: "Votación del Público",
-        scenario: "Registrar el voto del público durante una presentación",
+        rotulo: "Historia de usuario 1.1",
+        titulo: "Votación del público",
+        modo: "hu",
+        partes: PARTES_HU,
         bloques: [
           {
-            id: "f1e1-given",
-            tipo: "given",
+            id: "f1h1-como",
+            tipo: "como",
+            texto:
+              "Como espectador del Mundial de Salsa en el Coliseo El Pueblo",
+          },
+          {
+            id: "f1h1-quiero",
+            tipo: "quiero",
+            texto:
+              "Quiero emitir mi voto desde la app oficial por la pareja que está en la pista",
+          },
+          {
+            id: "f1h1-para",
+            tipo: "para",
+            texto:
+              "Para apoyar a mis artistas favoritos y reflejar el favoritismo del público",
+          },
+          {
+            id: "f1h1-d1",
+            tipo: "distractor",
+            texto:
+              "La orquesta en vivo empieza a interpretar “Cali Pachanguero” frente al Coliseo",
+          },
+          {
+            id: "f1h1-d2",
+            tipo: "distractor",
+            texto:
+              "El bailarín principal se resbala durante la ejecución del paso caleño “El Repique”",
+          },
+          {
+            id: "f1h1-d3",
+            tipo: "distractor",
+            texto:
+              "El presentador del evento anuncia a los patrocinadores oficiales por el micrófono",
+          },
+          {
+            id: "f1h1-d4",
+            tipo: "distractor",
+            texto:
+              "El servidor web reinicia la transmisión en vivo por saturación de usuarios",
+          },
+        ],
+      },
+      {
+        rotulo: "Criterio de aceptación 1.1",
+        titulo: "Votación del público",
+        modo: "bdd",
+        partes: PARTES_BDD,
+        bloques: [
+          {
+            id: "f1b1-dado",
+            tipo: "dado",
             texto:
               "El espectador tiene la app oficial abierta y la pareja de baile está ejecutando su rutina en la pista",
           },
           {
-            id: "f1e1-when",
-            tipo: "when",
+            id: "f1b1-cuando",
+            tipo: "cuando",
             texto:
               'El espectador presiona el botón "Votar por esta Pareja" y selecciona un puntaje de 10',
           },
           {
-            id: "f1e1-then",
-            tipo: "then",
+            id: "f1b1-entonces",
+            tipo: "entonces",
             texto:
               'El sistema suma el voto al promedio en tiempo real y muestra la confirmación "¡Voto registrado!"',
           },
           {
-            id: "f1e1-d1",
+            id: "f1b1-x1",
             tipo: "distractor",
             texto:
               "El jurado internacional califica el vestuario y la coordinación de la escuela de baile",
           },
           {
-            id: "f1e1-d2",
+            id: "f1b1-x2",
             tipo: "distractor",
             texto:
               "El servidor web reinicia la transmisión en vivo por saturación de usuarios",
           },
           {
-            id: "f1e1-d3",
+            id: "f1b1-x3",
             tipo: "distractor",
             texto:
               'El bailarín principal se resbala durante la ejecución del paso caleño "El Repique"',
           },
           {
-            id: "f1e1-d4",
+            id: "f1b1-x4",
             tipo: "distractor",
             texto:
               "La app envía un correo promocional con descuento para la tienda oficial de salsa",
-          },
-        ],
-      },
-      {
-        nombre: "Control de Voto Duplicado",
-        scenario: "Control de votación duplicada en un mismo dispositivo",
-        bloques: [
-          {
-            id: "f1e2-given",
-            tipo: "given",
-            texto:
-              "El usuario ya emitió su voto para la pareja en competencia desde su cuenta verificada",
-          },
-          {
-            id: "f1e2-when",
-            tipo: "when",
-            texto:
-              "Intenta presionar nuevamente el botón de votación para la misma presentación",
-          },
-          {
-            id: "f1e2-then",
-            tipo: "then",
-            texto:
-              'El sistema deshabilita la acción, mantiene el voto previo y despliega el aviso "Ya has votado por este participante"',
-          },
-          {
-            id: "f1e2-d1",
-            tipo: "distractor",
-            texto:
-              "El administrador del evento elimina la cuenta del usuario por intento de fraude",
-          },
-          {
-            id: "f1e2-d2",
-            tipo: "distractor",
-            texto:
-              "La app cierra la sesión automáticamente y reinicia los valores del servidor",
-          },
-          {
-            id: "f1e2-d3",
-            tipo: "distractor",
-            texto:
-              "El conteo total de votos retrocede a cero para todas las parejas de la categoría",
-          },
-          {
-            id: "f1e2-d4",
-            tipo: "distractor",
-            texto:
-              "El dispositivo del usuario recibe una notificación push con la programación del día siguiente",
           },
         ],
       },
@@ -153,100 +242,104 @@ const FLUJOS: Flujo[] = [
   },
   {
     nombre: "Boletería Digital",
-    ejercicios: [
+    pasos: [
       {
-        nombre: "Boletería Digital",
-        scenario: "Compra exitosa de entradas en categoría Ensambles",
+        rotulo: "Historia de usuario 2.1",
+        titulo: "Compra de entradas VIP",
+        modo: "hu",
+        partes: PARTES_HU,
         bloques: [
           {
-            id: "f2e1-given",
-            tipo: "given",
+            id: "f2h1-como",
+            tipo: "como",
+            texto:
+              "Como aficionado a la salsa que quiere ver el Mundial desde el Coliseo El Pueblo",
+          },
+          {
+            id: "f2h1-quiero",
+            tipo: "quiero",
+            texto:
+              "Quiero comprar entradas VIP de la categoría Ensambles sin hacer fila en la boletería",
+          },
+          {
+            id: "f2h1-para",
+            tipo: "para",
+            texto:
+              "Para asegurar mi lugar en primera fila y apoyar a las parejas del Mundial",
+          },
+          {
+            id: "f2h1-x1",
+            tipo: "distractor",
+            texto:
+              "Las boleterías físicas del Coliseo El Pueblo abren a las 8 de la mañana y forman una fila larga",
+          },
+          {
+            id: "f2h1-x2",
+            tipo: "distractor",
+            texto:
+              "La orquesta de salsa ensaya en el camerino del Coliseo antes de la apertura",
+          },
+          {
+            id: "f2h1-x3",
+            tipo: "distractor",
+            texto:
+              "Cambian la señalización del Coliseo para indicar dónde está cada zona de boletería",
+          },
+          {
+            id: "f2h1-x4",
+            tipo: "distractor",
+            texto:
+              "El proveedor de la pasarela de pagos actualiza sus tarifas antes del Mundial",
+          },
+        ],
+      },
+      {
+        rotulo: "Criterio de aceptación 2.1",
+        titulo: "Compra de entradas VIP",
+        modo: "bdd",
+        partes: PARTES_BDD,
+        bloques: [
+          {
+            id: "f2b1-dado",
+            tipo: "dado",
             texto:
               "El usuario está autenticado en la plataforma y existen entradas disponibles en Zona VIP",
           },
           {
-            id: "f2e1-when",
-            tipo: "when",
+            id: "f2b1-cuando",
+            tipo: "cuando",
             texto:
               "Selecciona 2 boletas y completa la transacción ingresando los datos de pago",
           },
           {
-            id: "f2e1-then",
-            tipo: "then",
+            id: "f2b1-entonces",
+            tipo: "entonces",
             texto:
               "El sistema reserva los asientos, descuenta las entradas del inventario y genera el código QR",
           },
           {
-            id: "f2e1-d1",
+            id: "f2b1-x1",
             tipo: "distractor",
             texto:
               'La orquesta en vivo comienza a interpretar el tema "Cali Pachanguero"',
           },
           {
-            id: "f2e1-d2",
+            id: "f2b1-x2",
             tipo: "distractor",
             texto:
               "El usuario descarga la lista de reproducción oficial del evento en Spotify",
           },
           {
-            id: "f2e1-d3",
+            id: "f2b1-x3",
             tipo: "distractor",
             texto:
               "El organizador del evento habilita el ingreso de comida y bebidas al coliseo",
           },
           {
-            id: "f2e1-d4",
+            id: "f2b1-x4",
             tipo: "distractor",
             texto:
               "El banco rechaza la tarjeta por saldo insuficiente y bloquea la cuenta del usuario",
-          },
-        ],
-      },
-      {
-        nombre: "Redención de Cupón Promocional",
-        scenario: "Aplicación de código de descuento instituido por la Alcaldía",
-        bloques: [
-          {
-            id: "f2e2-given",
-            tipo: "given",
-            texto:
-              "El comprador se encuentra en la pantalla de resumen de pago con 2 boletas en su carrito",
-          },
-          {
-            id: "f2e2-when",
-            tipo: "when",
-            texto:
-              'Ingresa el código promocional "FERIADECALI" y presiona el botón "Aplicar"',
-          },
-          {
-            id: "f2e2-then",
-            tipo: "then",
-            texto:
-              "El sistema descuenta el 20% del total a pagar, actualiza el monto y muestra el desglose del ahorro",
-          },
-          {
-            id: "f2e2-d1",
-            tipo: "distractor",
-            texto:
-              "La pasarela de pago duplica el valor del pedido por cobro de comisiones bancarias",
-          },
-          {
-            id: "f2e2-d2",
-            tipo: "distractor",
-            texto:
-              "El usuario se registra como participante en la maratón de salsa de la ciudad",
-          },
-          {
-            id: "f2e2-d3",
-            tipo: "distractor",
-            texto:
-              "El sistema envía una alerta SMS al organizador notificando la compra",
-          },
-          {
-            id: "f2e2-d4",
-            tipo: "distractor",
-            texto:
-              "El cupón expira y el carrito de compras elimina las boletas seleccionadas",
           },
         ],
       },
@@ -254,100 +347,103 @@ const FLUJOS: Flujo[] = [
   },
   {
     nombre: "Calificación de Jurados",
-    ejercicios: [
+    pasos: [
       {
-        nombre: "Calificación de Jurados",
-        scenario: "Registro del puntaje en el criterio de Ritmo y Sabor",
+        rotulo: "Historia de usuario 3.1",
+        titulo: "Registro de calificaciones",
+        modo: "hu",
+        partes: PARTES_HU,
         bloques: [
           {
-            id: "f3e1-given",
-            tipo: "given",
-            texto:
-              "El jurado oficial tiene la sesión activa en la tablet de juzgamiento del evento",
+            id: "f3h1-como",
+            tipo: "como",
+            texto: "Como jurado internacional del Mundial de Salsa",
           },
           {
-            id: "f3e1-when",
-            tipo: "when",
+            id: "f3h1-quiero",
+            tipo: "quiero",
             texto:
-              'Ingresa una calificación de "9.8" en la casilla de Ritmo y presiona "Guardar Puntaje"',
+              "Quiero registrar el puntaje de cada pareja en la tablet de juzgamiento",
           },
           {
-            id: "f3e1-then",
-            tipo: "then",
+            id: "f3h1-para",
+            tipo: "para",
             texto:
-              "El sistema calcula el promedio de la pareja, bloquea la celda y actualiza la tabla de posiciones",
+              "Para que la competencia se evalúe con el mismo criterio y la decisión sea transparente",
           },
           {
-            id: "f3e1-d1",
+            id: "f3h1-x1",
             tipo: "distractor",
             texto:
-              "El público asistente en el coliseo empieza a ovacionar a la delegación internacional",
+              "Las parejas hacen su entrada a la pista saludando al público del Coliseo",
           },
           {
-            id: "f3e1-d2",
+            id: "f3h1-x2",
             tipo: "distractor",
             texto:
-              "La pareja realiza un cambio de vestuario de emergencia antes de salir a la pista",
+              "El público en las gradas canta la salsa de la delegación invitada",
           },
           {
-            id: "f3e1-d3",
-            tipo: "distractor",
-            texto:
-              "El presentador del evento anuncia a los patrocinadores oficiales por el micrófono",
-          },
-          {
-            id: "f3e1-d4",
-            tipo: "distractor",
-            texto:
-              "El sistema imprime un certificado en papel firmado por el alcalde de Cali",
-          },
-        ],
-      },
-      {
-        nombre: "Impugnación y Recalificación",
-        scenario: "Modificación justificada de puntaje por penalización técnica",
-        bloques: [
-          {
-            id: "f3e2-given",
-            tipo: "given",
-            texto:
-              "El juez principal ha abierto la solicitud de revisión técnica sobre una rutina finalizada",
-          },
-          {
-            id: "f3e2-when",
-            tipo: "when",
-            texto:
-              "Registra la deducción de 0.5 puntos por caída de accesorio y confirma con su clave de juez",
-          },
-          {
-            id: "f3e2-then",
-            tipo: "then",
-            texto:
-              "El sistema recalcula la nota final, registra el motivo en la bitácora de auditoría y notifica a la mesa central",
-          },
-          {
-            id: "f3e2-d1",
+            id: "f3h1-x3",
             tipo: "distractor",
             texto:
               "La transmisión de televisión interrumpe la señal para emitir comerciales",
           },
           {
-            id: "f3e2-d2",
+            id: "f3h1-x4",
             tipo: "distractor",
             texto:
-              "El público vota a través de redes sociales para anular la decisión del juez",
+              "La organización reparte refrigerios y credenciales en la zona de jurados",
+          },
+        ],
+      },
+      {
+        rotulo: "Criterio de aceptación 3.1",
+        titulo: "Registro de calificaciones",
+        modo: "bdd",
+        partes: PARTES_BDD,
+        bloques: [
+          {
+            id: "f3b1-dado",
+            tipo: "dado",
+            texto:
+              "El jurado oficial tiene la sesión activa en la tablet de juzgamiento del evento",
           },
           {
-            id: "f3e2-d3",
-            tipo: "distractor",
+            id: "f3b1-cuando",
+            tipo: "cuando",
             texto:
-              "El sistema deshabilita la conexión Wi-Fi de todas las tablets de juzgamiento",
+              'Ingresa una calificación de "9.8" en la casilla de Ritmo y presiona "Guardar Puntaje"',
           },
           {
-            id: "f3e2-d4",
+            id: "f3b1-entonces",
+            tipo: "entonces",
+            texto:
+              "El sistema calcula el promedio de la pareja, bloquea la celda y actualiza la tabla de posiciones",
+          },
+          {
+            id: "f3b1-x1",
             tipo: "distractor",
             texto:
-              "Los participantes solicitan repetir la rutina desde el inicio del tema musical",
+              "El público asistente en el coliseo empieza a ovacionar a la delegación internacional",
+          },
+          {
+            id: "f3b1-x2",
+            tipo: "distractor",
+            texto:
+              "La pareja realiza un cambio de vestuario de emergencia antes de salir a la pista",
+          },
+          {
+            id: "f3b1-x3",
+            tipo: "distractor",
+            texto:
+              "El presentador del evento anuncia a los patrocinadores oficiales por el micrófono",
+          },
+          {
+            id: "f3b1-x4",
+            tipo: "distractor",
+            texto:
+              "El sistema imprime un certificado en papel firmado por el alcalde de Cali",
           },
         ],
       },
@@ -378,43 +474,33 @@ function barajar<T>(items: T[]): T[] {
 /* Retroalimentación                                                   */
 /* ------------------------------------------------------------------ */
 
-type TipoZona = Exclude<TipoBloque, "distractor">;
-
-/** Cómo se llama cada parte del requerimiento, en palabras sencillas. */
-const NOMBRE_PARTE: Record<TipoZona, string> = {
-  given: "la condición inicial (Dado que…)",
-  when: "la acción de la persona (Cuando…)",
-  then: "la respuesta del sistema (Entonces…)",
+const PISTAS: Record<"hu" | "bdd", string> = {
+  hu: "Lee cada tarjeta y pregúntate: ¿dice quién es la persona que usa la app (Como), qué quiere hacer (Quiero) o para qué le sirve (Para)? Si cuenta algo que pasa en el evento, como la orquesta o los patrocinadores, es un distractor y se queda en el banco.",
+  bdd: "Lee cada tarjeta y pregúntate: ¿describe cómo están las cosas antes de empezar (Dado que), lo que hace la persona (Cuando) o lo que responde el sistema (Entonces)? Si cuenta algo que pasa en el evento pero no tiene que ver con usar la app, es un distractor y se queda en el banco.",
 };
-
-/** Qué describe una tarjeta de cada tipo. */
-const QUE_DESCRIBE: Record<TipoZona, string> = {
-  given: "describe cómo están las cosas antes de empezar",
-  when: "es lo que hace la persona en la app",
-  then: "es lo que el sistema responde o hace después",
-};
-
-const PISTA =
-  "Lee cada tarjeta y pregúntate: ¿describe cómo están las cosas antes de empezar (Dado que), lo que hace la persona (Cuando) o lo que responde el sistema (Entonces)? Si cuenta algo que pasa en el evento pero no tiene que ver con usar la app, es un distractor y se queda en el banco.";
 
 interface ResultadoZona {
   ok: boolean;
   mensaje: string;
 }
 
-function revisarZona(indice: number, bloque: Bloque | null): ResultadoZona {
-  const esperado = ZONAS[indice].tipo as TipoZona;
+function revisarZona(
+  indice: number,
+  bloque: Bloque | null,
+  partes: Parte[],
+): ResultadoZona {
+  const esperada = partes[indice];
 
   if (!bloque) {
     return {
       ok: false,
-      mensaje: `Falta una tarjeta: aquí va ${NOMBRE_PARTE[esperado]}.`,
+      mensaje: `Falta una tarjeta: aquí va ${esperada.resumen}.`,
     };
   }
-  if (bloque.tipo === esperado) {
+  if (bloque.tipo === esperada.tipo) {
     return {
       ok: true,
-      mensaje: `¡Bien! Esta tarjeta ${QUE_DESCRIBE[esperado]}.`,
+      mensaje: `¡Bien! Esta tarjeta ${esperada.describe}.`,
     };
   }
   if (bloque.tipo === "distractor") {
@@ -424,10 +510,11 @@ function revisarZona(indice: number, bloque: Bloque | null): ResultadoZona {
         "Esta tarjeta es un distractor: cuenta algo que pasa en el evento, pero no es algo que la persona haga en la app ni algo que el sistema responda. Devuélvela al banco.",
     };
   }
-  const destino = ZONAS.findIndex((z) => z.tipo === bloque.tipo) + 1;
+  const destino = partes.findIndex((p) => p.tipo === bloque.tipo) + 1;
+  const otra = partes.find((p) => p.tipo === bloque.tipo);
   return {
     ok: false,
-    mensaje: `Casi: esta tarjeta sí hace parte del requerimiento, pero ${QUE_DESCRIBE[bloque.tipo]}. Muévela a la zona ${destino}: ${NOMBRE_PARTE[bloque.tipo]}.`,
+    mensaje: `Casi: esta tarjeta sí hace parte del requerimiento, pero ${otra?.describe}. Muévela a la zona ${destino}: ${otra?.resumen}.`,
   };
 }
 
@@ -440,7 +527,7 @@ export default function AnalistaSalsaChallenge() {
   const router = useRouter();
   const [pantalla, setPantalla] = useState<"intro" | "desafio">("intro");
   const [flujoIndex, setFlujoIndex] = useState(0);
-  const [ejercicioIndex, setEjercicioIndex] = useState(0);
+  const [pasoIndex, setPasoIndex] = useState(0);
   const [banco, setBanco] = useState<string[]>([]);
   const [zonas, setZonas] = useState<(string | null)[]>([null, null, null]);
   const [estado, setEstado] = useState<"idle" | "correcto" | "incorrecto">(
@@ -450,10 +537,10 @@ export default function AnalistaSalsaChallenge() {
   const [intento, setIntento] = useState(0);
   const [pistaVisible, setPistaVisible] = useState(false);
 
-  function prepararEjercicio(indiceFlujo: number, indiceEjercicio: number) {
+  function prepararPaso(indiceFlujo: number, indicePaso: number) {
     setBanco(
       barajar(
-        FLUJOS[indiceFlujo].ejercicios[indiceEjercicio].bloques.map((bloque) => bloque.id),
+        FLUJOS[indiceFlujo].pasos[indicePaso].bloques.map((bloque) => bloque.id),
       ),
     );
     setZonas([null, null, null]);
@@ -466,8 +553,8 @@ export default function AnalistaSalsaChallenge() {
   function handleComenzar() {
     const indiceFlujo = Math.floor(Math.random() * FLUJOS.length);
     setFlujoIndex(indiceFlujo);
-    setEjercicioIndex(0);
-    prepararEjercicio(indiceFlujo, 0);
+    setPasoIndex(0);
+    prepararPaso(indiceFlujo, 0);
     setPantalla("desafio");
   }
 
@@ -476,13 +563,13 @@ export default function AnalistaSalsaChallenge() {
   }
 
   const flujo = FLUJOS[flujoIndex];
-  const feature = flujo.ejercicios[ejercicioIndex];
+  const paso = flujo.pasos[pasoIndex];
   const bloquesEnBanco = banco.filter((id) => !zonas.includes(id));
   const zonaBloqueada = (indice: number) => revision[indice]?.ok === true;
   const correctas = revision.filter((r) => r?.ok).length;
 
   function encontrarBloque(id: string) {
-    return feature.bloques.find((bloque) => bloque.id === id) ?? null;
+    return paso.bloques.find((bloque) => bloque.id === id) ?? null;
   }
 
   /** Borra la revisión solo de las zonas que cambiaron. */
@@ -530,13 +617,13 @@ export default function AnalistaSalsaChallenge() {
 
   function handleValidar() {
     const resultados = zonas.map((id, indice) =>
-      revisarZona(indice, id ? encontrarBloque(id) : null),
+      revisarZona(indice, id ? encontrarBloque(id) : null, paso.partes),
     );
     setRevision(resultados);
 
     if (resultados.every((r) => r.ok)) {
       setEstado("correcto");
-      if (ejercicioIndex === 1) {
+      if (pasoIndex === 1) {
         completeStage(1);
       }
       return;
@@ -545,30 +632,33 @@ export default function AnalistaSalsaChallenge() {
     setIntento((actual) => actual + 1);
   }
 
-  function handleAvanzarEjercicio() {
-    setEjercicioIndex(1);
-    prepararEjercicio(flujoIndex, 1);
+  function handleAvanzarPaso() {
+    setPasoIndex(1);
+    prepararPaso(flujoIndex, 1);
   }
 
   const bloquesFinales = zonas.map((id) => (id ? encontrarBloque(id) : null));
   const historia =
     estado === "correcto" && bloquesFinales.every(Boolean)
-      ? `Dado que ${enMinuscula(bloquesFinales[0]!.texto)}, cuando ${enMinuscula(bloquesFinales[1]!.texto)}, entonces ${enMinuscula(bloquesFinales[2]!.texto)}.`
+      ? paso.modo === "hu"
+        ? `${bloquesFinales[0]!.texto}, ${bloquesFinales[1]!.texto}, ${bloquesFinales[2]!.texto}.`
+        : `Dado que ${enMinuscula(bloquesFinales[0]!.texto)}, cuando ${enMinuscula(bloquesFinales[1]!.texto)}, entonces ${enMinuscula(bloquesFinales[2]!.texto)}.`
       : null;
+
+  const esHu = paso.modo === "hu";
 
   return (
     <div className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2">
       <section className="space-y-6">
         <div className="rounded-3xl border-2 border-brand-soft bg-brand-light/30 p-6 text-center">
           <span className="etiqueta">
-            Ejercicio{" "}
-            {ejercicioIndex + 1} de 2
+            Paso {pasoIndex + 1} de 2
           </span>
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
-            {flujo.nombre}
+            {paso.rotulo}
           </h2>
           <p className="mt-2 text-sm text-brand-support/80">
-            Escenario: <strong>{feature.scenario}</strong>
+            Tema: <strong>{paso.titulo}</strong> · Flujo {flujo.nombre}
           </p>
         </div>
 
@@ -610,16 +700,17 @@ export default function AnalistaSalsaChallenge() {
       <section className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
         <div className="mb-6 text-center">
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
-            Organiza el requerimiento
+            {esHu ? "Escribe la historia de usuario" : "Escribe el criterio de aceptación"}
           </h2>
           <p className="mt-2 text-sm text-brand-support/80">
-            Selecciona las 3 tarjetas correctas y ordénalas en formato
-            Given-When-Then para el equipo de desarrollo.
+            {esHu
+              ? "Una historia de usuario dice quién la necesita, qué quiere hacer y para qué le sirve. Coloca las 3 tarjetas en su parte."
+              : "Un criterio de aceptación en formato Dado-Cuando-Entonces le dice al equipo de desarrollo exactamente qué debe hacer la app."}
           </p>
         </div>
 
         <div className="space-y-4">
-          {ZONAS.map((zona, indice) => {
+          {paso.partes.map((zona, indice) => {
             const id = zonas[indice];
             const bloque = id ? encontrarBloque(id) : null;
             const resultado = revision[indice];
@@ -649,13 +740,7 @@ export default function AnalistaSalsaChallenge() {
               >
                 <div className="flex items-center justify-between gap-2">
                   <span
-                    className={`rounded-sm px-3 py-1 font-mono text-xs font-black uppercase tracking-widest ${
-                      zona.tipo === "given"
-                        ? "bg-brand-soft text-white"
-                        : zona.tipo === "when"
-                          ? "bg-brand-primary text-white"
-                          : "bg-brand-mid text-brand-support"
-                    }`}
+                    className={`rounded-sm px-3 py-1 font-mono text-xs font-black uppercase tracking-widest ${zona.color}`}
                   >
                     {zona.etiqueta}
                   </span>
@@ -687,7 +772,7 @@ export default function AnalistaSalsaChallenge() {
                     />
                   ) : (
                     <p className="rounded-xl border-2 border-dashed border-brand-soft/60 bg-white/40 px-4 py-3 text-center text-sm text-brand-support/40">
-                      Suelta aquí la tarjeta correcta
+                      Suelta aquí la tarjeta de {zona.corto}
                     </p>
                   )}
                 </div>
@@ -711,7 +796,7 @@ export default function AnalistaSalsaChallenge() {
           <div className="mt-6 space-y-4">
             {pistaVisible && (
               <div className="animate-fade-in rounded-xl border border-brand-mid/50 bg-brand-soft/10 p-3 text-sm leading-relaxed text-brand-support">
-                <strong>💡 Pista:</strong> {PISTA}
+                <strong>💡 Pista:</strong> {PISTAS[paso.modo]}
               </div>
             )}
 
@@ -738,7 +823,7 @@ export default function AnalistaSalsaChallenge() {
                 onClick={handleValidar}
                 className="inline-flex flex-1 items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
               >
-                Validar Requerimiento
+                {esHu ? "Validar Historia de Usuario" : "Validar Criterio de Aceptación"}
               </button>
             </div>
           </div>
@@ -750,14 +835,17 @@ export default function AnalistaSalsaChallenge() {
             <div className="animate-fade-in rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center">
               <p className="text-3xl">🎺🎉</p>
               <p className="mt-3 text-lg font-bold text-emerald-700">
-                ¡Requerimiento listo! Separaste los distractores y pusiste cada
-                parte en su lugar.
+                {esHu
+                  ? "¡Historia de usuario lista! Ya sabes quién la necesita, qué quiere hacer y para qué le sirve."
+                  : "¡Criterio de aceptación listo! Separaste los distractores y pusiste cada parte en su lugar."}
               </p>
 
               {historia && (
                 <div className="mt-4 rounded-xl border border-emerald-200 bg-white p-4 text-left">
                   <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">
-                    Así queda la historia de usuario completa
+                    {esHu
+                      ? "Así queda la historia de usuario completa"
+                      : "Así queda el criterio de aceptación completo"}
                   </p>
                   <p className="mt-2 text-sm leading-relaxed text-brand-support">
                     {historia}
@@ -766,18 +854,18 @@ export default function AnalistaSalsaChallenge() {
               )}
 
               <p className="mt-4 text-sm leading-relaxed text-brand-support/90">
-                {ejercicioIndex === 0
-                  ? "Con esta frase, el equipo de desarrollo sabe en qué situación ocurre, qué hace la persona y qué debe responder la app. ¡Vamos con el segundo caso!"
-                  : "¡Completaste los 2 ejercicios! Así trabaja un analista: convierte lo que la gente necesita en requerimientos claros que todo el equipo entiende igual."}
+                {pasoIndex === 0
+                  ? "Con esta frase el equipo sabe qué necesita la persona, sin detalles técnicos. Ahora toca bajar al detalle: ¿qué tendría que verse en la app para decir que está lista?"
+                  : "¡Completaste los 2 pasos! Así trabaja un analista: primero cuenta la necesidad con palabras simples y después la traduce en un criterio que se pueda verificar."}
               </p>
 
-              {ejercicioIndex === 0 ? (
+              {pasoIndex === 0 ? (
                 <button
                   type="button"
-                  onClick={handleAvanzarEjercicio}
+                  onClick={handleAvanzarPaso}
                   className="mt-6 inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
                 >
-                  Avanzar al Ejercicio 2 de {flujo.nombre}
+                  Escribir el criterio de aceptación
                   <svg
                     viewBox="0 0 24 24"
                     className="h-5 w-5"
@@ -824,40 +912,33 @@ function PantallaIntro({ onComenzar }: { onComenzar: () => void }) {
       <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10">
         <div className="text-center">
           <h2 className="mt-4 text-2xl font-black tracking-tight text-brand-support sm:text-3xl">
-            Estructura una historia de usuario en formato BDD
+            De la idea al requerimiento: Historia de Usuario y Criterio de
+            Aceptación
           </h2>
           <p className="mt-2 text-sm leading-relaxed text-brand-support/80">
-            Antes de iniciar el reto, repasa cómo se organiza un requerimiento
-            con la sintaxis Gherkin (Given-When-Then). Luego deberás filtrar los
-            distractores y colocar las tarjetas correctas en su zona.
+            Un requerimiento se escribe en dos capas. Primero cuentas la
+            necesidad con palabras sencillas; después dices cómo se comprueba
+            que la app quedó bien. Repasa las dos antes de iniciar el reto.
           </p>
         </div>
 
-        <div className="mt-8 overflow-hidden rounded-2xl border border-brand-soft">
-          <table className="w-full border-collapse text-left text-sm">
-            <thead>
-              <tr className="border-b-2 border-brand-soft bg-brand-light/40 text-xs font-bold uppercase tracking-wide text-brand-support">
-                <th className="px-4 py-3">Palabra Clave</th>
-                <th className="px-4 py-3">Significado</th>
-                <th className="px-4 py-3">Ejemplo Contextual</th>
-              </tr>
-            </thead>
-            <tbody>
-              {TABLA_GHERKIN.map((fila) => (
-                <tr
-                  key={fila.palabra}
-                  className="border-b border-brand-soft/40 text-brand-support last:border-0"
-                >
-                  <td className="px-4 py-3 font-black text-brand-primary">
-                    {fila.palabra}
-                  </td>
-                  <td className="px-4 py-3">{fila.significado}</td>
-                  <td className="px-4 py-3">{fila.ejemplo}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        <h3 className="mt-8 text-sm font-black uppercase tracking-wide text-brand-support">
+          1. Historia de usuario — la necesidad
+        </h3>
+        <p className="mt-1 text-xs leading-relaxed text-brand-support/70">
+          Se escribe desde el punto de vista de la persona que la usa, nunca
+          desde el punto de vista técnico.
+        </p>
+        <TablaFormato filas={TABLA_HU} />
+
+        <h3 className="mt-8 text-sm font-black uppercase tracking-wide text-brand-support">
+          2. Criterio de aceptación — cómo se comprueba
+        </h3>
+        <p className="mt-1 text-xs leading-relaxed text-brand-support/70">
+          Se escribe en formato BDD (Dado-Cuando-Entonces) y describe el
+          comportamiento que la app debe cumplir.
+        </p>
+        <TablaFormato filas={TABLA_BDD} />
 
         <button
           type="button"
@@ -878,6 +959,40 @@ function PantallaIntro({ onComenzar }: { onComenzar: () => void }) {
           </svg>
         </button>
       </div>
+    </div>
+  );
+}
+
+function TablaFormato({
+  filas,
+}: {
+  filas: { palabra: string; pregunta: string; ejemplo: string }[];
+}) {
+  return (
+    <div className="mt-3 overflow-hidden rounded-2xl border border-brand-soft">
+      <table className="w-full border-collapse text-left text-sm">
+        <thead>
+          <tr className="border-b-2 border-brand-soft bg-brand-light/40 text-xs font-bold uppercase tracking-wide text-brand-support">
+            <th className="px-4 py-3">Palabra Clave</th>
+            <th className="px-4 py-3">Pregunta que responde</th>
+            <th className="px-4 py-3">Ejemplo Contextual</th>
+          </tr>
+        </thead>
+        <tbody>
+          {filas.map((fila) => (
+            <tr
+              key={fila.palabra}
+              className="border-b border-brand-soft/40 text-brand-support last:border-0"
+            >
+              <td className="px-4 py-3 font-black text-brand-primary">
+                {fila.palabra}
+              </td>
+              <td className="px-4 py-3">{fila.pregunta}</td>
+              <td className="px-4 py-3">{fila.ejemplo}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
     </div>
   );
 }
