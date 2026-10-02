@@ -267,7 +267,7 @@ export interface Verbo {
 export const VERBOS: Verbo[] = [
   { id: "v-formada", texto: "está formada por" },
   { id: "v-toca", texto: "toca en" },
-  { id: "v-desfila", texto: "desfila en" },
+  { id: "v-participa", texto: "participa en" },
   { id: "v-permite", texto: "permite ver" },
   { id: "v-compra", texto: "compra" },
   { id: "v-come", texto: "se come" },
@@ -301,7 +301,7 @@ export const CONEXIONES: Conexion[] = [
     id: "r-bailarin-desfile",
     desde: "bailarin",
     hacia: "desfile",
-    verboCorrecto: "v-desfila",
+    verboCorrecto: "v-participa",
     pista: "¿Qué hace un Bailarín en el Salsódromo?",
   },
   {
