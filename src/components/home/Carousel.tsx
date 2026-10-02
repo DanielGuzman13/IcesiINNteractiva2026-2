@@ -20,23 +20,23 @@ interface CarouselProps {
 const DEFAULT_SLIDES: MediaSlide[] = [
   {
     type: "image",
-    src: "/media/cali-skyline.svg",
+    src: "/media/carrusel/Principal.jpg",
     alt: "Skyline de Cali con colores de la marca",
   },
   {
-    type: "video",
-    src: "/media/cali-demo.mp4",
+    type: "image",
+    src: "/media/carrusel/Sesión 2.jpg",
     alt: "Video de bienvenida Cali nos une",
     poster: "/media/cali-unite.svg",
   },
   {
     type: "image",
-    src: "/media/cali-sunrise.svg",
+    src: "/media/carrusel/Sesión 4.jpg",
     alt: "Amanecer en Cali",
   },
   {
     type: "image",
-    src: "/media/cali-unite.svg",
+    src: "/media/carrusel/Sesión 1.jpg",
     alt: "Cali nos une",
   },
 ];
@@ -113,7 +113,7 @@ export default function Carousel({
                     className="h-full w-full"
                     style={{
                       background:
-                        "linear-gradient(135deg,#45609B,#719FC1,#91A4BC,#B2BCCC)",
+                        "linear-gradient(135deg,var(--brand-primary),var(--brand-mid),var(--brand-soft),var(--brand-support))",
                     }}
                   />
                 )}
@@ -182,4 +182,4 @@ export default function Carousel({
       )}
     </section>
   );
-}
+}

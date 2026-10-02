@@ -11,7 +11,13 @@ export const MAPA_BACKGROUND_IMAGE = "/mapa/mapa-sin-fondo.png";
  *   "rgb(30, 41, 59)"     -> Modo oscuro elegante
  *   "rgb(248, 250, 252)"  -> Blanco / gris claro
  */
-export const MAPA_BACKGROUND_COLOR = "rgb(156, 216, 180)";
+export const MAPA_BACKGROUND_COLOR = "#E2ECDF"; // Verde Farallones apagado (paleta Cali nos une)
+
+/**
+ * Desplazamiento vertical del mapa para despegarlo del borde inferior.
+ * Valores negativos (ej: "-4%", "-5%" o "-35px") suben el mapa hacia arriba.
+ */
+export const MAPA_OFFSET_Y = "-4%";
 
 export type RutaStageIcon = "inicio" | "trofeo" | "chiva" | "marimba" | "atleta";
 

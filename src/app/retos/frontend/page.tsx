@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import EncabezadoEditor from "@/components/retos/EncabezadoEditor";
 import { useState } from "react";
 import FrontendPetronioAudit from "@/components/FrontendPetronioAudit";
 
@@ -8,7 +9,7 @@ export default function FrontendRetoPage() {
   const [showIntro, setShowIntro] = useState(true);
 
   return (
-    <main className="flex min-h-screen flex-col items-center bg-gradient-to-br from-brand-primary via-brand-support to-brand-mid px-4 py-8">
+    <main className="flex min-h-screen flex-col items-center fondo-editor px-4 py-8">
       <div className="mb-6 flex w-full max-w-7xl items-center justify-between">
         <Link
           href="/retos"
@@ -25,7 +26,7 @@ export default function FrontendRetoPage() {
               <div
                 key={i}
                 className={`h-3 w-3 rounded-full border-2 border-white transition-all ${
-                  i === 1 ? "bg-brand-light" : "bg-white/20"
+                  i === 1 ? "bg-white" : "bg-transparent"
                 }`}
               />
             ))}
@@ -34,43 +35,63 @@ export default function FrontendRetoPage() {
         </div>
       </div>
 
-      <div className="w-full max-w-7xl overflow-hidden rounded-3xl bg-white shadow-2xl 2xl:max-w-[1400px]">
-        <div
-          className="flex items-center justify-between gap-4 px-8 py-6 text-white"
-          style={{ background: "linear-gradient(90deg, #45609B 0%, #719FC1 100%)" }}
-        >
-          <div className="flex items-center gap-4">
-            <div className="flex h-16 w-16 items-center justify-center rounded-full border-2 border-white bg-white/20 shadow-inner">
-              <svg viewBox="0 0 24 24" className="h-8 w-8" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-                <path d="M12 9a3 3 0 1 0 0 6 3 3 0 0 0 0-6z" />
-                <path d="M8 12h.01M16 12h.01M19 9a7 7 0 0 1 0 6M5 9a7 7 0 0 0 0 6" />
-                <path d="M12 3v3M12 18v3M6.5 6.5l2 2M15.5 15.5l2 2M17.5 6.5l-2 2M8.5 15.5l-2 2" />
+      <div className="w-full max-w-7xl overflow-hidden rounded-md border-2 border-brand-support bg-white shadow-[8px_8px_0_var(--brand-support)] 2xl:max-w-[1400px]">
+        <EncabezadoEditor
+          archivo="petronio-alvarez / frontend / ritmos.tsx"
+          titulo="Frontend / UX"
+          descripcion="Mejora la app “Ritmos del Pacífico”."
+          imagen="/personajes/back-nuevo.webp"
+          anchoImagen={1200}
+          altoImagen={1486}
+          foto={{
+            src: "/media/eventos/petronio-tarima.jpg",
+            alt: "Agrupación del Pacífico con trajes blancos y fucsia bailando en la tarima del Festival Petronio Álvarez",
+            pie: "Petronio Álvarez",
+            ancho: 1280,
+            alto: 720,
+            giro: 2,
+            cinta: "esquina",
+          }}
+          fotoDerecha={16}
+          distintivo={
+            <div
+              className="pointer-events-none absolute right-[10.2rem] top-6 hidden -rotate-[4deg] lg:block"
+              aria-hidden="true"
+            >
+              <span className="flex items-center gap-1 rounded-full bg-brand-primary px-3 py-1 text-[11px] font-bold text-white shadow-[2px_3px_0_rgba(0,0,0,0.2)]">
+                <svg viewBox="0 0 24 24" className="h-3 w-3" fill="currentColor">
+                  <path d="M8 5v14l11-7z" />
+                </svg>
+                Escuchar
+              </span>
+              <svg
+                viewBox="0 0 24 24"
+                className="absolute -bottom-3 right-1 h-5 w-5 drop-shadow"
+                fill="white"
+                stroke="#111"
+                strokeWidth="1.5"
+                strokeLinejoin="round"
+              >
+                <path d="M9 11V5.5a1.5 1.5 0 0 1 3 0V10m0-1a1.5 1.5 0 0 1 3 0v1.5m0-.5a1.5 1.5 0 0 1 3 0V12m0-.5a1.5 1.5 0 0 1 3 0V16a6 6 0 0 1-6 6h-1.5a6 6 0 0 1-4.9-2.6L4.4 15a1.5 1.5 0 0 1 2.4-1.8L9 15.5V11" />
               </svg>
             </div>
-            <div>
-              <div className="mb-0.5 text-xs font-semibold uppercase tracking-widest text-white/80">
-                Rol del equipo
-              </div>
-              <h1 className="text-3xl font-extrabold">Frontend / UX</h1>
-              <div className="text-sm font-medium text-white/80">
-                Mejora la app &quot;Sonoridades del Pacífico&quot;
-              </div>
-            </div>
-          </div>
-          <button
-            type="button"
-            onClick={() => setShowIntro(true)}
-            className="flex shrink-0 items-center gap-2 rounded-full bg-white/20 px-4 py-2 text-sm font-semibold text-white backdrop-blur transition hover:bg-white/35"
-            title="Volver a ver la introducción de la actividad"
-          >
-            <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-              <circle cx="12" cy="12" r="9" />
-              <path d="M9.2 9a2.8 2.8 0 0 1 5.5.9c0 1.9-2.4 2.2-2.7 4" />
-              <circle cx="12" cy="17.2" r="0.6" fill="currentColor" stroke="none" />
-            </svg>
-            Ayuda
-          </button>
-        </div>
+          }
+          accion={
+            <button
+              type="button"
+              onClick={() => setShowIntro(true)}
+              className="flex items-center gap-2 border-2 border-brand-support bg-white px-4 py-2 text-sm font-bold text-brand-support shadow-[3px_3px_0_var(--brand-support)] transition hover:translate-x-[1px] hover:translate-y-[1px] hover:shadow-[2px_2px_0_var(--brand-support)]"
+              title="Volver a ver la introducción de la actividad"
+            >
+              <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="9" />
+                <path d="M9.2 9a2.8 2.8 0 0 1 5.5.9c0 1.9-2.4 2.2-2.7 4" />
+                <circle cx="12" cy="17.2" r="0.6" fill="currentColor" stroke="none" />
+              </svg>
+              Ayuda
+            </button>
+          }
+        />
 
         <div className="p-4 md:p-6 lg:p-8">
           <FrontendPetronioAudit showIntro={showIntro} />
@@ -79,7 +100,7 @@ export default function FrontendRetoPage() {
 
       {showIntro && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-brand-primary/40 p-4 backdrop-blur-[6px]"
+          className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-brand-support/40 p-4 backdrop-blur-[6px]"
           role="dialog"
           aria-modal="true"
           aria-labelledby="frontend-intro-title"
@@ -87,10 +108,10 @@ export default function FrontendRetoPage() {
           <div className="relative my-auto w-full max-w-xl overflow-hidden rounded-3xl bg-white shadow-2xl">
             <div
               className="px-6 py-6 text-white"
-              style={{ background: "linear-gradient(120deg, #45609B 0%, #719FC1 100%)" }}
+              style={{ background: "linear-gradient(120deg, var(--brand-primary) 0%, var(--brand-fin) 100%)" }}
             >
               <div className="mb-1 text-xs font-semibold uppercase tracking-[0.2em] text-white/70">
-                Ruta de Ingeniería de Software · Festival Petronio Álvarez
+                Ruta de Ingeniería de Software - Festival Petronio Álvarez
               </div>
               <h2 id="frontend-intro-title" className="text-2xl font-black sm:text-3xl">
                 Bienvenido, Frontend Engineer
@@ -100,7 +121,7 @@ export default function FrontendRetoPage() {
             <div className="space-y-4 px-6 py-6">
               <p className="text-sm leading-relaxed text-brand-support">
                 La organización acaba de lanzar la app oficial{" "}
-                <strong>&quot;Sonoridades del Pacífico&quot;</strong> para que el público
+                <strong>&quot;Ritmos del Pacífico&quot;</strong> para que el público
                 consulte en vivo qué agrupación de marimba o chirimía está tocando en
                 tarima y escuche adelantos de sus canciones.
               </p>
@@ -120,7 +141,7 @@ export default function FrontendRetoPage() {
               <button
                 type="button"
                 onClick={() => setShowIntro(false)}
-                className="rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-mid"
+                className="rounded-xl bg-brand-primary px-6 py-3 text-sm font-bold text-white transition-colors hover:bg-brand-support"
               >
                 Comenzar a Mejorar la App
               </button>

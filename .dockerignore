@@ -1,0 +1,27 @@
+# deps / build artifacts
+node_modules
+.next
+out
+build
+
+# version control & CI
+.git
+.gitignore
+.github
+
+# docs & agent metadata
+README.md
+AGENTS.md
+CLAUDE.md
+CONTRASENAS-GUIAS.md
+specs
+.lean-spec
+referencias
+docs
+
+# local artifacts
+*.md
+*.tar.gz
+.env*
+.DS_Store
+npm-debug.log*

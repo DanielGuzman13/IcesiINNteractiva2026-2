@@ -227,9 +227,9 @@ function SPINNER({ className = "h-4 w-4" }: { className?: string }) {
 
 function ZonePlaceholder() {
   return (
-    <div className="flex min-h-[96px] w-full flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-slate-300 bg-white/70 px-4 py-3 text-center">
-      <p className="text-xs font-bold text-slate-400">Zona de vista previa</p>
-      <p className="text-[10px] text-slate-400/80">Selecciona una opción para previsualizarla aquí.</p>
+    <div className="flex min-h-[96px] w-full flex-col items-center justify-center gap-1 rounded-xl border-2 border-dashed border-brand-support/25 bg-white/70 px-4 py-3 text-center">
+      <p className="text-xs font-bold text-brand-support/50">Zona de vista previa</p>
+      <p className="text-[10px] text-brand-support/45">Selecciona una opción para previsualizarla aquí.</p>
     </div>
   );
 }
@@ -243,7 +243,7 @@ function renderAudioZone(selected: string | null) {
       <div className="mx-auto w-full max-w-sm">
         <div className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-emerald-500 text-white shadow-lg">
           <PlayIcon />
-          <span className="text-xs font-extrabold">Reproducir Marimba de Chonta</span>
+          <span className="text-xs font-extrabold">Reproducir Marimba</span>
         </div>
       </div>
     );
@@ -251,7 +251,7 @@ function renderAudioZone(selected: string | null) {
   if (selected === "b") {
     return (
       <div className="mx-auto w-full max-w-sm">
-        <div className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-emerald-600 text-white shadow-lg">
+        <div className="flex h-14 w-full items-center justify-center gap-2 rounded-full bg-brand-mid text-white shadow-lg">
           <SPINNER />
           <span className="text-xs font-extrabold">Cargando audio...</span>
         </div>
@@ -273,22 +273,22 @@ function renderConcertCard(selected: string | null) {
   if (selected === "a") {
     return (
       <div className="w-full rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
-        <p className="text-[10px] font-black text-yellow-400">10:00 PM · Marimba de Chonta</p>
+        <p className="text-[10px] font-black text-yellow-400">10:00 PM - Marimba</p>
         <p className="text-[10px] font-medium text-yellow-400/80">Tarima principal</p>
       </div>
     );
   }
   if (selected === "b") {
     return (
-      <div className="w-full rounded-xl bg-[#0F172A] px-4 py-3 shadow-lg">
-        <p className="text-[10px] font-black text-white">10:00 PM · Marimba de Chonta</p>
+      <div className="w-full rounded-xl bg-[color-mix(in_srgb,var(--brand-mid)_70%,var(--brand-support))] px-4 py-3 shadow-lg">
+        <p className="text-[10px] font-black text-white">10:00 PM - Marimba</p>
         <p className="text-[10px] font-medium text-white/80">Tarima principal</p>
       </div>
     );
   }
   return (
     <div className="w-full rounded-xl bg-slate-400 px-4 py-3 shadow-sm">
-      <p className="text-[10px] font-black text-slate-500">10:00 PM · Marimba de Chonta</p>
+      <p className="text-[10px] font-black text-slate-500">10:00 PM - Marimba</p>
       <p className="text-[10px] font-medium text-slate-500/80">Tarima principal</p>
     </div>
   );
@@ -331,13 +331,13 @@ function renderControlCluster(selected: string | null) {
   }
   return (
     <div className="flex items-center justify-center gap-3">
-      <span className={`${btn} bg-emerald-100 text-emerald-700`}>
+      <span className={`${btn} bg-brand-soft/30 text-brand-support`}>
         <PrevIcon />
       </span>
-      <span className={`${btn} h-14 w-14 bg-emerald-500 text-white shadow-lg`}>
+      <span className={`${btn} h-14 w-14 bg-brand-primary text-white shadow-lg`}>
         <PlayIcon />
       </span>
-      <span className={`${btn} bg-emerald-100 text-emerald-700`}>
+      <span className={`${btn} bg-brand-soft/30 text-brand-support`}>
         <NextIcon />
       </span>
     </div>
@@ -345,7 +345,7 @@ function renderControlCluster(selected: string | null) {
 }
 
 const FAVORITE_SONGS = [
-  { title: "Marimba de Chonta", artist: "Grupo Bahía" },
+  { title: "Marimba", artist: "Grupo Bahía" },
   { title: "Palo de agua", artist: "Gualajo" },
   { title: "Cosecha", artist: "Herencia de Timbiquí" },
   { title: "Mi Buenaventura", artist: "Nidia Góngora" },
@@ -412,14 +412,23 @@ function renderFavoritesZone(selected: string | null) {
     return (
       <div className="w-full rounded-xl border border-slate-200 bg-white p-4 text-left shadow-sm">
         {header}
-        <div className="space-y-2.5">
-          {FAVORITE_SONGS.map((song, i) => (
-            <FavoriteRow key={song.title} song={song} removed={i === 0} />
-          ))}
+        <div className="rounded-lg border border-brand-support/20 bg-brand-light/60 p-3 text-center">
+          <p className="text-[10px] font-bold text-brand-support">
+            ¿Seguro que quieres eliminar “Marimba” de tus favoritos?
+          </p>
+          <div className="mt-2.5 flex gap-2">
+            <span className="flex-1 rounded-md border border-brand-support/25 bg-white py-1.5 text-center text-[9px] font-bold text-brand-support/70">
+              Cancelar
+            </span>
+            <span className="flex-1 rounded-md bg-brand-primary py-1.5 text-center text-[9px] font-bold text-white">
+              Eliminar
+            </span>
+          </div>
         </div>
-        <div className="mt-3 flex items-center justify-between gap-2 rounded-lg bg-slate-900 px-3 py-2.5 text-white shadow-lg">
+        <p className="my-2 text-center text-[9px] font-semibold text-brand-support/50">Al confirmar</p>
+        <div className="flex items-center justify-between gap-2 rounded-lg bg-brand-support px-3 py-2.5 text-white shadow-lg">
           <span className="text-[10px] font-semibold">Tema eliminado de tus favoritos</span>
-          <span className="rounded-md bg-white/15 px-2.5 py-1 text-[9px] font-bold text-amber-300">Deshacer</span>
+          <span className="rounded-md bg-white/15 px-2.5 py-1 text-[9px] font-bold text-brand-soft">Deshacer</span>
         </div>
       </div>
     );
@@ -447,8 +456,8 @@ function renderActionsRow(selected: string | null) {
   if (selected === "b") {
     return (
       <div className="flex w-full flex-col gap-2 sm:flex-row sm:gap-3">
-        <span className="h-11 flex-1 rounded-lg bg-emerald-600 text-center text-[11px] font-extrabold leading-[44px] text-white shadow-lg">Confirmar reserva</span>
-        <span className="h-11 flex-1 rounded-lg border-2 border-slate-200 bg-white text-center text-[11px] font-bold leading-[40px] text-slate-500">Cancelar</span>
+        <span className="h-11 flex-1 rounded-lg bg-brand-primary text-center text-[11px] font-extrabold leading-[44px] text-white shadow-lg">Confirmar reserva</span>
+        <span className="h-11 flex-1 rounded-lg border-2 border-brand-support/25 bg-white text-center text-[11px] font-bold leading-[40px] text-brand-support/70">Cancelar</span>
       </div>
     );
   }
@@ -478,10 +487,10 @@ function renderSearchZone(selected: string | null) {
     return (
       <div className="space-y-2">
         <div className="flex w-full items-center gap-2 rounded-lg bg-white px-3 py-2.5 ring-1 ring-slate-200">
-          <span className="text-slate-400">
+          <span className="text-brand-support/50">
             <SearchIcon />
           </span>
-          <span className="text-[11px] font-medium text-slate-400">Buscar agrupación...</span>
+          <span className="text-[11px] font-medium text-brand-support/50">Buscar agrupación...</span>
         </div>
         <div className="flex flex-wrap gap-1.5">
           {[
@@ -538,54 +547,54 @@ export function renderScene(questionIndex: number, optionId: string): ReactNode 
 
 function LiveStreamView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-slate-950 text-white">
-      <div className="flex items-center justify-center gap-2 bg-slate-900 px-4 py-2.5">
-        <span className="flex items-center gap-1.5 rounded-md bg-red-600 px-2 py-0.5 text-[9px] font-black uppercase tracking-wider">
+    <div className="flex min-h-[460px] flex-col bg-brand-support text-white">
+      <div className="flex items-center justify-center gap-2 bg-black/25 px-4 py-2.5">
+        <span className="flex items-center gap-1.5 rounded-md bg-brand-primary px-2 py-0.5 text-[9px] font-black uppercase tracking-wider">
           <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-white" />
           EN VIVO
         </span>
         <span className="text-[11px] font-extrabold">Festival Petronio Álvarez</span>
       </div>
-      <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-gradient-to-b from-slate-900 via-slate-950 to-black px-6 py-10">
+      <div className="flex flex-1 flex-col items-center justify-center gap-3 bg-gradient-to-b from-brand-support via-brand-support to-black/60 px-6 py-10">
         <div className="flex h-24 w-24 items-center justify-center rounded-full bg-brand-mid text-white ring-4 ring-white/10">
           <MusicIcon className="h-9 w-9" />
         </div>
         <p className="text-sm font-black">Herencia de Timbiquí</p>
-        <p className="text-[11px] font-medium text-white/60">Marimba de chonta · Transmisión oficial</p>
+        <p className="text-[11px] font-medium text-white/60">Marimba - Transmisión oficial</p>
       </div>
-      <div className="border-t border-white/10 bg-slate-900 px-4 py-4">{renderAudioZone(selected)}</div>
+      <div className="border-t border-white/10 bg-black/25 px-4 py-4">{renderAudioZone(selected)}</div>
     </div>
   );
 }
 
 function AgendaView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-slate-50">
+    <div className="flex min-h-[460px] flex-col bg-brand-light/50">
       <div className="flex items-center justify-between bg-brand-primary px-4 py-2.5 text-white">
-        <span className="text-xs font-extrabold">Agenda Nocturna · Tarima Principal</span>
+        <span className="text-xs font-extrabold">Agenda Nocturna - Tarima Principal</span>
         <span className="text-[10px] font-semibold text-white/80">Sábado</span>
       </div>
       <div className="flex-1 space-y-2.5 px-4 py-4">
         <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-sm">
           <span className="w-16 text-[10px] font-black text-brand-mid">8:00 PM</span>
           <div>
-            <p className="text-[11px] font-bold text-slate-700">Grupo Bahía</p>
-            <p className="text-[9px] text-slate-400">Sonora bonaverense</p>
+            <p className="text-[11px] font-bold text-brand-support">Grupo Bahía</p>
+            <p className="text-[9px] text-brand-support/55">Sonora bonaverense</p>
           </div>
         </div>
         <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-sm">
           <span className="w-16 text-[10px] font-black text-brand-mid">9:00 PM</span>
           <div>
-            <p className="text-[11px] font-bold text-slate-700">Gualajo</p>
-            <p className="text-[9px] text-slate-400">Marimba</p>
+            <p className="text-[11px] font-bold text-brand-support">Gualajo</p>
+            <p className="text-[9px] text-brand-support/55">Marimba</p>
           </div>
         </div>
         {renderConcertCard(selected)}
         <div className="flex items-center gap-3 rounded-xl bg-white px-4 py-2.5 shadow-sm">
           <span className="w-16 text-[10px] font-black text-brand-mid">11:30 PM</span>
           <div>
-            <p className="text-[11px] font-bold text-slate-700">Estrellas del Pacífico</p>
-            <p className="text-[9px] text-slate-400">Cierre</p>
+            <p className="text-[11px] font-bold text-brand-support">Estrellas del Pacífico</p>
+            <p className="text-[9px] text-brand-support/55">Cierre</p>
           </div>
         </div>
       </div>
@@ -595,22 +604,22 @@ function AgendaView({ selected }: { selected: string | null }) {
 
 function PlayerView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-gradient-to-b from-amber-50 via-emerald-50 to-slate-100">
-      <div className="flex items-center justify-between bg-emerald-800 px-4 py-2.5 text-white">
+    <div className="flex min-h-[460px] flex-col bg-gradient-to-b from-brand-light via-brand-light to-brand-soft/20">
+      <div className="flex items-center justify-between bg-brand-support px-4 py-2.5 text-white">
         <span className="text-xs font-extrabold">Mini Reproductor</span>
-        <span className="text-[10px] font-semibold text-white/80">Marimba de Chonta</span>
+        <span className="text-[10px] font-semibold text-white/80">Marimba</span>
       </div>
       <div className="flex flex-1 flex-col items-center justify-center gap-4 px-6 py-8">
-        <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-emerald-900 text-white shadow-lg">
+        <div className="flex h-28 w-28 items-center justify-center rounded-2xl bg-brand-primary text-white shadow-lg">
           <MusicIcon className="h-10 w-10" />
         </div>
         <div className="w-full max-w-md">
-          <p className="text-center text-sm font-black text-slate-800">Marimba de Chonta</p>
-          <p className="text-center text-[10px] text-slate-500">Grupo Bahía · Álbum “Fuga”</p>
-          <div className="mt-4 h-1.5 w-full rounded-full bg-slate-300">
+          <p className="text-center text-sm font-black text-brand-support">Marimba</p>
+          <p className="text-center text-[10px] text-brand-support/60">Grupo Bahía - Álbum “Fuga”</p>
+          <div className="mt-4 h-1.5 w-full rounded-full bg-brand-support/20">
             <div className="h-full w-1/3 rounded-full bg-brand-primary" />
           </div>
-          <div className="mt-1 flex justify-between text-[9px] font-semibold text-slate-500">
+          <div className="mt-1 flex justify-between text-[9px] font-semibold text-brand-support/60">
             <span>1:32</span>
             <span>4:05</span>
           </div>
@@ -623,7 +632,7 @@ function PlayerView({ selected }: { selected: string | null }) {
 
 function FavoritesView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-slate-50">
+    <div className="flex min-h-[460px] flex-col bg-brand-light/50">
       <div className="flex items-center justify-between bg-brand-primary px-4 py-2.5 text-white">
         <span className="text-xs font-extrabold">Mis Favoritos</span>
         <span className="text-[10px] font-semibold text-white/80">12 temas</span>
@@ -635,16 +644,16 @@ function FavoritesView({ selected }: { selected: string | null }) {
 
 function CheckoutView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-slate-50">
+    <div className="flex min-h-[460px] flex-col bg-brand-light/50">
       <div className="bg-brand-primary px-4 py-2.5 text-xs font-extrabold text-white">Confirmar reserva</div>
       <div className="flex flex-1 flex-col gap-4 px-4 py-5">
         <div className="rounded-2xl border-2 border-dashed border-brand-primary/50 bg-white p-4">
           <p className="text-[10px] font-bold uppercase tracking-widest text-brand-mid">Gradas Norte</p>
-          <p className="mt-1 text-sm font-black text-slate-800">2 entradas · Sección B</p>
-          <p className="text-[11px] text-slate-500">Noche 1 · Festival Petronio</p>
-          <div className="mt-2 flex items-center justify-between border-t border-dashed border-slate-200 pt-2">
-            <span className="text-[10px] font-bold text-slate-500">Total</span>
-            <span className="text-sm font-black text-emerald-600">$120.000</span>
+          <p className="mt-1 text-sm font-black text-brand-support">2 entradas - Sección B</p>
+          <p className="text-[11px] text-brand-support/60">Noche 1 - Festival Petronio</p>
+          <div className="mt-2 flex items-center justify-between border-t border-dashed border-brand-support/20 pt-2">
+            <span className="text-[10px] font-bold text-brand-support/60">Total</span>
+            <span className="text-sm font-black text-brand-primary">$120.000</span>
           </div>
         </div>
         {renderActionsRow(selected)}
@@ -655,7 +664,7 @@ function CheckoutView({ selected }: { selected: string | null }) {
 
 function DirectoryView({ selected }: { selected: string | null }) {
   return (
-    <div className="flex min-h-[460px] flex-col bg-slate-50">
+    <div className="flex min-h-[460px] flex-col bg-brand-light/50">
       <div className="bg-brand-primary px-4 py-2.5 text-xs font-extrabold text-white">Directorio de Agrupaciones</div>
       <div className="flex-1 px-4 py-4">
         {renderSearchZone(selected)}
@@ -670,8 +679,8 @@ function DirectoryView({ selected }: { selected: string | null }) {
                 <UserIcon className="h-4 w-4" />
               </div>
               <div>
-                <p className="text-[11px] font-bold text-slate-700">{artist.name}</p>
-                <p className="text-[9px] text-slate-400">{artist.genre}</p>
+                <p className="text-[11px] font-bold text-brand-support">{artist.name}</p>
+                <p className="text-[9px] text-brand-support/55">{artist.genre}</p>
               </div>
             </div>
           ))}
@@ -713,8 +722,8 @@ function FadeBlock({ index, children }: { index: number; children: ReactNode }) 
 
 export default function AppSimulator({ questionIndex, selectedOptionId }: AppSimulatorProps) {
   return (
-    <div className="overflow-hidden rounded-[2rem] border-4 border-slate-800/90 bg-slate-100 shadow-2xl">
-      <div className="flex items-center justify-between bg-slate-900 px-5 py-1.5 text-white">
+    <div className="overflow-hidden rounded-[2rem] border-4 border-brand-support bg-brand-light shadow-2xl">
+      <div className="flex items-center justify-between bg-brand-support px-5 py-1.5 text-white">
         <span className="text-[10px] font-bold tracking-wide">9:41</span>
         <div className="flex items-center gap-1.5">
           <SignalIcon />
@@ -727,7 +736,7 @@ export default function AppSimulator({ questionIndex, selectedOptionId }: AppSim
         {renderView(questionIndex, selectedOptionId)}
       </FadeBlock>
 
-      <div className="border-t border-slate-200 bg-white px-2 py-1.5">
+      <div className="border-t border-brand-support/15 bg-white px-2 py-1.5">
         <div className="grid grid-cols-6 gap-1">
           {APP_TABS.map((tab, i) => {
             const active = i === questionIndex;
@@ -735,7 +744,7 @@ export default function AppSimulator({ questionIndex, selectedOptionId }: AppSim
               <div
                 key={tab.label}
                 className={`flex flex-col items-center gap-0.5 rounded-lg py-1 ${
-                  active ? "text-brand-primary" : "text-slate-400"
+                  active ? "text-brand-primary" : "text-brand-support/45"
                 }`}
               >
                 <span>{tab.icon}</span>
@@ -746,7 +755,7 @@ export default function AppSimulator({ questionIndex, selectedOptionId }: AppSim
         </div>
       </div>
 
-      <div className="border-t border-amber-200 bg-amber-50 px-4 py-2 text-[11px] font-semibold text-amber-800">
+      <div className="border-t border-brand-soft/40 bg-brand-soft/15 px-4 py-2 text-[11px] font-semibold text-brand-support">
         Vista previa en vivo: elige una opción y observa el cambio aquí.
       </div>
     </div>

@@ -2,7 +2,8 @@
 
 import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
-import { savePlayer } from "@/lib/player";
+import { nombreYaUsado, registrarNombreUsado, savePlayer } from "@/lib/player";
+import { iniciarNuevaSesion } from "@/lib/stage-access";
 import { AVATARS, type AvatarId } from "@/lib/avatars";
 import AvatarPicker from "./AvatarPicker";
 
@@ -23,6 +24,9 @@ export default function RegistrationForm() {
 
     if (!name.trim()) {
       nextErrors.name = "Escribe tu nombre para continuar.";
+    } else if (nombreYaUsado(name)) {
+      nextErrors.name =
+        "Ese nombre ya se usó en este computador. Agrega tu apellido o una inicial (ej. Juan P.).";
     }
     if (!avatar) {
       nextErrors.avatar = "Elige un avatar para tu perfil.";
@@ -32,6 +36,10 @@ export default function RegistrationForm() {
     if (Object.keys(nextErrors).length > 0) return;
     if (!avatar) return;
 
+    // Cada registro es una persona nueva: se borra el avance y los desbloqueos
+    // de este computador para que el mapa vuelva a pedir las contraseñas.
+    iniciarNuevaSesion();
+    registrarNombreUsado(name);
     savePlayer({ name: name.trim(), avatar });
     router.push("/retos");
   }
@@ -43,14 +51,12 @@ export default function RegistrationForm() {
       className="w-full rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-10"
     >
       <div className="mb-8 text-center">
-        <span className="inline-flex items-center gap-2 rounded-full bg-brand-soft/40 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-brand-support">
-          Paso 2 de 3
-        </span>
+
         <h2 className="mt-4 text-3xl font-black tracking-tight text-brand-support sm:text-4xl">
           Crea tu perfil
         </h2>
         <p className="mt-2 text-sm text-brand-support/80 sm:text-base">
-          Cuéntanos tu nombre y elige un avatar para el reto.
+          Escribe tu nombre y elige un avatar para el reto.
         </p>
       </div>
 
@@ -124,7 +130,7 @@ export default function RegistrationForm() {
       {avatar && name.trim() && (
         <p className="mt-4 text-center text-sm text-brand-support/70">
           Jugando como <strong className="text-brand-primary">{name.trim()}</strong>
-          {" · "}
+          {" - "}
           {AVATARS.find((item) => item.id === avatar)?.label}
         </p>
       )}

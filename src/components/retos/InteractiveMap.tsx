@@ -8,6 +8,7 @@ import {
   RUTA_STAGES,
   MAPA_BACKGROUND_IMAGE,
   MAPA_BACKGROUND_COLOR,
+  MAPA_OFFSET_Y,
   getMaxCompletedStage,
   getStageStatus,
   type RutaStage,
@@ -16,6 +17,8 @@ import {
 import { loadPlayer } from "@/lib/player";
 import { getAvatarSrc } from "@/lib/avatars";
 import { useHasHydrated } from "@/lib/use-has-hydrated";
+import { isStageUnlocked } from "@/lib/stage-access";
+import StagePasswordPrompt from "./StagePasswordPrompt";
 
 interface Point {
   x: number;
@@ -164,14 +167,12 @@ function RedXMarker({
   x,
   y,
   customIconUrl,
-  isCompleted,
   isCurrent,
   onClick,
 }: {
   x: number;
   y: number;
   customIconUrl?: string | null;
-  isCompleted: boolean;
   isCurrent: boolean;
   onClick: () => void;
 }) {
@@ -208,10 +209,6 @@ function RedXMarker({
           </svg>
         )}
       </div>
-
-      <span className="mt-0.5 rounded-full bg-slate-950/85 px-2 py-0.5 text-[9px] sm:text-[10px] font-black uppercase tracking-wider text-rose-200 shadow-md backdrop-blur whitespace-nowrap">
-        {isCompleted ? "✓ Inicio" : "Partida"}
-      </span>
     </button>
   );
 }
@@ -374,6 +371,9 @@ export default function InteractiveMap() {
   const [isLanding, setIsLanding] = useState<boolean>(false);
   const [hasMounted, setHasMounted] = useState<boolean>(false);
 
+  // Parada que espera contraseña antes de abrirse
+  const [stagePendiente, setStagePendiente] = useState<RutaStage | null>(null);
+
   // Posiciones efectivas de cada estación directamente desde src/lib/ruta-progress.ts
   const stagePositions = useMemo(() => {
     const res: Record<number, Point> = {};
@@ -447,18 +447,27 @@ export default function InteractiveMap() {
     }
   };
 
+  const irAParadaActiva = (stage: RutaStage) => {
+    if (currentStage !== stage.index) {
+      moveAvatarToStage(stage.index);
+      setTimeout(() => {
+        router.push(stage.href);
+      }, 1200);
+    } else {
+      router.push(stage.href);
+    }
+  };
+
   const handleStageClick = (stage: RutaStage, status: StageStatus) => {
     if (status === "locked") return;
 
     if (status === "active") {
-      if (currentStage !== stage.index) {
-        moveAvatarToStage(stage.index);
-        setTimeout(() => {
-          router.push(stage.href);
-        }, 1200);
-      } else {
-        router.push(stage.href);
+      // Cada parada nueva pide la contraseña que entregan los guías
+      if (!isStageUnlocked(stage.index)) {
+        setStagePendiente(stage);
+        return;
       }
+      irAParadaActiva(stage);
       return;
     }
 
@@ -468,7 +477,7 @@ export default function InteractiveMap() {
   };
 
   const player = hasHydrated ? loadPlayer() : null;
-  const avatarSrc = player ? getAvatarSrc(player.avatar) : "/media/avatars/av-companion.svg";
+  const avatarSrc = player?.avatar ? getAvatarSrc(player.avatar) : "/media/avatars/aborrajado.png";
   const playerName = player?.name ?? null;
 
   return (
@@ -477,7 +486,12 @@ export default function InteractiveMap() {
       className="relative overflow-hidden select-none flex items-center justify-center h-dvh w-screen transition-colors duration-300"
       style={{ backgroundColor: MAPA_BACKGROUND_COLOR }}
     >
-      {/* Imagen del mapa a pantalla completa */}
+      {/* Capa desplazable del mapa (sube ligeramente para dar aire abajo) */}
+      <div
+        className="relative h-full w-full"
+        style={{ transform: `translateY(${MAPA_OFFSET_Y})` }}
+      >
+        {/* Imagen del mapa a pantalla completa */}
       <Image
         src={MAPA_BACKGROUND_IMAGE}
         alt="Mapa de retos de Cali"
@@ -509,7 +523,7 @@ export default function InteractiveMap() {
             <path
               d={traversedPathD}
               fill="none"
-              stroke="#fbbf24"
+              stroke="#EC6449"
               strokeWidth="1.7"
               strokeDasharray="1.8 2.2"
               strokeLinecap="round"
@@ -517,7 +531,7 @@ export default function InteractiveMap() {
             <path
               d={traversedPathD}
               fill="none"
-              stroke="#d97706"
+              stroke="#C63254"
               strokeWidth="0.9"
               strokeDasharray="1.8 2.2"
               strokeLinecap="round"
@@ -531,7 +545,6 @@ export default function InteractiveMap() {
         x={stagePositions[0].x}
         y={stagePositions[0].y}
         customIconUrl={RUTA_STAGES[0]?.imageSrc}
-        isCompleted={maxCompleted >= 0}
         isCurrent={currentStage === 0}
         onClick={() => moveAvatarToStage(0)}
       />
@@ -598,13 +611,13 @@ export default function InteractiveMap() {
             }
             className="relative flex flex-col items-center"
           >
-            <div className="relative h-13 w-13 sm:h-16 sm:w-16 md:h-20 md:w-20 overflow-hidden rounded-full border-3 sm:border-4 border-white bg-slate-900 shadow-2xl ring-4 ring-amber-400">
+            <div className="relative h-16 w-16 sm:h-20 sm:w-20 md:h-24 md:w-24 flex items-center justify-center">
               <Image
                 src={avatarSrc}
                 alt={playerName || "Tu avatar"}
                 fill
-                sizes="(max-width: 640px) 64px, 80px"
-                className="object-cover select-none"
+                sizes="(max-width: 640px) 80px, 96px"
+                className="object-contain select-none pointer-events-none drop-shadow-[0_6px_14px_rgba(0,0,0,0.35)]"
                 draggable={false}
               />
             </div>
@@ -614,6 +627,27 @@ export default function InteractiveMap() {
             </div>
           </motion.div>
         </motion.div>
+      )}
+      </div>
+
+      {/* Contraseña de la parada */}
+      {stagePendiente && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center bg-slate-950/60 px-4 backdrop-blur-sm"
+          onClick={() => setStagePendiente(null)}
+        >
+          <div className="flex w-full max-w-5xl justify-center" onClick={(event) => event.stopPropagation()}>
+            <StagePasswordPrompt
+              stage={stagePendiente}
+              onUnlocked={() => {
+                const stage = stagePendiente;
+                setStagePendiente(null);
+                irAParadaActiva(stage);
+              }}
+              onCancel={() => setStagePendiente(null)}
+            />
+          </div>
+        </div>
       )}
     </div>
   );

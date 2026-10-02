@@ -1,4 +1,3 @@
-
 # Feature: Módulo Ciberseguridad / Incident Response - Carrera del Pacífico
 
 ## Contexto General del Taller
@@ -10,14 +9,23 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
 - **Evento:** Publicación de Tiempos Oficiales de la Carrera del Pacífico (Cali, Colombia).
 - **Rol:** Cybersecurity Analyst.
 - **Situación:** Un atacante ha bloqueado la puerta de enlace (gateway) del servidor de resultados en el Bulevar del Río con un algoritmo de Cifrado César dinámico.
-- **Objetivo del Estudiante:** Calcular la clave de desplazamiento en papel resolviendo la pista de los 21K de la maratón, descifrar la expresión asignada aleatoriamente ingresando cada letra desplazada e ingresar la clave resultante en la interfaz web para restaurar el sistema.
+- **Objetivo del Estudiante:** Calcular la clave de desplazamiento en papel resolviendo la pista asignada (uno de 4 acertijos numéricos), descifrar la expresión asignada aleatoriamente ingresando cada letra desplazada e ingresar la clave resultante en la interfaz web para restaurar el sistema.
 
 ---
 
 ## Reto Análogo (Hoja de Papel)
 
 - **Generación Aleatoria (Mecanismo Anti-Trampa):** Cada estudiante/estación de trabajo recibe en pantalla un **Código Encriptado Único** seleccionado aleatoriamente de un banco de 35 expresiones típicas caleñas y colombianas encriptadas con Cifrado César (Shift = 3).
-- **Pista Impresa en Papel / Pantalla:** *"La clave de desplazamiento es igual al número de kilómetros oficiales de la Media Maratón de Cali (21K) dividida entre 7"*. ($21 \div 7 = 3$, Desplazamiento = 3 posiciones hacia atrás en el abecedario).
+- **Pista Impresa en Papel / Pantalla:** la clave de desplazamiento se obtiene de uno de **4 acertijos numéricos** asignados también al azar. Las cuatro variantes dan el mismo resultado (3), por lo que el Cifrado César siempre es Shift = 3, aunque el texto de la pista cambie en cada intento. En pantalla **solo se muestra el acertijo, nunca el resultado**: el cálculo se resuelve en papel.
+
+  | # | Tema | Acertijo | Cálculo |
+  | --- | --- | --- | --- |
+  | 0 | Media Maratón de Cali | *"La clave de desplazamiento es igual al número de kilómetros oficiales de la Media Maratón de Cali (21K) dividida entre 7"*. | $21 \div 7 = 3$ |
+  | 1 | Deporte (Jugadores en cancha) | *"La clave de desplazamiento es igual al número total de jugadores que inician un partido de fútbol en un equipo (11) menos 8"*. | $11 - 8 = 3$ |
+  | 2 | Geografía de Colombia (Departamentos) | *"La clave de desplazamiento es igual al número total de departamentos que tiene Colombia (32) dividido entre 8, y al resultado réstale 1"*. | $(32 \div 8) - 1 = 4 - 1 = 3$ |
+  | 3 | Geometría (Heptágono) | *"La clave de desplazamiento es igual al número de lados que tiene un heptágono (7) menos 4"*. | $7 - 4 = 3$ |
+
+  En los cuatro casos: Desplazamiento = 3 posiciones hacia atrás en el abecedario.
 - **Herramienta en Papel:** Hoja con la tabla o disco de sustitución del Cifrado César para retroceder 3 posiciones por cada letra.
 - **Banco de Expresiones Encriptadas y Descifradas (Shift = 3):**
   1. `FKRODGRKHODGR` ➔ **CHOLADOHELADO**
@@ -65,6 +73,7 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
   Given que el estudiante ingresa al módulo de Ciberseguridad en la app web
   Then la interfaz debe mostrar una alerta roja de "SERVIDOR BLOQUEADO / ATAQUE DETECTADO"
   And seleccionar y mostrar aleatoriamente un código encriptado del banco (ej. "Código Encriptado: FRRODGRKHODGR")
+  And seleccionar y mostrar aleatoriamente una de las 4 pistas de la clave de desplazamiento (ej. la de la Media Maratón de Cali, que da $21 \div 7 = 3$), sin revelar el resultado del cálculo
   And mostrar la instrucción: "Paso 1: Resuelve el acertijo numérico en tu hoja para hallar el desplazamiento y descifra el código usando la tabla de Cifrado César."
   And mostrar un campo de texto (input) para ingresar la "Clave Descifrada"
   And un botón con la etiqueta "Restaurar Servidor".
@@ -91,5 +100,5 @@ Este módulo forma parte del taller interactivo "Ruta de Ingeniería de Software
   When el estudiante ingresa un texto que no corresponde a la sustitución por Cifrado César del código asignado
   And hace clic en el botón "Restaurar Servidor"
   Then el sistema debe mantenerse en estado "BLOQUEADO"
-  And mostrar un mensaje de error: "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo (21K ÷ 7 = 3) y retroceder 3 posiciones en el abecedario para cada letra."
+  And mostrar un mensaje de error: "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo de la pista de desplazamiento y retroceder 3 posiciones en el abecedario para cada letra."
   And aplicar una animación de sacudida (shake) al contenedor del formulario.

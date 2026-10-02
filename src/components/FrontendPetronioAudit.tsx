@@ -1,9 +1,10 @@
 "use client";
 
-import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import AppSimulator, { renderScene } from "@/components/AppSimulator";
 import { completeStage } from "@/lib/ruta-progress";
+import { continuarConCierre } from "@/lib/personajes";
 
 type Phase = "quiz" | "results";
 
@@ -123,6 +124,7 @@ export default function FrontendPetronioAudit({
 }: {
   showIntro: boolean;
 }) {
+  const router = useRouter();
   const [phase, setPhase] = useState<Phase>("quiz");
   const [currentIndex, setCurrentIndex] = useState(0);
   const [selected, setSelected] = useState<string | null>(null);
@@ -171,7 +173,7 @@ export default function FrontendPetronioAudit({
       >
         <div className="mb-5">
           <div className="text-xs font-semibold uppercase tracking-widest text-brand-support/70">
-            App oficial &quot;Sonoridades del Pacífico&quot;
+            App oficial &quot;Ritmos del Pacífico&quot;
           </div>
           <h2 className="text-xl font-black text-brand-support">
             Mejora la interfaz y la usabilidad
@@ -183,7 +185,7 @@ export default function FrontendPetronioAudit({
             <div className="mb-6">
               <div className="flex flex-wrap items-center justify-between gap-2 text-sm font-bold text-brand-support">
                 <span>Pregunta {currentIndex + 1} de {QUESTIONS.length}</span>
-                <span className="rounded-full bg-brand-soft/40 px-3 py-1 text-xs uppercase tracking-widest text-brand-support">
+                <span className="etiqueta">
                   {current.heuristica}
                 </span>
               </div>
@@ -246,7 +248,7 @@ export default function FrontendPetronioAudit({
                     type="button"
                     onClick={handleNext}
                     disabled={selected === null}
-                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-mid disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
+                    className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-all hover:bg-brand-support disabled:cursor-not-allowed disabled:bg-slate-300 disabled:shadow-none"
                   >
                     {isLast ? "Finalizar" : "Siguiente"}
                   </button>
@@ -259,14 +261,12 @@ export default function FrontendPetronioAudit({
         {phase === "results" && (
           <div className="space-y-6">
             <div className="text-center">
-              <span className="inline-flex items-center rounded-full bg-amber-200/70 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-amber-900">
-                Actividad completada
-              </span>
               <h2 className="mt-3 text-3xl font-black tracking-tight text-brand-support">
                 {score}/6 aciertos
               </h2>
               <p className="mt-2 text-sm text-brand-support/80">
-                Revisa cada decisión de interfaz y su justificación técnica.
+                Revisa cada decisión de interfaz. En las que fallaste, la opción
+                correcta aparece resaltada con su explicación.
               </p>
             </div>
 
@@ -287,7 +287,7 @@ export default function FrontendPetronioAudit({
                     <div className="flex items-start justify-between gap-3">
                       <div>
                         <div className="text-[11px] font-bold uppercase tracking-widest text-brand-support/70">
-                          Pregunta {index + 1} · {question.heuristica}
+                          Pregunta {index + 1} - {question.heuristica}
                         </div>
                         <p className="mt-1 text-sm font-semibold text-brand-support">{question.caso}</p>
                       </div>
@@ -299,23 +299,52 @@ export default function FrontendPetronioAudit({
                       </span>
                     </div>
 
-                    <div className="mt-3 grid grid-cols-1 gap-2 text-xs font-semibold text-brand-support sm:grid-cols-2">
-                      <div className="rounded-xl bg-white/80 px-3 py-2">
-                        <span className="text-brand-support/60">Elegida: </span>
+                    <div
+                      className={`mt-3 flex items-center gap-2 rounded-xl border px-3 py-2 text-sm ${
+                        isCorrect
+                          ? "border-emerald-300 bg-white text-emerald-800"
+                          : "border-rose-200 bg-white/80 text-rose-700"
+                      }`}
+                    >
+                      <span aria-hidden="true" className="font-black">
+                        {isCorrect ? "✓" : "✗"}
+                      </span>
+                      <span className="text-xs font-bold uppercase tracking-wide opacity-70">
+                        Tu respuesta:
+                      </span>
+                      <span className="font-semibold">
                         {chosen ? chosen.title : "Sin responder"}
-                      </div>
-                      {!isCorrect && correctOption && (
-                        <div className="rounded-xl bg-white/80 px-3 py-2">
-                          <span className="text-brand-support/60">Correcta: </span>
-                          <span className="text-emerald-700">{correctOption.title}</span>
-                        </div>
-                      )}
+                      </span>
                     </div>
 
-                    <div className="mt-3 flex gap-2 rounded-xl bg-white/80 px-3 py-2 text-xs leading-relaxed text-brand-support/90">
-                      <span aria-hidden="true">💡</span>
-                      <span>{question.justification}</span>
-                    </div>
+                    {!isCorrect && correctOption && (
+                      <div className="mt-3 rounded-xl border-2 border-emerald-500 bg-emerald-50 p-4 shadow-md shadow-emerald-500/20">
+                        <div className="flex items-center gap-3">
+                          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white">
+                            <CheckIcon />
+                          </span>
+                          <div>
+                            <div className="text-[11px] font-bold uppercase tracking-widest text-emerald-700">
+                              La respuesta correcta era
+                            </div>
+                            <div className="text-base font-black text-emerald-900 sm:text-lg">
+                              {correctOption.title}
+                            </div>
+                          </div>
+                        </div>
+                        <p className="mt-3 border-t border-emerald-200 pt-3 text-sm leading-relaxed text-brand-support">
+                          <strong className="text-emerald-800">¿Por qué? </strong>
+                          {question.justification}
+                        </p>
+                      </div>
+                    )}
+
+                    {isCorrect && (
+                      <div className="mt-3 flex gap-2 rounded-xl bg-white/80 px-3 py-2 text-sm leading-relaxed text-brand-support/90">
+                        <span aria-hidden="true">💡</span>
+                        <span>{question.justification}</span>
+                      </div>
+                    )}
                   </div>
                 );
               })}
@@ -334,12 +363,13 @@ export default function FrontendPetronioAudit({
               >
                 Reintentar actividad
               </button>
-              <Link
-                href="/retos"
-                className="rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-lg transition-colors hover:bg-brand-mid"
+              <button
+                type="button"
+                onClick={() => continuarConCierre("frontend", router.push)}
+                className="animate-fade-in rounded-xl bg-brand-primary px-8 py-3 text-sm font-bold text-white shadow-xl shadow-brand-primary/40 ring-4 ring-brand-primary/20 transition-colors hover:bg-brand-support"
               >
                 Continuar
-              </Link>
+              </button>
             </div>
           </div>
         )}

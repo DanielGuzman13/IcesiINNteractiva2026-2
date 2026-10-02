@@ -20,6 +20,9 @@
 # production
 /build
 
+# docker image exports
+*.tar.gz
+
 # misc
 .DS_Store
 *.pem

@@ -1,9 +1,11 @@
 "use client";
 
-import Link from "next/link";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { useState, type FormEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
+import { continuarConCierre } from "@/lib/personajes";
 
 const EXPRESIONES: string[] = [
   "CHOLADOHELADO",
@@ -43,6 +45,34 @@ const EXPRESIONES: string[] = [
   "CALENOAMOR",
 ];
 
+interface PistaDesplazamiento {
+  id: string;
+  acertijo: string;
+}
+
+const PISTAS_DESPLAZAMIENTO: PistaDesplazamiento[] = [
+  {
+    id: "maraton",
+    acertijo:
+      "La clave de desplazamiento es igual al número de kilómetros oficiales de la Media Maratón de Cali dividida entre 7",
+  },
+  {
+    id: "futbol",
+    acertijo:
+      "La clave de desplazamiento es igual al número total de jugadores que inician un partido de fútbol en un equipo menos 8",
+  },
+  {
+    id: "colombia",
+    acertijo:
+      "La clave de desplazamiento es igual al número total de departamentos que tiene Colombia dividido entre 8, y al resultado réstale 1",
+  },
+  {
+    id: "heptagono",
+    acertijo:
+      "La clave de desplazamiento es igual al número de lados que tiene un heptágono menos 4",
+  },
+];
+
 function cifrarCesar(texto: string, posiciones: number) {
   const abecedario = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
   return texto
@@ -75,6 +105,7 @@ const COLORES_CONFETI = [
 ];
 
 export default function CyberCarreraChallenge() {
+  const router = useRouter();
   const [estado, setEstado] = useState<"bloqueado" | "restaurado">("bloqueado");
   const [clave, setClave] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -84,9 +115,15 @@ export default function CyberCarreraChallenge() {
       ? 0
       : Math.floor(Math.random() * EXPRESIONES.length),
   );
+  const [pistaIndex] = useState(() =>
+    typeof window === "undefined"
+      ? 0
+      : Math.floor(Math.random() * PISTAS_DESPLAZAMIENTO.length),
+  );
 
   const expresion = EXPRESIONES[expresionIndex];
   const encriptado = cifrarCesar(expresion, 3);
+  const pista = PISTAS_DESPLAZAMIENTO[pistaIndex];
 
   function handleRestaurar(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -97,7 +134,7 @@ export default function CyberCarreraChallenge() {
       return;
     }
     setError(
-      "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo (21K ÷ 7 = 3) y retroceder 3 posiciones en el abecedario para cada letra.",
+      "⚠️ Clave de acceso no válida. Recuerda resolver el acertijo de la pista de desplazamiento y retroceder 3 posiciones en el abecedario para cada letra.",
     );
     setIntentoFallido((current) => current + 1);
   }
@@ -112,14 +149,11 @@ export default function CyberCarreraChallenge() {
           className="grid w-full grid-cols-1 gap-8 lg:grid-cols-2"
         >
           <div className="space-y-6">
-            <div className="rounded-3xl border-2 border-red-400 bg-red-50 p-6 text-center shadow-xl shadow-red-500/10">
-              <span className="inline-flex items-center gap-2 rounded-full bg-red-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-red-600">
-                Estado del servidor
-              </span>
-              <p className="mt-3 animate-pulse text-2xl font-black tracking-tight text-red-600 sm:text-3xl">
+            <div className="rounded-3xl border-2 border-brand-alerta bg-brand-alerta/10 p-6 text-center shadow-xl shadow-brand-alerta/15">
+              <p className="mt-3 animate-pulse font-display text-2xl font-black tracking-tight text-brand-alerta sm:text-3xl">
                 ⚠️ SERVIDOR BLOQUEADO / ATAQUE DETECTADO
               </p>
-              <p className="mt-2 text-sm text-red-500/90">
+              <p className="mt-2 text-sm text-brand-alerta/90">
                 Un atacante bloqueó la puerta de enlace del servidor de
                 resultados del Bulevar del Río con un algoritmo de Cifrado
                 César dinámico.
@@ -127,26 +161,33 @@ export default function CyberCarreraChallenge() {
             </div>
 
             <div className="rounded-3xl border border-brand-soft bg-brand-light/30 p-6">
-              <h3 className="text-sm font-bold uppercase tracking-wide text-brand-support">
+              <h3 className="text-center text-sm font-bold uppercase tracking-wide text-brand-support">
                 Código Encriptado
               </h3>
               <p
                 suppressHydrationWarning
-                className="mt-2 rounded-xl bg-white/70 p-4 font-mono text-xl tracking-widest text-brand-primary"
+                className="mt-2 rounded-xl bg-white/70 p-4 text-center font-mono text-xl tracking-widest text-brand-primary"
               >
                 {encriptado}
               </p>
-              <div className="mt-4 rounded-xl border border-amber-200 bg-amber-50 p-4 text-left">
-                <p className="text-xs font-bold uppercase tracking-wide text-amber-700">
+              <div className="mt-4 rounded-xl border border-brand-mid/50 bg-brand-mid/15 p-4 text-left">
+                <p className="text-xs font-bold uppercase tracking-wide text-brand-support">
                   Pista: clave de desplazamiento
                 </p>
-                <p className="mt-1 text-xs leading-relaxed text-amber-800/90">
-                  &ldquo;La clave de desplazamiento es igual al número de kilómetros
-                  oficiales de la Media Maratón de Cali (21K) dividida entre 7&rdquo;
-                  (21 ÷ 7 = 3, Desplazamiento = 3 posiciones hacia atrás en el
-                  abecedario).
+                <p
+                  suppressHydrationWarning
+                  className="mt-1 text-xs leading-relaxed text-brand-support/85"
+                >
+                  &ldquo;{pista.acertijo}&rdquo;.
                 </p>
               </div>
+              <Image
+                src="/media/alfabeto-referencia.png"
+                alt="Alfabeto de la A a la Z con la posición de cada letra, del 1 al 26"
+                width={1600}
+                height={560}
+                className="mt-4 h-auto w-full rounded-xl border border-brand-soft"
+              />
               <p className="mt-3 text-xs leading-relaxed text-brand-support/80">
                 Paso 1: Resuelve el acertijo numérico en tu hoja para hallar el
                 desplazamiento y descifra el código usando la tabla de Cifrado
@@ -188,20 +229,20 @@ export default function CyberCarreraChallenge() {
                   autoComplete="off"
                   aria-invalid={Boolean(error)}
                   className={`w-full rounded-2xl border-2 bg-white/80 px-5 py-3.5 font-mono text-base text-brand-support shadow-sm outline-none transition placeholder:font-sans placeholder:text-brand-support/50 focus:border-brand-primary focus:ring-4 focus:ring-brand-primary/20 ${
-                    error ? "border-red-400" : "border-brand-soft"
+                    error ? "border-brand-soft" : "border-brand-primary/30"
                   }`}
                 />
               </label>
 
               <button
                 type="submit"
-                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-red-500 px-8 py-4 text-lg font-bold text-white shadow-xl shadow-red-500/30 transition-all duration-300 hover:bg-red-600"
+                className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-soft px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-soft/30 transition-all duration-300 hover:bg-brand-support"
               >
                 Restaurar Servidor
               </button>
 
               {error && (
-                <p className="mt-4 animate-fade-in rounded-xl border border-red-200 bg-red-50 p-3 text-sm font-semibold text-red-600">
+                <p className="mt-4 animate-fade-in rounded-xl border border-brand-soft/40 bg-brand-soft/10 p-3 text-sm font-semibold text-brand-soft">
                   {error}
                 </p>
               )}
@@ -223,10 +264,7 @@ export default function CyberCarreraChallenge() {
           <Confetti />
 
           <div className="rounded-3xl border-2 border-emerald-300 bg-emerald-50 p-6 text-center shadow-xl shadow-emerald-500/10 sm:p-8">
-            <span className="inline-flex items-center gap-2 rounded-full bg-emerald-100 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.18em] text-emerald-700">
-              Estado del servidor
-            </span>
-            <p className="mt-3 text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
+            <p className="mt-3 font-display text-2xl font-black tracking-tight text-emerald-700 sm:text-3xl">
               ✅ SISTEMA RESTAURADO
             </p>
             <div className="mx-auto mt-4 max-w-lg rounded-xl border border-emerald-300 bg-[#0d1117] p-4 text-left font-mono text-xs text-emerald-400 sm:text-sm">
@@ -250,7 +288,7 @@ export default function CyberCarreraChallenge() {
           <div className="mt-6 overflow-hidden rounded-3xl border border-white/60 bg-white/70 shadow-2xl shadow-brand-primary/20 backdrop-blur-md">
             <div className="border-b border-brand-soft bg-brand-light/40 px-6 py-4">
               <h3 className="text-lg font-black text-brand-support">
-                Tabla oficial de ganadores · Carrera del Pacífico
+                Tabla oficial de ganadores - Carrera del Pacífico
               </h3>
               <p className="text-xs text-brand-support/70">
                 Resultados Bulevar del Río, Cali — Colombia
@@ -290,9 +328,10 @@ export default function CyberCarreraChallenge() {
           </div>
 
           <div className="mt-6 flex flex-col justify-center gap-3 sm:flex-row">
-            <Link
-              href="/retos"
-              className="inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-mid"
+            <button
+              type="button"
+              onClick={() => continuarConCierre("ciberseguridad", router.push)}
+              className="animate-fade-in inline-flex items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-3.5 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
             >
               Continuar
               <svg
@@ -306,7 +345,7 @@ export default function CyberCarreraChallenge() {
               >
                 <path d="M5 12h14M12 5l7 7-7 7" />
               </svg>
-            </Link>
+            </button>
           </div>
         </div>
       )}

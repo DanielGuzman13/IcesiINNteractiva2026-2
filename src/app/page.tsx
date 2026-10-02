@@ -3,29 +3,29 @@ import Carousel from "@/components/home/Carousel";
 
 export default function Home() {
   return (
-    <div className="relative min-h-dvh w-full overflow-hidden">
+    <div data-tema="general" className="relative min-h-dvh w-full overflow-hidden">
       <Carousel />
 
       <div
         className="pointer-events-none absolute inset-0"
         style={{
           background:
-            "radial-gradient(ellipse at center, rgba(43,58,86,0.45) 0%, rgba(43,58,86,0.75) 100%)",
+            "radial-gradient(ellipse at center, color-mix(in srgb, var(--brand-support) 45%, transparent) 0%, color-mix(in srgb, var(--brand-support) 75%, transparent) 100%)",
         }}
       />
 
       <div className="relative z-10 flex min-h-dvh flex-col items-center justify-between px-6 py-10 sm:py-14">
         <div className="flex flex-1 flex-col items-center justify-center text-center">
-          <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:text-sm">
+{/*           <span className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/40 bg-black/20 px-4 py-1.5 text-xs font-semibold uppercase tracking-[0.2em] text-white backdrop-blur-sm sm:text-sm">
             Cali nos une
-          </span>
+          </span> */}
           <h1 className="max-w-4xl text-4xl font-black leading-tight tracking-tight text-white drop-shadow-lg sm:text-6xl lg:text-7xl">
-            Bienvenido al reto
+            Vamos a darnos un borondo
           </h1>
-          <p className="mt-4 max-w-xl text-base text-white/90 drop-shadow sm:text-lg">
+{/*           <p className="mt-4 max-w-xl text-base text-white/90 drop-shadow sm:text-lg">
             Una experiencia interactiva donde tus ideas construyen el futuro de
             nuestra región.
-          </p>
+          </p> */}
         </div>
 
         <div className="pb-2 sm:pb-4">
@@ -50,4 +50,4 @@ export default function Home() {
       </div>
     </div>
   );
-}
+}

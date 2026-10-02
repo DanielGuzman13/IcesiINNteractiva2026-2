@@ -2,14 +2,12 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { inject, svgResize, Themes, WorkspaceSvg } from 'blockly';
-import Link from 'next/link';
 import { backendToolbox } from '@/lib/toolbox/backend-petronio-toolbox';
 import {
   defineBackendBlocks,
   buildBackendPlan,
   runBackendPedido,
   INITIAL_INVENTORY,
-  type BackendLog,
   type BackendPlan,
   type Inventory,
   type Ingredient
@@ -18,11 +16,6 @@ import {
 type CasetaScene = 'idle' | 'cooking' | 'served' | 'rejected' | 'smoke';
 type ServerState = 'inactive' | 'deployed';
 type TransactionState = 'idle' | 'ok' | 'conflict' | 'rollback' | 'no-updates' | 'invalid';
-
-interface LogEntry extends BackendLog {
-  id: number;
-  time: string;
-}
 
 interface Banner {
   text: string;
@@ -34,13 +27,6 @@ interface CasetaCanvasProps {
   banner: Banner;
   targetIngredient: string | null;
 }
-
-const LOG_TONE_CLASS: Record<BackendLog['tone'], string> = {
-  info: 'text-sky-300',
-  success: 'text-emerald-400',
-  error: 'text-red-400',
-  warn: 'text-amber-300'
-};
 
 const TX_LABEL: Record<TransactionState, string> = {
   idle: 'En espera de un pedido',
@@ -60,33 +46,22 @@ function isSmallViewport(width: number): boolean {
   return width < 1024;
 }
 
-function nowTime(): string {
-  return new Date().toLocaleTimeString('es-CO', { hour12: false });
-}
-
 function BackendPetronioWorkspace({
-  nextHref = '/retos',
   onHelp,
-  onCompleted
+  onContinue
 }: {
-  nextHref?: string;
   onHelp?: () => void;
-  onCompleted?: () => void;
+  onContinue?: () => void;
 }) {
   const blocklyDivRef = useRef<HTMLDivElement>(null);
   const workspaceRef = useRef<WorkspaceSvg | null>(null);
   const timersRef = useRef<number[]>([]);
-  const logIdRef = useRef(1);
   const completedRef = useRef(false);
-  const terminalRef = useRef<HTMLDivElement>(null);
 
   const [serverState, setServerState] = useState<ServerState>('inactive');
   const [scene, setScene] = useState<CasetaScene>('idle');
   const [inventory, setInventory] = useState<Inventory>(INITIAL_INVENTORY);
   const inventoryRef = useRef<Inventory>(INITIAL_INVENTORY);
-  const [logs, setLogs] = useState<LogEntry[]>([
-    { id: 0, tone: 'info', text: 'La caseta está cerrada: arma el flujo y ábrela para recibir pedidos.', time: '--:--:--' }
-  ]);
   const [plan, setPlan] = useState<BackendPlan | null>(null);
   const [txState, setTxState] = useState<TransactionState>('idle');
   const [targetIngredient, setTargetIngredient] = useState<string | null>(null);
@@ -96,20 +71,6 @@ function BackendPetronioWorkspace({
   const clearTimers = useCallback(() => {
     timersRef.current.forEach((timer) => window.clearTimeout(timer));
     timersRef.current = [];
-  }, []);
-
-  const appendLogs = useCallback((entries: BackendLog[]) => {
-    setLogs((prev) => {
-      const next = [
-        ...prev,
-        ...entries.map((entry) => ({
-          ...entry,
-          id: logIdRef.current++,
-          time: nowTime()
-        }))
-      ];
-      return next.slice(-80);
-    });
   }, []);
 
   const banner: Banner = useMemo<Banner>(() => {
@@ -209,11 +170,6 @@ function BackendPetronioWorkspace({
   }, []);
 
   useEffect(() => {
-    const terminal = terminalRef.current;
-    if (terminal) terminal.scrollTop = terminal.scrollHeight;
-  }, [logs]);
-
-  useEffect(() => {
     return () => clearTimers();
   }, [clearTimers]);
 
@@ -232,9 +188,6 @@ function BackendPetronioWorkspace({
 
     if (serverState === 'inactive') {
       setServerState('deployed');
-      appendLogs([
-        { tone: 'info', text: 'La caseta abrió sus puertas: ya puede recibir pedidos.' }
-      ]);
     }
 
     const result = runBackendPedido(ws, inventoryRef.current);
@@ -259,7 +212,6 @@ function BackendPetronioWorkspace({
         if (!completedRef.current) {
           completedRef.current = true;
           setCompleted(true);
-          onCompleted?.();
         }
         break;
       case 'conflict':
@@ -290,15 +242,11 @@ function BackendPetronioWorkspace({
     }
 
     setTip(result.tip);
-    appendLogs(result.logs);
   };
 
   const resetCaseta = () => {
     clearTimers();
     applyInventory({ ...INITIAL_INVENTORY });
-    setLogs([
-      { id: logIdRef.current++, tone: 'info', text: 'La caseta está cerrada: arma el flujo y ábrela para recibir pedidos.', time: nowTime() }
-    ]);
     setScene('idle');
     setServerState('inactive');
     setTxState('idle');
@@ -319,14 +267,14 @@ function BackendPetronioWorkspace({
     <section className="w-full overflow-hidden rounded-3xl bg-white shadow-2xl">
       <header
         className="flex flex-wrap items-center justify-between gap-4 px-6 py-5 text-white"
-        style={{ background: 'linear-gradient(90deg, #45609B 0%, #719FC1 100%)' }}
+        style={{ background: 'linear-gradient(90deg, var(--brand-primary) 0%, var(--brand-fin) 100%)' }}
       >
         <div>
           <div className="text-xs font-semibold uppercase tracking-widest text-white/70">
-            Ruta de Ingeniería de Software · Festival Petronio Álvarez
+            Ruta de Ingeniería de Software - Festival Petronio Álvarez
           </div>
           <h2 className="mt-1 text-2xl font-extrabold">
-            Backend Engineer · Caseta Gastronómica
+            Backend Engineer - Caseta Gastronómica
           </h2>
           <p className="text-sm font-medium text-white/85">
             Construye la lógica de la caseta con bloques y observa la cocina en tiempo real.
@@ -357,12 +305,6 @@ function BackendPetronioWorkspace({
               Ayuda
             </button>
           )}
-          
-          {completed && (
-            <span className="rounded-full bg-amber-300 px-3 py-1 text-xs font-bold uppercase tracking-wide text-amber-950">
-              Reto Completado
-            </span>
-          )}
         </div>
       </header>
 
@@ -373,7 +315,7 @@ function BackendPetronioWorkspace({
               type="button"
               onClick={runRequest}
               disabled={readOnly}
-              className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-mid disabled:cursor-not-allowed disabled:opacity-50"
+              className="rounded-lg bg-brand-primary px-4 py-2 text-sm font-bold text-white transition-colors hover:bg-brand-support disabled:cursor-not-allowed disabled:opacity-50"
             >
               {serverState === 'inactive' ? 'Abrir la caseta' : 'Recibir un pedido'}
             </button>
@@ -433,12 +375,13 @@ function BackendPetronioWorkspace({
 
             </div>
             {completed ? (
-              <Link
-                href={nextHref}
-                className="rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white transition-colors hover:bg-emerald-600"
+              <button
+                type="button"
+                onClick={onContinue}
+                className="animate-fade-in rounded-xl bg-emerald-500 px-5 py-2.5 text-sm font-bold text-white shadow-xl shadow-emerald-500/40 ring-4 ring-emerald-500/20 transition-colors hover:bg-emerald-600"
               >
                 Continuar
-              </Link>
+              </button>
             ) : (
               <button
                 type="button"
@@ -453,12 +396,12 @@ function BackendPetronioWorkspace({
           <div className="overflow-hidden rounded-2xl border border-slate-200 bg-slate-950 shadow-sm">
             <div className="flex items-center justify-between border-b border-white/10 px-4 py-2">
               <span className="text-xs font-bold uppercase tracking-wider text-white/70">
-                Simulador · Caseta de la Abuela Paz
+                Simulador - Caseta de la Abuela Paz
               </span>
               <span className="text-xs font-semibold text-white/50">
                 {scene === 'idle' && targetIngredient === null
                   ? `Inventario: ${formatInventory(inventory)}`
-                  : `Ingrediente: ${targetIngredient ?? '—'} · ${formatInventory(inventory)}`}
+                  : `Ingrediente: ${targetIngredient ?? '—'} - ${formatInventory(inventory)}`}
               </span>
             </div>
             <CasetaCanvas scene={scene} banner={banner} targetIngredient={targetIngredient} />
@@ -519,43 +462,25 @@ function BackendPetronioWorkspace({
               </div>
             </div>
 
-            <div className="rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
+            <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-3 shadow-sm md:col-span-2">
               <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Pseudocódigo 
+                Pseudocódigo
               </h3>
-              <pre className="h-[168px] overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed text-emerald-300">
+              <pre className="min-h-[220px] flex-1 overflow-auto whitespace-pre-wrap break-words rounded-lg bg-slate-950 p-4 font-mono text-[13px] leading-relaxed text-emerald-300">
                 {plan?.pseudo ?? '// Tu flujo aparecerá aquí'}
               </pre>
               {plan && plan.issues.length > 0 && (
                 <ul className="mt-2 space-y-1">
                   {plan.issues.map((issue) => (
-                    <li key={issue} className="flex gap-1.5 text-[11px] text-amber-700">
+                    <li key={issue} className="flex gap-1.5 text-xs text-amber-700">
                       <span aria-hidden="true">▲</span>
                       <span>{issue}</span>
                     </li>
                   ))}
                 </ul>
               )}
-            </div>
-
-            <div className="flex flex-col rounded-2xl border border-slate-200 bg-white p-3 shadow-sm">
-              <h3 className="mb-2 text-xs font-bold uppercase tracking-wider text-brand-support">
-                Bitácora de la caseta
-              </h3>
-              <div
-                ref={terminalRef}
-                className="flex-1 overflow-auto rounded-lg bg-slate-950 p-3 font-mono text-[11px] leading-relaxed"
-                style={{ maxHeight: '230px' }}
-              >
-                {logs.map((log) => (
-                  <div key={log.id} className="flex gap-2">
-                    <span className="shrink-0 text-slate-500">{log.time}</span>
-                    <span className={LOG_TONE_CLASS[log.tone]}>{log.text}</span>
-                  </div>
-                ))}
-              </div>
               {tip && (
-                <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-[11px] font-semibold text-amber-800">
+                <div className="mt-2 rounded-lg border border-amber-200 bg-amber-50 px-2 py-1.5 text-xs font-semibold text-amber-800">
                   {tip}
                 </div>
               )}
@@ -570,7 +495,7 @@ function BackendPetronioWorkspace({
 function formatInventory(inventory: Inventory): string {
   return Object.entries(inventory)
     .map(([name, count]) => `${name} ${count}`)
-    .join(' · ');
+    .join(' - ');
 }
 
 // ---------------------------------------------------------------------------
