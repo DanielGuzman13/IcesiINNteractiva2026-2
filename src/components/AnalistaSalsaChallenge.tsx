@@ -1,7 +1,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useState, type DragEvent } from "react";
+import { useEffect, useState, type DragEvent } from "react";
 import { motion } from "framer-motion";
 import { completeStage } from "@/lib/ruta-progress";
 import { continuarConCierre } from "@/lib/personajes";
@@ -536,6 +536,7 @@ export default function AnalistaSalsaChallenge() {
   const [revision, setRevision] = useState<(ResultadoZona | null)[]>([null, null, null]);
   const [intento, setIntento] = useState(0);
   const [pistaVisible, setPistaVisible] = useState(false);
+  const [revisando, setRevisando] = useState(false);
 
   function prepararPaso(indiceFlujo: number, indicePaso: number) {
     setBanco(
@@ -564,6 +565,7 @@ export default function AnalistaSalsaChallenge() {
 
   const flujo = FLUJOS[flujoIndex];
   const paso = flujo.pasos[pasoIndex];
+  const pasoAnterior = pasoIndex > 0 ? flujo.pasos[pasoIndex - 1] : null;
   const bloquesEnBanco = banco.filter((id) => !zonas.includes(id));
   const zonaBloqueada = (indice: number) => revision[indice]?.ok === true;
   const correctas = revision.filter((r) => r?.ok).length;
@@ -660,6 +662,29 @@ export default function AnalistaSalsaChallenge() {
           <p className="mt-2 text-sm text-brand-support/80">
             Tema: <strong>{paso.titulo}</strong> · Flujo {flujo.nombre}
           </p>
+          {pasoAnterior && (
+            <button
+              type="button"
+              onClick={() => setRevisando(true)}
+              className="mt-4 inline-flex items-center gap-2 rounded-full border-2 border-brand-soft bg-white/80 px-5 py-2 text-sm font-bold text-brand-support shadow-sm transition hover:-translate-y-0.5 hover:border-brand-mid"
+            >
+              <svg
+                viewBox="0 0 24 24"
+                className="h-4 w-4"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2.5"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                aria-hidden="true"
+              >
+                <path d="M19 12H5M12 19l-7-7 7-7" />
+              </svg>
+              {pasoAnterior.modo === "hu"
+                ? "Ver la historia de usuario"
+                : "Ver el criterio de aceptación"}
+            </button>
+          )}
         </div>
 
         <div className="rounded-3xl border border-white/60 bg-white/70 p-6 shadow-2xl shadow-brand-primary/20 backdrop-blur-md sm:p-8">
@@ -902,6 +927,129 @@ export default function AnalistaSalsaChallenge() {
           </div>
         )}
       </section>
+
+      {revisando && pasoAnterior && (
+        <ModalPasoAnterior
+          paso={pasoAnterior}
+          numeroPasoAnterior={pasoIndex}
+          nombreFlujo={flujo.nombre}
+          onCerrar={() => setRevisando(false)}
+        />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Consulta en modo lectura del paso que el estudiante ya resolvió. No permite
+ * arrastrar ni editar: solo deja volver a leer la frase y las tres partes.
+ */
+function ModalPasoAnterior({
+  paso,
+  numeroPasoAnterior,
+  nombreFlujo,
+  onCerrar,
+}: {
+  paso: Historia;
+  numeroPasoAnterior: number;
+  nombreFlujo: string;
+  onCerrar: () => void;
+}) {
+  useEffect(() => {
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") onCerrar();
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [onCerrar]);
+
+  /** La tarjeta correcta de cada parte: la que coincide con su tipo. */
+  const tarjetasCorrectas = paso.partes.map(
+    (parte) => paso.bloques.find((bloque) => bloque.tipo === parte.tipo) ?? null,
+  );
+  const frases = tarjetasCorrectas.map((tarjeta) => tarjeta?.texto ?? "");
+  const frase =
+    paso.modo === "hu"
+      ? `${frases[0]}, ${frases[1]}, ${frases[2]}.`
+      : `Dado que ${enMinuscula(frases[0])}, cuando ${enMinuscula(frases[1])}, entonces ${enMinuscula(frases[2])}.`;
+
+  return (
+    <div
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="titulo-paso-anterior"
+      onClick={onCerrar}
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black/55 p-4"
+    >
+      <div
+        onClick={(event) => event.stopPropagation()}
+        className="max-h-[85vh] w-full max-w-2xl overflow-y-auto rounded-3xl bg-white p-6 text-left shadow-2xl sm:p-8"
+      >
+        <div className="text-center">
+          <span className="etiqueta">Paso {numeroPasoAnterior} de 2</span>
+          <h3
+            id="titulo-paso-anterior"
+            className="mt-4 text-2xl font-black tracking-tight text-brand-support"
+          >
+            {paso.rotulo}
+          </h3>
+          <p className="mt-2 text-sm text-brand-support/80">
+            Tema: <strong>{paso.titulo}</strong> · Flujo {nombreFlujo}
+          </p>
+        </div>
+
+        <div className="mt-6 rounded-2xl border-2 border-emerald-300 bg-emerald-50 p-4">
+          <p className="text-xs font-bold uppercase tracking-wide text-emerald-700">
+            {paso.modo === "hu"
+              ? "Así quedó tu historia de usuario"
+              : "Así quedó tu criterio de aceptación"}
+          </p>
+          <p className="mt-2 text-sm leading-relaxed text-brand-support">
+            {frase}
+          </p>
+        </div>
+
+        <ol className="mt-5 space-y-3">
+          {paso.partes.map((parte, indice) => (
+            <li
+              key={parte.tipo}
+              className="flex items-start gap-3 rounded-2xl border-2 border-brand-soft bg-white/80 p-3"
+            >
+              <span
+                className={`shrink-0 rounded-full px-3 py-1 text-xs font-black ${parte.color}`}
+              >
+                {parte.corto}
+              </span>
+              <span className="text-sm leading-relaxed text-brand-support">
+                {tarjetasCorrectas[indice]?.texto}
+              </span>
+            </li>
+          ))}
+        </ol>
+
+        <button
+          type="button"
+          onClick={onCerrar}
+          autoFocus
+          className="mt-6 inline-flex w-full items-center justify-center gap-2 rounded-full bg-brand-primary px-8 py-4 text-lg font-bold text-white shadow-xl shadow-brand-primary/30 transition-all duration-300 hover:bg-brand-support"
+        >
+          {paso.modo === "hu"
+            ? "Volver al criterio de aceptación"
+            : "Volver a la historia de usuario"}
+          <svg
+            viewBox="0 0 24 24"
+            className="h-5 w-5"
+            fill="none"
+            stroke="currentColor"
+            strokeWidth="2.5"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M5 12h14M12 5l7 7-7 7" />
+          </svg>
+        </button>
+      </div>
     </div>
   );
 }

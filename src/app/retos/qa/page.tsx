@@ -32,11 +32,11 @@ export default function QaRetoPage() {
 
       <div className="w-full max-w-7xl border-2 border-brand-mid bg-white shadow-[8px_8px_0_var(--brand-mid)] 2xl:max-w-[1400px]">
         <EncabezadoConsola
-          ruta="CARRERA-DEL-PACIFICO / QA / FORMULARIO-INSCRIPCION"
+          ruta="CARRERA-DEL-PACIFICO / QA / TRAZABILIDAD-REGLAS"
           estado="EN PRUEBAS"
           ledClase="bg-brand-mid animate-pulse"
           titulo="QA Engineer"
-          descripcion="Carrera del Pacífico: detección de bugs y auditoría."
+          descripcion="Carrera del Pacífico: detección de campos y trazabilidad de reglas."
           imagen="/personajes/qa-nuevo.webp"
           anchoImagen={1405}
           altoImagen={1458}

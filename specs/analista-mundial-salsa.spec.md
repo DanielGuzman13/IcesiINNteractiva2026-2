@@ -152,6 +152,23 @@ Antes de empezar se presentan las dos tablas de referencia.
 
 ---
 
+### Scenario: Consulta del paso anterior
+
+  Given que el estudiante ya completó el Paso 1 y está resolviendo el Paso 2
+  Then la cabecera del panel izquierdo debe mostrar un botón "Ver la historia de usuario"
+  And el botón NO debe aparecer durante el Paso 1, porque en ese momento no hay un paso anterior
+  And el botón debe seguir disponible después de completar el módulo, para poder repasar los dos formatos
+  When el estudiante hace clic en el botón
+  Then debe abrirse un modal en modo lectura con el rótulo del Paso 1 (ej. "Historia de usuario 1.1") y el mismo flujo temático
+  And el modal debe mostrar la frase completa "Como…, Quiero…, Para…" que el estudiante resolvió en el Paso 1
+  And el modal debe mostrar las 3 partes ya resueltas, cada una con su badge (Como, Quiero, Para) y el texto de la tarjeta que el estudiante colocó ahí
+  And el modal NO debe permitir modificar nada: no hay tarjetas arrastrables, ni zonas activas, ni botón de validar
+  When el estudiante cierra el modal
+  Then puede cerrarlo con el botón "Volver al criterio de aceptación", con la tecla Escape, o haciendo clic fuera del cuadro
+  And el Paso 2 debe quedar exactamente como estaba, conservando las tarjetas colocadas y su revisión.
+
+---
+
 ### Scenario: Retroalimentación por zona en ambos formatos
 
   Given que el estudiante coloca tarjetas en las 3 zonas del paso activo
