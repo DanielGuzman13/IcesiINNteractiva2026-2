@@ -1,0 +1,10 @@
+import type { ReactNode } from "react";
+import StageGate from "@/components/retos/StageGate";
+
+export default function Layout({ children }: { children: ReactNode }) {
+  return (
+    <StageGate stage={2} rol="arquitecto">
+      {children}
+    </StageGate>
+  );
+}
